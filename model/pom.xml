@@ -1,6 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
->
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>CoRE.app</artifactId>
         <groupId>com.chiralbehaviors.CoRE</groupId>
@@ -21,6 +20,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.tinkerpop.blueprints</groupId>
+            <artifactId>blueprints-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
@@ -85,6 +89,10 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tinkerpop.blueprints</groupId>
+            <artifactId>blueprints-core</artifactId>
         </dependency>
     </dependencies>
 
@@ -185,8 +193,8 @@
         </plugins>
         <pluginManagement>
             <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings
-                    only. It has no influence on the Maven build itself. -->
+                <!--This plugin's configuration is used to store Eclipse 
+                    m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -412,7 +420,8 @@
                                     <username>${testing.db.login}</username>
                                     <password>${testing.db.password}</password>
                                     <autocommit>true</autocommit>
-                                    <sqlCommand>SELECT sqlj.set_classpath('ruleform',
+                                    <sqlCommand>SELECT
+                                        sqlj.set_classpath('ruleform',
                                         '${pljavaClassPath}');</sqlCommand>
                                 </configuration>
                             </execution>
