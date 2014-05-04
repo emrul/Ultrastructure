@@ -141,10 +141,9 @@ public class GraphImpl implements IndexableGraph, KeyIndexableGraph, Serializabl
     }
 
 
-
     public Iterable<Vertex> getVertices(final String key, final Object value) {
         if (vertexKeyIndex.getIndexedKeys().contains(key)) {
-            return (Iterable<Vertex>) vertexKeyIndex.get(key, value);
+            return (Iterable) vertexKeyIndex.get(key, value);
         } else {
             return new PropertyFilteredIterable<Vertex>(key, value, this.getVertices());
         }
@@ -152,7 +151,7 @@ public class GraphImpl implements IndexableGraph, KeyIndexableGraph, Serializabl
 
     public Iterable<Edge> getEdges(final String key, final Object value) {
         if (edgeKeyIndex.getIndexedKeys().contains(key)) {
-            return (Iterable<Edge>) edgeKeyIndex.get(key, value);
+            return (Iterable) edgeKeyIndex.get(key, value);
         } else {
             return new PropertyFilteredIterable<Edge>(key, value, this.getEdges());
         }

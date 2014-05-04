@@ -68,15 +68,14 @@ public class IndexImpl<T extends Element> implements Index<T>, Serializable {
 
     }
 
-    @SuppressWarnings("unchecked")
     public CloseableIterable<T> get(final String key, final Object value) {
         final Map<Object, Set<T>> keyMap = this.index.get(key);
         if (null == keyMap) {
-            return new WrappingCloseableIterable<T>((Iterable<T>) Collections.emptyList());
+            return new WrappingCloseableIterable<T>((Iterable) Collections.emptyList());
         } else {
             Set<T> set = keyMap.get(value);
             if (null == set)
-                return new WrappingCloseableIterable<T>((Iterable<T>) Collections.emptyList());
+                return new WrappingCloseableIterable<T>((Iterable) Collections.emptyList());
             else
                 return new WrappingCloseableIterable<T>(new ArrayList<T>(set));
         }
