@@ -33,8 +33,7 @@ import com.tinkerpop.blueprints.util.WrappingCloseableIterable;
  * @author hparry
  *
  */
-@SuppressWarnings("serial")
-public class IndexImpl<T extends Element> implements Index<T>, Serializable {
+class IndexImpl<T extends Element> implements Index<T>, Serializable {
 
     protected Map<String, Map<Object, Set<T>>> index = new HashMap<String, Map<Object, Set<T>>>();
     protected final String indexName;

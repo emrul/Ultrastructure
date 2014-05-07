@@ -59,7 +59,6 @@ public class GraphImpl implements IndexableGraph, KeyIndexableGraph, Serializabl
     protected Long currentId = 0l;
     protected Map<String, Vertex> vertices = new HashMap<String, Vertex>();
     protected Map<String, Edge> edges = new HashMap<String, Edge>();
-    @SuppressWarnings("rawtypes")
     protected Map<String, IndexImpl> indices = new HashMap<String, IndexImpl>();
 
     protected KeyIndexImpl<VertexImpl> vertexKeyIndex = new KeyIndexImpl<VertexImpl>(VertexImpl.class, this);
@@ -207,7 +206,6 @@ public class GraphImpl implements IndexableGraph, KeyIndexableGraph, Serializabl
     }
 
     public <T extends Element> Index<T> getIndex(final String indexName, final Class<T> indexClass) {
-        @SuppressWarnings("unchecked")
         Index<T> index = this.indices.get(indexName);
         if (null == index)
             return null;
@@ -291,7 +289,6 @@ public class GraphImpl implements IndexableGraph, KeyIndexableGraph, Serializabl
         this.vertexKeyIndex.removeElement((VertexImpl) vertex);
         for (Index<?> index : this.getIndices()) {
             if (Vertex.class.isAssignableFrom(index.getIndexClass())) {
-                @SuppressWarnings("unchecked")
                 IndexImpl<VertexImpl> idx = (IndexImpl<VertexImpl>) index;
                 idx.removeElement((VertexImpl) vertex);
             }
@@ -350,7 +347,6 @@ public class GraphImpl implements IndexableGraph, KeyIndexableGraph, Serializabl
         this.edgeKeyIndex.removeElement((EdgeImpl) edge);
         for (Index<?> index : this.getIndices()) {
             if (Edge.class.isAssignableFrom(index.getIndexClass())) {
-                @SuppressWarnings("unchecked")
                 IndexImpl<EdgeImpl> idx = (IndexImpl<EdgeImpl>) index;
                 idx.removeElement((EdgeImpl) edge);
             }

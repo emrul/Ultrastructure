@@ -29,13 +29,11 @@ import com.tinkerpop.blueprints.util.ElementHelper;
  * @author hparry
  *
  */
-public class ElementImpl implements Element {
+abstract class ElementImpl implements Element {
 
     protected Map<String, Object> properties = new HashMap<String, Object>();
     protected final String id;
     protected final GraphImpl graph;
-
-
 
     protected ElementImpl(final String id, final GraphImpl graph) {
         this.graph = graph;
@@ -46,7 +44,6 @@ public class ElementImpl implements Element {
         return new HashSet<String>(this.properties.keySet());
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T getProperty(final String key) {
         return (T) this.properties.get(key);
     }
@@ -60,7 +57,6 @@ public class ElementImpl implements Element {
             this.graph.edgeKeyIndex.autoUpdate(key, value, oldValue, (EdgeImpl) this);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T removeProperty(final String key) {
         Object oldValue = this.properties.remove(key);
         if (this instanceof VertexImpl)

@@ -74,7 +74,6 @@ public class EdgeImpl<T> implements Edge<T> {
 	public boolean equals(Object obj) {
 		if (obj instanceof EdgeImpl) {
 			Node<?> child = ((EdgeImpl<?>)obj).getChild();
-			@SuppressWarnings("unchecked")
 			T model = (T) ((EdgeImpl<?>)obj).getEdgeObject();
 			Node<?> parent = ((EdgeImpl<?>)obj).getParent();
 			
