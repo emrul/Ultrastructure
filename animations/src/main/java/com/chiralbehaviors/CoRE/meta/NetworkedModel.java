@@ -93,6 +93,11 @@ public interface NetworkedModel<RuleForm extends ExistentialRuleform<RuleForm, N
      * @param attributes
      */
     void authorize(Aspect<RuleForm> aspect, Attribute... attributes);
+    
+    /**
+     * Authorize the attribute and a set of valid enum values for the aspect 
+     */
+    void authorizeEnum(Aspect<RuleForm> aspect, Attribute attribute, Attribute enumAttribute);
 
     /**
      * Create a new instance of the RuleForm based on the provided prototype
@@ -341,4 +346,12 @@ public interface NetworkedModel<RuleForm extends ExistentialRuleform<RuleForm, N
      * @throws SQLException
      */
     void propagate();
+    
+    /**
+     * Sets an attribute value and validates against any enum restrictions that exist
+     * @param ruleform
+     * @param attribute
+     * @param value
+     */
+    void setAttributeValue(AttributeType attributeValue);
 }

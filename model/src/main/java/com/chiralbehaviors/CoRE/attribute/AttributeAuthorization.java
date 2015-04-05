@@ -46,157 +46,169 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 abstract public class AttributeAuthorization extends Ruleform {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "authorized_attribute")
-    private Attribute         authorizedAttribute;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "authorized_attribute")
+	private Attribute authorizedAttribute;
 
-    @Column(name = "binary_value")
-    private byte[]            binaryValue;
+	@Column(name = "binary_value")
+	private byte[] binaryValue;
 
-    @Column(name = "boolean_value")
-    private Integer           booleanValue;
+	@Column(name = "boolean_value")
+	private Integer booleanValue;
 
-    // bi-directional many-to-one association to Agency
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "grouping_agency")
-    private Agency            groupingAgency;
+	// bi-directional many-to-one association to Agency
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "grouping_agency")
+	private Agency groupingAgency;
 
-    @Column(name = "integer_value")
-    private Integer           integerValue;
+	@Column(name = "integer_value")
+	private Integer integerValue;
 
-    @Column(name = "numeric_value")
-    private BigDecimal        numericValue;
+	@Column(name = "numeric_value")
+	private BigDecimal numericValue;
 
-    @Column(name = "sequence_number")
-    private Integer           sequenceNumber   = 1;
+	@Column(name = "sequence_number")
+	private Integer sequenceNumber = 1;
 
-    @Column(name = "text_value")
-    private String            textValue;
+	@Column(name = "text_value")
+	private String textValue;
 
-    @Column(name = "timestamp_value")
-    private Timestamp         timestampValue;
+	@Column(name = "timestamp_value")
+	private Timestamp timestampValue;
 
-    public AttributeAuthorization() {
-        super();
-    }
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "validating_attribute")
+	private Attribute validatingAttribute;
 
-    /**
-     * @param updatedBy
-     */
-    public AttributeAuthorization(Agency updatedBy) {
-        super(updatedBy);
-    }
+	public AttributeAuthorization() {
+		super();
+	}
 
-    public AttributeAuthorization(Attribute authorized, Agency updatedBy) {
-        super(updatedBy);
-        authorizedAttribute = authorized;
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public AttributeAuthorization(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param id
-     */
-    public AttributeAuthorization(UUID id) {
-        super(id);
-    }
+	public AttributeAuthorization(Attribute authorized, Agency updatedBy) {
+		super(updatedBy);
+		authorizedAttribute = authorized;
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public AttributeAuthorization(UUID id, Agency updatedBy) {
-        super(id, updatedBy);
-    }
+	/**
+	 * @param id
+	 */
+	public AttributeAuthorization(UUID id) {
+		super(id);
+	}
 
-    @JsonGetter
-    public Attribute getAuthorizedAttribute() {
-        return authorizedAttribute;
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public AttributeAuthorization(UUID id, Agency updatedBy) {
+		super(id, updatedBy);
+	}
 
-    /**
-     * @return the binaryValue
-     */
-    public byte[] getBinaryValue() {
-        return binaryValue;
-    }
+	@JsonGetter
+	public Attribute getAuthorizedAttribute() {
+		return authorizedAttribute;
+	}
 
-    /**
-     * @return the booleanValue
-     */
-    public Integer getBooleanValue() {
-        return booleanValue;
-    }
+	/**
+	 * @return the binaryValue
+	 */
+	public byte[] getBinaryValue() {
+		return binaryValue;
+	}
 
-    @JsonGetter
-    public Agency getGroupingAgency() {
-        return groupingAgency;
-    }
+	/**
+	 * @return the booleanValue
+	 */
+	public Integer getBooleanValue() {
+		return booleanValue;
+	}
 
-    public Integer getIntegerValue() {
-        return integerValue;
-    }
+	@JsonGetter
+	public Agency getGroupingAgency() {
+		return groupingAgency;
+	}
 
-    public BigDecimal getNumericValue() {
-        return numericValue;
-    }
+	public Integer getIntegerValue() {
+		return integerValue;
+	}
 
-    public Integer getSequenceNumber() {
-        return sequenceNumber;
-    }
+	public BigDecimal getNumericValue() {
+		return numericValue;
+	}
 
-    public String getTextValue() {
-        return textValue;
-    }
+	public Integer getSequenceNumber() {
+		return sequenceNumber;
+	}
 
-    public Timestamp getTimestampValue() {
-        return timestampValue;
-    }
+	public String getTextValue() {
+		return textValue;
+	}
 
-    public void setAuthorizedAttribute(Attribute productAttributeType3) {
-        authorizedAttribute = productAttributeType3;
-    }
+	public Timestamp getTimestampValue() {
+		return timestampValue;
+	}
 
-    /**
-     * @param binaryValue
-     *            the binaryValue to set
-     */
-    public void setBinaryValue(byte[] binaryValue) {
-        this.binaryValue = binaryValue;
-    }
+	public Attribute getValidatingAttribute() {
+		return validatingAttribute;
+	}
 
-    /**
-     * @param booleanValue
-     *            the booleanValue to set
-     */
-    public void setBooleanValue(Integer booleanValue) {
-        this.booleanValue = booleanValue;
-    }
+	public void setAuthorizedAttribute(Attribute productAttributeType3) {
+		authorizedAttribute = productAttributeType3;
+	}
 
-    public void setGroupingAgency(Agency agency) {
-        groupingAgency = agency;
-    }
+	/**
+	 * @param binaryValue
+	 *            the binaryValue to set
+	 */
+	public void setBinaryValue(byte[] binaryValue) {
+		this.binaryValue = binaryValue;
+	}
 
-    public void setIntegerValue(Integer integerValue) {
-        this.integerValue = integerValue;
-    }
+	/**
+	 * @param booleanValue
+	 *            the booleanValue to set
+	 */
+	public void setBooleanValue(Integer booleanValue) {
+		this.booleanValue = booleanValue;
+	}
 
-    public void setNumericValue(BigDecimal numericValue) {
-        this.numericValue = numericValue;
-    }
+	public void setGroupingAgency(Agency agency) {
+		groupingAgency = agency;
+	}
 
-    public void setSequenceNumber(Integer sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
+	public void setIntegerValue(Integer integerValue) {
+		this.integerValue = integerValue;
+	}
 
-    public void setTextValue(String textValue) {
-        this.textValue = textValue;
-    }
+	public void setNumericValue(BigDecimal numericValue) {
+		this.numericValue = numericValue;
+	}
 
-    /**
-     * @param timestampValue
-     *            the timestampValue to set
-     */
-    public void setTimestampValue(Timestamp timestampValue) {
-        this.timestampValue = timestampValue;
-    }
+	public void setSequenceNumber(Integer sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
+	}
+
+	public void setTextValue(String textValue) {
+		this.textValue = textValue;
+	}
+
+	/**
+	 * @param timestampValue
+	 *            the timestampValue to set
+	 */
+	public void setTimestampValue(Timestamp timestampValue) {
+		this.timestampValue = timestampValue;
+	}
+
+	public void setValidatingAttribute(Attribute validatingAttribute) {
+		this.validatingAttribute = validatingAttribute;
+	}
 }

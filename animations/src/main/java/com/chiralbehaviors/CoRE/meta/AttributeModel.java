@@ -30,7 +30,7 @@ import com.chiralbehaviors.CoRE.attribute.AttributeNetwork;
  *
  */
 public interface AttributeModel
-        extends
-        NetworkedModel<Attribute, AttributeNetwork, AttributeMetaAttributeAuthorization, AttributeMetaAttribute> {
+		extends
+		NetworkedModel<Attribute, AttributeNetwork, AttributeMetaAttributeAuthorization, AttributeMetaAttribute> {
 
 }

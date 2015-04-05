@@ -20,7 +20,7 @@
 
 package com.chiralbehaviors.CoRE.meta.models;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,10 +31,14 @@ import org.junit.Test;
 
 import com.chiralbehaviors.CoRE.agency.Agency;
 import com.chiralbehaviors.CoRE.attribute.Attribute;
+import com.chiralbehaviors.CoRE.attribute.AttributeMetaAttribute;
 import com.chiralbehaviors.CoRE.attribute.AttributeNetwork;
 import com.chiralbehaviors.CoRE.attribute.ValueType;
+import com.chiralbehaviors.CoRE.network.Aspect;
 import com.chiralbehaviors.CoRE.network.NetworkInference;
 import com.chiralbehaviors.CoRE.network.Relationship;
+import com.chiralbehaviors.CoRE.product.Product;
+import com.chiralbehaviors.CoRE.product.ProductAttribute;
 
 /**
  * @author hhildebrand
@@ -42,38 +46,100 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  */
 public class AttributeModelTest extends AbstractModelTest {
 
-    @Test
-    public void testSimpleNetworkPropagation() {
-        Agency core = model.getKernel().getCore();
-        Relationship equals = model.getKernel().getEquals();
+	@Test
+	public void testSimpleNetworkPropagation() {
+		Agency core = model.getKernel().getCore();
+		Relationship equals = model.getKernel().getEquals();
 
-        em.getTransaction().begin();
+		em.getTransaction().begin();
 
-        Relationship equals2 = new Relationship("equals 2",
-                                                "an alias for equals", core);
-        equals2.setInverse(equals2);
-        em.persist(equals2);
-        NetworkInference aEqualsA = new NetworkInference(equals, equals2,
-                                                         equals, core);
-        em.persist(aEqualsA);
-        Attribute a = new Attribute("A", "A", ValueType.BOOLEAN, core);
-        em.persist(a);
-        Attribute b = new Attribute("B", "B", ValueType.BOOLEAN, core);
-        em.persist(b);
-        Attribute c = new Attribute("C", "C", ValueType.BOOLEAN, core);
-        em.persist(c);
-        AttributeNetwork edgeA = new AttributeNetwork(a, equals, b, core);
-        em.persist(edgeA);
-        AttributeNetwork edgeB = new AttributeNetwork(b, equals2, c, core);
-        em.persist(edgeB);
+		Relationship equals2 = new Relationship("equals 2",
+				"an alias for equals", core);
+		equals2.setInverse(equals2);
+		em.persist(equals2);
+		NetworkInference aEqualsA = new NetworkInference(equals, equals2,
+				equals, core);
+		em.persist(aEqualsA);
+		Attribute a = new Attribute("A", "A", ValueType.BOOLEAN, core);
+		em.persist(a);
+		Attribute b = new Attribute("B", "B", ValueType.BOOLEAN, core);
+		em.persist(b);
+		Attribute c = new Attribute("C", "C", ValueType.BOOLEAN, core);
+		em.persist(c);
+		AttributeNetwork edgeA = new AttributeNetwork(a, equals, b, core);
+		em.persist(edgeA);
+		AttributeNetwork edgeB = new AttributeNetwork(b, equals2, c, core);
+		em.persist(edgeB);
 
-        em.flush();
+		em.flush();
 
-        TypedQuery<AttributeNetwork> query = em.createQuery("SELECT edge FROM AttributeNetwork edge WHERE edge.inference.id <> :id",
-                                                            AttributeNetwork.class);
-        query.setParameter("id", new UUID(0, 0));
-        List<AttributeNetwork> edges = query.getResultList();
-        assertEquals(2, edges.size());
-    }
+		TypedQuery<AttributeNetwork> query = em
+				.createQuery(
+						"SELECT edge FROM AttributeNetwork edge WHERE edge.inference.id <> :id",
+						AttributeNetwork.class);
+		query.setParameter("id", new UUID(0, 0));
+		List<AttributeNetwork> edges = query.getResultList();
+		assertEquals(2, edges.size());
+	}
 
+	@Test
+	public void testEnumValues() {
+		Agency core = model.getKernel().getCore();
+		em.getTransaction().begin();
+		Attribute attr = new Attribute("Attribute", "A", ValueType.TEXT, core);
+		em.persist(attr);
+
+		Attribute validValues = new Attribute("ValidValues",
+				"Valid enumeration values for this attribute", ValueType.TEXT,
+				core);
+		em.persist(validValues);
+
+		em.getTransaction().commit();
+		em.getTransaction().begin();
+		AttributeMetaAttribute a = new AttributeMetaAttribute(validValues, "a",
+				core);
+		a.setMetaAttribute(attr);
+		em.persist(a);
+		AttributeMetaAttribute b = new AttributeMetaAttribute(validValues, "b",
+				core);
+		b.setMetaAttribute(attr);
+		b.setSequenceNumber(10);
+		em.persist(b);
+		AttributeMetaAttribute c = new AttributeMetaAttribute(validValues, "c",
+				core);
+		c.setSequenceNumber(100);
+		c.setMetaAttribute(attr);
+		em.persist(c);
+		em.getTransaction().commit();
+		em.getTransaction().begin();
+		Product validatedProduct = new Product("ValidatedProduct",
+				"A product supertype with validation", core);
+		em.persist(validatedProduct);
+
+		Product myProduct = new Product("MyProduct", "my product", core);
+		em.persist(myProduct);
+
+		model.getProductModel().link(myProduct, model.getKernel().getIsA(),
+				validatedProduct, core);
+		model.getProductModel().authorizeEnum(
+				new Aspect<Product>(model.getKernel().getIsA(),
+						validatedProduct), attr, validValues);
+		em.getTransaction().commit();
+		// set value
+		ProductAttribute attributeValue = new ProductAttribute(attr, model
+				.getKernel().getCore());
+		attributeValue.setProduct(myProduct);
+		attributeValue.setTextValue("a");
+
+		model.getProductModel().setAttributeValue(attributeValue);
+		attributeValue.setTextValue("aaa");
+		try {
+			model.getProductModel().setAttributeValue(attributeValue);
+			fail();
+		} catch (IllegalArgumentException e) {
+
+		}
+		// validate
+
+	}
 }

@@ -174,4 +174,23 @@ public class AgencyModelImpl
         }
         return attributes;
     }
+
+	/* (non-Javadoc)
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.chiralbehaviors.CoRE.network.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute, com.chiralbehaviors.CoRE.attribute.Attribute)
+	 */
+	@Override
+	public void authorizeEnum(Aspect<Agency> aspect, Attribute attribute,
+			Attribute enumAttribute) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.chiralbehaviors.CoRE.attribute.AttributeValue)
+	 */
+	@Override
+	public void setAttributeValue(AgencyAttribute attributeValue) {
+		// TODO Auto-generated method stub
+		
+	}
 }
