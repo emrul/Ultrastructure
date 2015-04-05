@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2014 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -37,36 +37,40 @@ import com.chiralbehaviors.CoRE.product.Product;
  */
 public class CachedWorkspace extends DatabaseBackedWorkspace {
 
-    public final Map<String, Ruleform> cache = new HashMap<>();
+	public final Map<String, Ruleform> cache = new HashMap<>();
 
-    /**
-     * @param definingProduct
-     * @param em
-     */
-    public CachedWorkspace(Product definingProduct, EntityManager em) {
-        super(definingProduct, em);
-        cache();
-    }
+	/**
+	 * @param definingProduct
+	 * @param em
+	 */
+	public CachedWorkspace(Product definingProduct, EntityManager em) {
+		super(definingProduct, em);
+		cache();
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends Ruleform> T get(String key) {
-        return (T) cache.get(key);
-    }
+	private void cache() {
+		cache.clear();
 
-    private void cache() {
-        cache.clear();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<WorkspaceAuthorization> query = cb
+				.createQuery(WorkspaceAuthorization.class);
+		Root<WorkspaceAuthorization> from = query
+				.from(WorkspaceAuthorization.class);
+		query.select(from)
+				.where(cb.and(cb.notEqual(
+						from.get(WorkspaceAuthorization_.key), null), cb.equal(
+						from.get(WorkspaceAuthorization_.definingProduct),
+						definingProduct)));
+		for (WorkspaceAuthorization auth : em.createQuery(query)
+				.getResultList()) {
+			cache.put(auth.getKey(), auth.getRuleform());
+		}
+	}
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<WorkspaceAuthorization> query = cb.createQuery(WorkspaceAuthorization.class);
-        Root<WorkspaceAuthorization> from = query.from(WorkspaceAuthorization.class);
-        query.select(from).where(cb.and(cb.notEqual(from.get(WorkspaceAuthorization_.key),
-                                                    null),
-                                        cb.equal(from.get(WorkspaceAuthorization_.definingProduct),
-                                                 definingProduct)));
-        for (WorkspaceAuthorization auth : em.createQuery(query).getResultList()) {
-            cache.put(auth.getKey(), auth.getRuleform());
-        }
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Ruleform> T get(String key) {
+		return (T) cache.get(key);
+	}
 
 }

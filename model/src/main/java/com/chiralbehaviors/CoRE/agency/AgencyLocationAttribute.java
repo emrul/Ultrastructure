@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -46,158 +46,160 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "agency_location_attribute", schema = "ruleform")
 public class AgencyLocationAttribute extends AttributeValue<AgencyLocation> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Agency
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "agency")
-    private Agency            agency;
+	// bi-directional many-to-one association to Agency
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "agency")
+	private Agency agency;
 
-    // bi-directional many-to-one association to AgencyLocation
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "agency_location")
-    private AgencyLocation    agencyLocation;
+	// bi-directional many-to-one association to AgencyLocation
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "agency_location")
+	private AgencyLocation agencyLocation;
 
-    // bi-directional many-to-one association to Attribute
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "attribute")
-    private Attribute         attribute;
+	// bi-directional many-to-one association to Attribute
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "attribute")
+	private Attribute attribute;
 
-    public AgencyLocationAttribute() {
-    }
+	public AgencyLocationAttribute() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public AgencyLocationAttribute(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public AgencyLocationAttribute(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param attribute
-     */
-    public AgencyLocationAttribute(Attribute attribute) {
-        super(attribute);
-    }
+	/**
+	 * @param attribute
+	 */
+	public AgencyLocationAttribute(Attribute attribute) {
+		super(attribute);
+	}
 
-    /**
-     * @param attribute
-     * @param updatedBy
-     */
-    public AgencyLocationAttribute(Attribute attribute, Agency updatedBy) {
-        super(attribute, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param updatedBy
+	 */
+	public AgencyLocationAttribute(Attribute attribute, Agency updatedBy) {
+		super(attribute, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public AgencyLocationAttribute(Attribute attribute, BigDecimal value,
-                                   Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public AgencyLocationAttribute(Attribute attribute, BigDecimal value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public AgencyLocationAttribute(Attribute attribute, boolean value,
-                                   Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public AgencyLocationAttribute(Attribute attribute, boolean value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public AgencyLocationAttribute(Attribute attribute, int value,
-                                   Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public AgencyLocationAttribute(Attribute attribute, int value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public AgencyLocationAttribute(Attribute attribute, String value,
-                                   Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public AgencyLocationAttribute(Attribute attribute, String value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param unit
-     */
-    public AgencyLocationAttribute(Attribute attribute, Unit unit) {
-        super(attribute, unit);
-    }
+	/**
+	 * @param attribute
+	 * @param unit
+	 */
+	public AgencyLocationAttribute(Attribute attribute, Unit unit) {
+		super(attribute, unit);
+	}
 
-    /**
-     * @param id
-     */
-    public AgencyLocationAttribute(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public AgencyLocationAttribute(UUID id) {
+		super(id);
+	}
 
-    @JsonGetter
-    public Agency getAgency() {
-        return agency;
-    }
+	@JsonGetter
+	public Agency getAgency() {
+		return agency;
+	}
 
-    @Override
-    public Attribute getAttribute() {
-        return attribute;
-    }
+	@Override
+	public Attribute getAttribute() {
+		return attribute;
+	}
 
-    @JsonGetter
-    public AgencyLocation getEntityLocation() {
-        return agencyLocation;
-    }
+	@JsonGetter
+	public AgencyLocation getEntityLocation() {
+		return agencyLocation;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-     */
-    @Override
-    public SingularAttribute<AgencyLocationAttribute, AgencyLocation> getRuleformAttribute() {
-        return AgencyLocationAttribute_.agencyLocation;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+	 */
+	@Override
+	public SingularAttribute<AgencyLocationAttribute, AgencyLocation> getRuleformAttribute() {
+		return AgencyLocationAttribute_.agencyLocation;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-     */
-    @Override
-    public Class<AgencyLocation> getRuleformClass() {
-        return AgencyLocation.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+	 */
+	@Override
+	public Class<AgencyLocation> getRuleformClass() {
+		return AgencyLocation.class;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, AgencyLocationAttribute> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.agencyLocationAttribute;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, AgencyLocationAttribute> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.agencyLocationAttribute;
+	}
 
-    public void setAgency(Agency agency2) {
-        agency = agency2;
-    }
+	public void setAgency(Agency agency2) {
+		agency = agency2;
+	}
 
-    @Override
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
-    }
+	@Override
+	public void setAttribute(Attribute attribute) {
+		this.attribute = attribute;
+	}
 
-    public void setEntityLocation(AgencyLocation AgencyLocation) {
-        agencyLocation = AgencyLocation;
-    }
+	public void setEntityLocation(AgencyLocation AgencyLocation) {
+		agencyLocation = AgencyLocation;
+	}
 }

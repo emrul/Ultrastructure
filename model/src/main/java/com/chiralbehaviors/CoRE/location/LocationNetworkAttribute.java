@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2014 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -47,158 +47,160 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "location_network_attribute", schema = "ruleform")
 public class LocationNetworkAttribute extends AttributeValue<LocationNetwork> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Agency
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "agency")
-    private Agency            agency;
+	// bi-directional many-to-one association to Agency
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "agency")
+	private Agency agency;
 
-    // bi-directional many-to-one association to Attribute
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "attribute")
-    private Attribute         attribute;
+	// bi-directional many-to-one association to Attribute
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "attribute")
+	private Attribute attribute;
 
-    // bi-directional many-to-one association to LocationNetwork
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "network_rule")
-    private LocationNetwork   LocationNetwork;
+	// bi-directional many-to-one association to LocationNetwork
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "network_rule")
+	private LocationNetwork LocationNetwork;
 
-    public LocationNetworkAttribute() {
-    }
+	public LocationNetworkAttribute() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public LocationNetworkAttribute(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public LocationNetworkAttribute(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param attribute
-     */
-    public LocationNetworkAttribute(Attribute attribute) {
-        super(attribute);
-    }
+	/**
+	 * @param attribute
+	 */
+	public LocationNetworkAttribute(Attribute attribute) {
+		super(attribute);
+	}
 
-    /**
-     * @param attribute
-     * @param updatedBy
-     */
-    public LocationNetworkAttribute(Attribute attribute, Agency updatedBy) {
-        super(attribute, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param updatedBy
+	 */
+	public LocationNetworkAttribute(Attribute attribute, Agency updatedBy) {
+		super(attribute, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public LocationNetworkAttribute(Attribute attribute, BigDecimal value,
-                                    Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public LocationNetworkAttribute(Attribute attribute, BigDecimal value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public LocationNetworkAttribute(Attribute attribute, boolean value,
-                                    Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public LocationNetworkAttribute(Attribute attribute, boolean value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public LocationNetworkAttribute(Attribute attribute, int value,
-                                    Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public LocationNetworkAttribute(Attribute attribute, int value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public LocationNetworkAttribute(Attribute attribute, String value,
-                                    Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public LocationNetworkAttribute(Attribute attribute, String value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param unit
-     */
-    public LocationNetworkAttribute(Attribute attribute, Unit unit) {
-        super(attribute, unit);
-    }
+	/**
+	 * @param attribute
+	 * @param unit
+	 */
+	public LocationNetworkAttribute(Attribute attribute, Unit unit) {
+		super(attribute, unit);
+	}
 
-    /**
-     * @param id
-     */
-    public LocationNetworkAttribute(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public LocationNetworkAttribute(UUID id) {
+		super(id);
+	}
 
-    @JsonGetter
-    public Agency getAgency() {
-        return agency;
-    }
+	@JsonGetter
+	public Agency getAgency() {
+		return agency;
+	}
 
-    @Override
-    public Attribute getAttribute() {
-        return attribute;
-    }
+	@Override
+	public Attribute getAttribute() {
+		return attribute;
+	}
 
-    @JsonGetter
-    public LocationNetwork getLocationNetwork() {
-        return LocationNetwork;
-    }
+	@JsonGetter
+	public LocationNetwork getLocationNetwork() {
+		return LocationNetwork;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-     */
-    @Override
-    public SingularAttribute<LocationNetworkAttribute, LocationNetwork> getRuleformAttribute() {
-        return LocationNetworkAttribute_.LocationNetwork;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+	 */
+	@Override
+	public SingularAttribute<LocationNetworkAttribute, LocationNetwork> getRuleformAttribute() {
+		return LocationNetworkAttribute_.LocationNetwork;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-     */
-    @Override
-    public Class<LocationNetwork> getRuleformClass() {
-        return LocationNetwork.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+	 */
+	@Override
+	public Class<LocationNetwork> getRuleformClass() {
+		return LocationNetwork.class;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, LocationNetworkAttribute> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.locationNetworkAttribute;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, LocationNetworkAttribute> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.locationNetworkAttribute;
+	}
 
-    public void setAgency(Agency agency2) {
-        agency = agency2;
-    }
+	public void setAgency(Agency agency2) {
+		agency = agency2;
+	}
 
-    @Override
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
-    }
+	@Override
+	public void setAttribute(Attribute attribute) {
+		this.attribute = attribute;
+	}
 
-    public void setLocationNetwork(LocationNetwork LocationNetwork) {
-        this.LocationNetwork = LocationNetwork;
-    }
+	public void setLocationNetwork(LocationNetwork LocationNetwork) {
+		this.LocationNetwork = LocationNetwork;
+	}
 }

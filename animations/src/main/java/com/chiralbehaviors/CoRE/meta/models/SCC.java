@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -35,50 +35,51 @@ import com.chiralbehaviors.CoRE.event.status.StatusCode;
  *
  */
 public class SCC {
-    private final Map<StatusCode, List<StatusCode>> graph;
-    private final Map<StatusCode, Integer>          low    = new HashMap<StatusCode, Integer>();
-    private final List<StatusCode[]>                result = new ArrayList<StatusCode[]>();
-    private List<StatusCode>                        stack  = new ArrayList<StatusCode>();
+	private final Map<StatusCode, List<StatusCode>> graph;
+	private final Map<StatusCode, Integer> low = new HashMap<StatusCode, Integer>();
+	private final List<StatusCode[]> result = new ArrayList<StatusCode[]>();
+	private List<StatusCode> stack = new ArrayList<StatusCode>();
 
-    public SCC(Map<StatusCode, List<StatusCode>> graph) {
-        this.graph = graph;
-    }
+	public SCC(Map<StatusCode, List<StatusCode>> graph) {
+		this.graph = graph;
+	}
 
-    public List<StatusCode[]> getStronglyConnectedComponents() {
-        for (StatusCode StatusCode : graph.keySet()) {
-            visit(StatusCode);
-        }
-        return result;
-    }
+	public List<StatusCode[]> getStronglyConnectedComponents() {
+		for (StatusCode StatusCode : graph.keySet()) {
+			visit(StatusCode);
+		}
+		return result;
+	}
 
-    public void visit(StatusCode StatusCode) {
-        if (low.containsKey(StatusCode)) {
-            return;
-        }
-        int num = low.size();
-        low.put(StatusCode, num);
-        int stackPos = stack.size();
-        stack.add(StatusCode);
-        for (StatusCode successor : graph.get(StatusCode)) {
-            visit(successor);
-            low.put(StatusCode,
-                    Math.min(low.get(StatusCode), low.get(successor)));
-        }
+	public void visit(StatusCode StatusCode) {
+		if (low.containsKey(StatusCode)) {
+			return;
+		}
+		int num = low.size();
+		low.put(StatusCode, num);
+		int stackPos = stack.size();
+		stack.add(StatusCode);
+		for (StatusCode successor : graph.get(StatusCode)) {
+			visit(successor);
+			low.put(StatusCode,
+					Math.min(low.get(StatusCode), low.get(successor)));
+		}
 
-        if (num == low.get(StatusCode).intValue()) {
-            List<StatusCode> component = stack.subList(stackPos, stack.size());
-            stack = stack.subList(0, stackPos);
+		if (num == low.get(StatusCode).intValue()) {
+			List<StatusCode> component = stack.subList(stackPos, stack.size());
+			stack = stack.subList(0, stackPos);
 
-            if (component.size() > 1) {// ignore trivial SCCs of a single
-                // StatusCode
-                StatusCode[] array = component.toArray(new StatusCode[component.size()]);
-                result.add(array);
-            }
+			if (component.size() > 1) {// ignore trivial SCCs of a single
+				// StatusCode
+				StatusCode[] array = component.toArray(new StatusCode[component
+						.size()]);
+				result.add(array);
+			}
 
-            for (StatusCode item : component) {
-                low.put(item, graph.size());
-            }
-        }
+			for (StatusCode item : component) {
+				low.put(item, graph.size());
+			}
+		}
 
-    }
+	}
 }

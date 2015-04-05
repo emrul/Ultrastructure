@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -117,7 +117,7 @@ public class IntervalAttribute extends AttributeValue<Interval> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
 	 */
@@ -128,7 +128,7 @@ public class IntervalAttribute extends AttributeValue<Interval> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
 	 */
 	@Override
@@ -138,7 +138,7 @@ public class IntervalAttribute extends AttributeValue<Interval> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
 	 */
 	@Override

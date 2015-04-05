@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -52,133 +52,135 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 
 @NamedQueries({
-               @NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM AttributeNetwork n "
-                                                        + "WHERE n.parent = :parent "
-                                                        + "AND n.relationship = :relationship"),
-               @NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM AttributeNetwork n "
-                                                        + "WHERE n.parent = :parent "
-                                                        + "AND n.relationship = :relationship "
-                                                        + "AND n.child = :child") })
+		@NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM AttributeNetwork n "
+				+ "WHERE n.parent = :parent "
+				+ "AND n.relationship = :relationship"),
+		@NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM AttributeNetwork n "
+				+ "WHERE n.parent = :parent "
+				+ "AND n.relationship = :relationship "
+				+ "AND n.child = :child") })
 @Entity
 @Table(name = "attribute_network", schema = "ruleform")
 public class AttributeNetwork extends NetworkRuleform<Attribute> {
-    public static final String GET_CHILDREN           = "attributeNetwork"
-                                                        + GET_CHILDREN_SUFFIX;
-    public static final String GET_NETWORKS           = "attributeNetwork"
-                                                        + GET_NETWORKS_SUFFIX;
-    public static final String GET_USED_RELATIONSHIPS = "attributeNetwork.getUsedRelationships";
-    private static final long  serialVersionUID       = 1L;
+	public static final String GET_CHILDREN = "attributeNetwork"
+			+ GET_CHILDREN_SUFFIX;
+	public static final String GET_NETWORKS = "attributeNetwork"
+			+ GET_NETWORKS_SUFFIX;
+	public static final String GET_USED_RELATIONSHIPS = "attributeNetwork.getUsedRelationships";
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Attribute
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child")
-    private Attribute          child;
+	// bi-directional many-to-one association to Attribute
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child")
+	private Attribute child;
 
-    //bi-directional many-to-one association to Attribute
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "parent")
-    private Attribute          parent;
+	// bi-directional many-to-one association to Attribute
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "parent")
+	private Attribute parent;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(insertable = false, name = "premise1")
-    private AttributeNetwork   premise1;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(insertable = false, name = "premise1")
+	private AttributeNetwork premise1;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(insertable = false, name = "premise2")
-    private AttributeNetwork   premise2;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(insertable = false, name = "premise2")
+	private AttributeNetwork premise2;
 
-    public AttributeNetwork() {
-    }
+	public AttributeNetwork() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public AttributeNetwork(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public AttributeNetwork(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param relationship
-     * @param updatedBy
-     */
-    public AttributeNetwork(Attribute parent, Relationship relationship,
-                            Attribute child, Agency updatedBy) {
-        super(relationship, updatedBy);
-        this.parent = parent;
-        this.child = child;
-    }
+	/**
+	 * @param relationship
+	 * @param updatedBy
+	 */
+	public AttributeNetwork(Attribute parent, Relationship relationship,
+			Attribute child, Agency updatedBy) {
+		super(relationship, updatedBy);
+		this.parent = parent;
+		this.child = child;
+	}
 
-    /**
-     * @param relationship
-     * @param updatedBy
-     */
-    public AttributeNetwork(Relationship relationship, Agency updatedBy) {
-        super(relationship, updatedBy);
-    }
+	/**
+	 * @param relationship
+	 * @param updatedBy
+	 */
+	public AttributeNetwork(Relationship relationship, Agency updatedBy) {
+		super(relationship, updatedBy);
+	}
 
-    /**
-     * @param id
-     */
-    public AttributeNetwork(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public AttributeNetwork(UUID id) {
+		super(id);
+	}
 
-    @Override
-    public void delete(Triggers triggers) {
-        triggers.delete(this);
-    }
+	@Override
+	public void delete(Triggers triggers) {
+		triggers.delete(this);
+	}
 
-    @Override
-    @JsonGetter
-    public Attribute getChild() {
-        return child;
-    }
+	@Override
+	@JsonGetter
+	public Attribute getChild() {
+		return child;
+	}
 
-    @Override
-    @JsonGetter
-    public Attribute getParent() {
-        return parent;
-    }
+	@Override
+	@JsonGetter
+	public Attribute getParent() {
+		return parent;
+	}
 
-    /**
-     * @return the premise1
-     */
-    @Override
-    @JsonGetter
-    public AttributeNetwork getPremise1() {
-        return premise1;
-    }
+	/**
+	 * @return the premise1
+	 */
+	@Override
+	@JsonGetter
+	public AttributeNetwork getPremise1() {
+		return premise1;
+	}
 
-    /**
-     * @return the premise2
-     */
-    @Override
-    @JsonGetter
-    public AttributeNetwork getPremise2() {
-        return premise2;
-    }
+	/**
+	 * @return the premise2
+	 */
+	@Override
+	@JsonGetter
+	public AttributeNetwork getPremise2() {
+		return premise2;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, AttributeNetwork> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.attributeNetwork;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, AttributeNetwork> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.attributeNetwork;
+	}
 
-    @Override
-    public void persist(Triggers triggers) {
-        triggers.persist(this);
-    }
+	@Override
+	public void persist(Triggers triggers) {
+		triggers.persist(this);
+	}
 
-    @Override
-    public void setChild(Attribute child) {
-        this.child = child;
-    }
+	@Override
+	public void setChild(Attribute child) {
+		this.child = child;
+	}
 
-    @Override
-    public void setParent(Attribute parent) {
-        this.parent = parent;
-    }
+	@Override
+	public void setParent(Attribute parent) {
+		this.parent = parent;
+	}
 }

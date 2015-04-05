@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -53,107 +53,109 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "agency_location", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = AGENCIES_AT_LOCATION, query = "SELECT n.agency "
-                                                                 + "FROM AgencyLocation n "
-                                                                 + "WHERE n.relationship = :relationship "
-                                                                 + "AND n.location = :location"), })
+		+ "FROM AgencyLocation n "
+		+ "WHERE n.relationship = :relationship "
+		+ "AND n.location = :location"), })
 public class AgencyLocation extends Ruleform implements
-        Attributable<AgencyLocationAttribute> {
-    public static final String           AGENCIES_AT_LOCATION = "agencyLocation.agenciesAtLocation";
-    private static final long            serialVersionUID     = 1L;
+		Attributable<AgencyLocationAttribute> {
+	public static final String AGENCIES_AT_LOCATION = "agencyLocation.agenciesAtLocation";
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Agency
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "agency")
-    private Agency                       agency;
+	// bi-directional many-to-one association to Agency
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "agency")
+	private Agency agency;
 
-    // bi-directional many-to-one association to ProductLocationAttribute
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "agencyLocation")
-    @JsonIgnore
-    private Set<AgencyLocationAttribute> attributes;
+	// bi-directional many-to-one association to ProductLocationAttribute
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "agencyLocation")
+	@JsonIgnore
+	private Set<AgencyLocationAttribute> attributes;
 
-    // bi-directional many-to-one association to Agency
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "authority")
-    private Agency                       authority;
+	// bi-directional many-to-one association to Agency
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "authority")
+	private Agency authority;
 
-    // bi-directional many-to-one association to Location
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "location")
-    private Location                     location;
+	// bi-directional many-to-one association to Location
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "location")
+	private Location location;
 
-    // bi-directional many-to-one association to Relationship
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "relationship")
-    private Relationship                 relationship;
+	// bi-directional many-to-one association to Relationship
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "relationship")
+	private Relationship relationship;
 
-    public AgencyLocation() {
-    }
+	public AgencyLocation() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public AgencyLocation(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public AgencyLocation(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    public AgencyLocation(Agency authority, Agency agency,
-                          Relationship relationship, Location location,
-                          Agency updatedBy) {
-        super(updatedBy);
-        this.authority = authority;
-        this.relationship = relationship;
-        this.location = location;
-        this.agency = agency;
-    }
+	public AgencyLocation(Agency authority, Agency agency,
+			Relationship relationship, Location location, Agency updatedBy) {
+		super(updatedBy);
+		this.authority = authority;
+		this.relationship = relationship;
+		this.location = location;
+		this.agency = agency;
+	}
 
-    /**
-     * @param id
-     */
-    public AgencyLocation(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public AgencyLocation(UUID id) {
+		super(id);
+	}
 
-    public Agency getAgency() {
-        return agency;
-    }
+	public Agency getAgency() {
+		return agency;
+	}
 
-    @Override
-    public Set<AgencyLocationAttribute> getAttributes() {
-        return attributes;
-    }
+	@Override
+	public Set<AgencyLocationAttribute> getAttributes() {
+		return attributes;
+	}
 
-    public Location getLocation() {
-        return location;
-    }
+	public Location getLocation() {
+		return location;
+	}
 
-    public Relationship getRelationship() {
-        return relationship;
-    }
+	public Relationship getRelationship() {
+		return relationship;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, AgencyLocation> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.agencyLocation;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, AgencyLocation> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.agencyLocation;
+	}
 
-    public void setAgency(Agency agency) {
-        this.agency = agency;
-    }
+	public void setAgency(Agency agency) {
+		this.agency = agency;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <A extends AgencyLocationAttribute> void setAttributes(Set<A> attributes) {
-        this.attributes = (Set<AgencyLocationAttribute>) attributes;
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public <A extends AgencyLocationAttribute> void setAttributes(
+			Set<A> attributes) {
+		this.attributes = (Set<AgencyLocationAttribute>) attributes;
+	}
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 
-    public void setRelationship(Relationship relationship) {
-        this.relationship = relationship;
-    }
+	public void setRelationship(Relationship relationship) {
+		this.relationship = relationship;
+	}
 }

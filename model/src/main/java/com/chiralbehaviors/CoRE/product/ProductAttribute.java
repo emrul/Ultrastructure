@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -49,147 +49,149 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({ @NamedQuery(name = GET_ATTRIBUTE, query = "SELECT ea FROM ProductAttribute ea"
-                                                                             + "   WHERE ea.product = :product "
-                                                                             + "   AND ea.attribute = :attribute") })
+		+ "   WHERE ea.product = :product "
+		+ "   AND ea.attribute = :attribute") })
 @Entity
 @Table(name = "product_attribute", schema = "ruleform")
 public class ProductAttribute extends AttributeValue<Product> {
-    public final static String GET_ATTRIBUTE = "productAttribute.getAttribute";
-    private static final long  serialVersionUID                 = 1L;
+	public final static String GET_ATTRIBUTE = "productAttribute.getAttribute";
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Attribute
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "attribute")
-    private Attribute          attribute;
+	// bi-directional many-to-one association to Attribute
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "attribute")
+	private Attribute attribute;
 
-    // bi-directional many-to-one association to Product
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "product")
-    private Product            product;
+	// bi-directional many-to-one association to Product
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "product")
+	private Product product;
 
-    public ProductAttribute() {
-    }
+	public ProductAttribute() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public ProductAttribute(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public ProductAttribute(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param attribute
-     */
-    public ProductAttribute(Attribute attribute) {
-        super(attribute);
-    }
+	/**
+	 * @param attribute
+	 */
+	public ProductAttribute(Attribute attribute) {
+		super(attribute);
+	}
 
-    /**
-     * @param attribute
-     * @param updatedBy
-     */
-    public ProductAttribute(Attribute attribute, Agency updatedBy) {
-        super(attribute, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param updatedBy
+	 */
+	public ProductAttribute(Attribute attribute, Agency updatedBy) {
+		super(attribute, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public ProductAttribute(Attribute attribute, BigDecimal value,
-                            Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public ProductAttribute(Attribute attribute, BigDecimal value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public ProductAttribute(Attribute attribute, boolean value, Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public ProductAttribute(Attribute attribute, boolean value, Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public ProductAttribute(Attribute attribute, int value, Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public ProductAttribute(Attribute attribute, int value, Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public ProductAttribute(Attribute attribute, String value, Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public ProductAttribute(Attribute attribute, String value, Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param unit
-     */
-    public ProductAttribute(Attribute attribute, Unit unit) {
-        super(attribute, unit);
-    }
+	/**
+	 * @param attribute
+	 * @param unit
+	 */
+	public ProductAttribute(Attribute attribute, Unit unit) {
+		super(attribute, unit);
+	}
 
-    /**
-     * @param id
-     */
-    public ProductAttribute(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public ProductAttribute(UUID id) {
+		super(id);
+	}
 
-    @Override
-    public Attribute getAttribute() {
-        return attribute;
-    }
+	@Override
+	public Attribute getAttribute() {
+		return attribute;
+	}
 
-    @JsonGetter
-    public Product getProduct() {
-        return product;
-    }
+	@JsonGetter
+	public Product getProduct() {
+		return product;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-     */
-    @Override
-    public SingularAttribute<ProductAttribute, Product> getRuleformAttribute() {
-        return ProductAttribute_.product;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+	 */
+	@Override
+	public SingularAttribute<ProductAttribute, Product> getRuleformAttribute() {
+		return ProductAttribute_.product;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-     */
-    @Override
-    public Class<Product> getRuleformClass() {
-        return Product.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+	 */
+	@Override
+	public Class<Product> getRuleformClass() {
+		return Product.class;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, ProductAttribute> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.productAttribute;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, ProductAttribute> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.productAttribute;
+	}
 
-    @Override
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
-    }
+	@Override
+	public void setAttribute(Attribute attribute) {
+		this.attribute = attribute;
+	}
 
-    public void setProduct(Product product2) {
-        product = product2;
-    }
+	public void setProduct(Product product2) {
+		product = product2;
+	}
 }

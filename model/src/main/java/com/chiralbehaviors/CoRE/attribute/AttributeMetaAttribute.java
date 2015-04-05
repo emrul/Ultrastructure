@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -19,7 +19,8 @@
  */
 package com.chiralbehaviors.CoRE.attribute;
 
-import static com.chiralbehaviors.CoRE.attribute.AttributeMetaAttribute.*;
+import static com.chiralbehaviors.CoRE.attribute.AttributeMetaAttribute.GET_ATTRIBUTE;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -126,7 +127,7 @@ public class AttributeMetaAttribute extends AttributeValue<Attribute> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
 	 */
@@ -137,7 +138,7 @@ public class AttributeMetaAttribute extends AttributeValue<Attribute> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
 	 */
 	@Override
@@ -147,7 +148,7 @@ public class AttributeMetaAttribute extends AttributeValue<Attribute> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
 	 */
 	@Override

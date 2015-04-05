@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -42,9 +42,9 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  *
  */
 public class AttributeModelImpl
-		extends
-		AbstractNetworkedModel<Attribute, AttributeNetwork, AttributeMetaAttributeAuthorization, AttributeMetaAttribute>
-		implements AttributeModel {
+extends
+AbstractNetworkedModel<Attribute, AttributeNetwork, AttributeMetaAttributeAuthorization, AttributeMetaAttribute>
+implements AttributeModel {
 
 	/**
 	 * @param em
@@ -55,7 +55,7 @@ public class AttributeModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
 	 * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -72,7 +72,26 @@ public class AttributeModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
+	 * chiralbehaviors.CoRE.network.Aspect,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute)
+	 */
+	@Override
+	public void authorizeEnum(Aspect<Attribute> aspect, Attribute attribute,
+			Attribute enumAttribute) {
+		AttributeMetaAttributeAuthorization auth = new AttributeMetaAttributeAuthorization(
+				aspect.getClassifier(), aspect.getClassification(), attribute,
+				kernel.getCoreAnimationSoftware());
+		auth.setValidatingAttribute(enumAttribute);
+		em.persist(auth);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
 	 * .CoRE.network .Networked)
@@ -100,7 +119,7 @@ public class AttributeModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
 	 * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -152,6 +171,36 @@ public class AttributeModelImpl
 	}
 
 	/**
+	 * @param attributeValue
+	 * @return
+	 */
+	private AttributeMetaAttributeAuthorization getValidatingAuthorization(
+			AttributeMetaAttribute attributeValue) {
+		String sql = "SELECT  p FROM AttributeMetaAttributeAuthorization p "
+				+ "WHERE p.validatingAttribute IS NOT NULL "
+				+ "AND p.authorizedAttribute = :attribute ";
+		TypedQuery<AttributeMetaAttributeAuthorization> query = em.createQuery(
+				sql, AttributeMetaAttributeAuthorization.class);
+		query.setParameter("attribute", attributeValue.getAttribute());
+		List<AttributeMetaAttributeAuthorization> auths = query.getResultList();
+		TypedQuery<AttributeNetwork> networkQuery = em.createNamedQuery(
+				AttributeNetwork.GET_NETWORKS, AttributeNetwork.class);
+		networkQuery.setParameter("parent", attributeValue.getMetaAttribute());
+		for (AttributeMetaAttributeAuthorization auth : auths) {
+			networkQuery.setParameter("relationship", auth.getClassification());
+			networkQuery.setParameter("child", auth.getClassifier());
+			try {
+				if (networkQuery.getSingleResult() != null) {
+					return auth;
+				}
+			} catch (NoResultException e) {
+				// keep going
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @param attribute
 	 * @param aspect
 	 */
@@ -174,7 +223,7 @@ public class AttributeModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
 	 * chiralbehaviors.CoRE.ExistentialRuleform,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
@@ -213,55 +262,6 @@ public class AttributeModelImpl
 		}
 
 		em.persist(attributeValue);
-
-	}
-
-	/**
-	 * @param attributeValue
-	 * @return
-	 */
-	private AttributeMetaAttributeAuthorization getValidatingAuthorization(
-			AttributeMetaAttribute attributeValue) {
-		String sql = "SELECT  p FROM AttributeMetaAttributeAuthorization p "
-				+ "WHERE p.validatingAttribute IS NOT NULL "
-				+ "AND p.authorizedAttribute = :attribute ";
-		TypedQuery<AttributeMetaAttributeAuthorization> query = em.createQuery(
-				sql, AttributeMetaAttributeAuthorization.class);
-		query.setParameter("attribute", attributeValue.getAttribute());
-		List<AttributeMetaAttributeAuthorization> auths = query.getResultList();
-		TypedQuery<AttributeNetwork> networkQuery = em.createNamedQuery(
-				AttributeNetwork.GET_NETWORKS, AttributeNetwork.class);
-		networkQuery.setParameter("parent", attributeValue.getMetaAttribute());
-		for (AttributeMetaAttributeAuthorization auth : auths) {
-			networkQuery.setParameter("relationship", auth.getClassification());
-			networkQuery.setParameter("child", auth.getClassifier());
-			try {
-				if (networkQuery.getSingleResult() != null) {
-					return auth;
-				}
-			} catch (NoResultException e) {
-				// keep going
-			}
-		}
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
-	 * chiralbehaviors.CoRE.network.Aspect,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute)
-	 */
-	@Override
-	public void authorizeEnum(Aspect<Attribute> aspect, Attribute attribute,
-			Attribute enumAttribute) {
-		AttributeMetaAttributeAuthorization auth = new AttributeMetaAttributeAuthorization(
-				aspect.getClassifier(), aspect.getClassification(), attribute,
-				kernel.getCoreAnimationSoftware());
-		auth.setValidatingAttribute(enumAttribute);
-		em.persist(auth);
 
 	}
 }

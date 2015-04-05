@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -54,115 +54,117 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "product_location", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = PRODUCTS_AT_LOCATION, query = "SELECT n.product "
-                                                                 + "FROM ProductLocation n "
-                                                                 + "WHERE n.relationship = :relationship "
-                                                                 + "AND n.location = :location"), })
+		+ "FROM ProductLocation n "
+		+ "WHERE n.relationship = :relationship "
+		+ "AND n.location = :location"), })
 public class ProductLocation extends Ruleform implements
-        Attributable<ProductLocationAttribute> {
-    public static final String            PRODUCTS_AT_LOCATION = "productLocation.productsAtLocation";
-    private static final long             serialVersionUID     = 1L;
+		Attributable<ProductLocationAttribute> {
+	public static final String PRODUCTS_AT_LOCATION = "productLocation.productsAtLocation";
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Agency
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "agency")
-    private Agency                        agency;
+	// bi-directional many-to-one association to Agency
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "agency")
+	private Agency agency;
 
-    // bi-directional many-to-one association to ProductLocationAttribute
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productLocation")
-    @JsonIgnore
-    private Set<ProductLocationAttribute> attributes;
+	// bi-directional many-to-one association to ProductLocationAttribute
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productLocation")
+	@JsonIgnore
+	private Set<ProductLocationAttribute> attributes;
 
-    // bi-directional many-to-one association to Location
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "location")
-    private Location                      location;
+	// bi-directional many-to-one association to Location
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "location")
+	private Location location;
 
-    // bi-directional many-to-one association to Product
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "product")
-    private Product                       product;
+	// bi-directional many-to-one association to Product
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "product")
+	private Product product;
 
-    // bi-directional many-to-one association to Relationship
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "relationship")
-    private Relationship                  relationship;
+	// bi-directional many-to-one association to Relationship
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "relationship")
+	private Relationship relationship;
 
-    public ProductLocation() {
-    }
+	public ProductLocation() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public ProductLocation(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public ProductLocation(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    public ProductLocation(Agency agency, Product product,
-                           Relationship relationship, Location location,
-                           Agency updatedBy) {
-        super(updatedBy);
-        this.product = product;
-        this.relationship = relationship;
-        this.location = location;
-        this.agency = agency;
-    }
+	public ProductLocation(Agency agency, Product product,
+			Relationship relationship, Location location, Agency updatedBy) {
+		super(updatedBy);
+		this.product = product;
+		this.relationship = relationship;
+		this.location = location;
+		this.agency = agency;
+	}
 
-    /**
-     * @param id
-     */
-    public ProductLocation(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public ProductLocation(UUID id) {
+		super(id);
+	}
 
-    public Agency getAgency() {
-        return agency;
-    }
+	public Agency getAgency() {
+		return agency;
+	}
 
-    @Override
-    public Set<ProductLocationAttribute> getAttributes() {
-        return attributes;
-    }
+	@Override
+	public Set<ProductLocationAttribute> getAttributes() {
+		return attributes;
+	}
 
-    public Location getLocation() {
-        return location;
-    }
+	public Location getLocation() {
+		return location;
+	}
 
-    public Product getProduct() {
-        return product;
-    }
+	public Product getProduct() {
+		return product;
+	}
 
-    public Relationship getRelationship() {
-        return relationship;
-    }
+	public Relationship getRelationship() {
+		return relationship;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, ProductLocation> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.productLocation;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, ProductLocation> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.productLocation;
+	}
 
-    public void setAgency(Agency agency2) {
-        agency = agency2;
-    }
+	public void setAgency(Agency agency2) {
+		agency = agency2;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <A extends ProductLocationAttribute> void setAttributes(Set<A> attributes) {
-        this.attributes = (Set<ProductLocationAttribute>) attributes;
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public <A extends ProductLocationAttribute> void setAttributes(
+			Set<A> attributes) {
+		this.attributes = (Set<ProductLocationAttribute>) attributes;
+	}
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 
-    public void setRelationship(Relationship relationship) {
-        this.relationship = relationship;
-    }
+	public void setRelationship(Relationship relationship) {
+		this.relationship = relationship;
+	}
 }

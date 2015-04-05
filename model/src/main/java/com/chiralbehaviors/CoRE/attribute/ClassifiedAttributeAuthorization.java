@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -44,64 +44,63 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 abstract public class ClassifiedAttributeAuthorization<RuleForm extends ExistentialRuleform<RuleForm, ?>>
-        extends AttributeAuthorization {
+		extends AttributeAuthorization {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "classification")
-    private Relationship      classification;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "classification")
+	private Relationship classification;
 
-    public ClassifiedAttributeAuthorization() {
-        super();
-    }
+	public ClassifiedAttributeAuthorization() {
+		super();
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public ClassifiedAttributeAuthorization(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public ClassifiedAttributeAuthorization(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param classification
-     * @param updatedBy
-     */
-    public ClassifiedAttributeAuthorization(Relationship classification,
-                                            Agency updatedBy) {
-        this.classification = classification;
-        setUpdatedBy(updatedBy);
-    }
+	/**
+	 * @param classification
+	 * @param updatedBy
+	 */
+	public ClassifiedAttributeAuthorization(Relationship classification,
+			Agency updatedBy) {
+		this.classification = classification;
+		setUpdatedBy(updatedBy);
+	}
 
-    /**
-     * @param classification
-     * @param authorized
-     * @param updatedBy
-     */
-    public ClassifiedAttributeAuthorization(Relationship classification,
-                                            Attribute authorized,
-                                            Agency updatedBy) {
-        super(authorized, updatedBy);
-        this.classification = classification;
-    }
+	/**
+	 * @param classification
+	 * @param authorized
+	 * @param updatedBy
+	 */
+	public ClassifiedAttributeAuthorization(Relationship classification,
+			Attribute authorized, Agency updatedBy) {
+		super(authorized, updatedBy);
+		this.classification = classification;
+	}
 
-    /**
-     * @param id
-     */
-    public ClassifiedAttributeAuthorization(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public ClassifiedAttributeAuthorization(UUID id) {
+		super(id);
+	}
 
-    public Relationship getClassification() {
-        return classification;
-    }
+	public Relationship getClassification() {
+		return classification;
+	}
 
-    @JsonGetter
-    abstract public RuleForm getClassifier();
+	@JsonGetter
+	abstract public RuleForm getClassifier();
 
-    public void setClassification(Relationship classification) {
-        this.classification = classification;
-    }
+	public void setClassification(Relationship classification) {
+		this.classification = classification;
+	}
 
-    abstract public void setClassifier(RuleForm classifier);
+	abstract public void setClassifier(RuleForm classifier);
 }

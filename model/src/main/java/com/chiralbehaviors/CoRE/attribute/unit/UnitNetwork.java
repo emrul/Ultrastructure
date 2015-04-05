@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -50,157 +50,164 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-               @NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM UnitNetwork n "
-                                                        + "WHERE n.parent = :parent "
-                                                        + "AND n.relationship = :relationship"),
-               @NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM ProductNetwork n "
-                                                        + "WHERE n.parent = :parent "
-                                                        + "AND n.relationship = :relationship "
-                                                        + "AND n.child = :child") })
+		@NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM UnitNetwork n "
+				+ "WHERE n.parent = :parent "
+				+ "AND n.relationship = :relationship"),
+		@NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM ProductNetwork n "
+				+ "WHERE n.parent = :parent "
+				+ "AND n.relationship = :relationship "
+				+ "AND n.child = :child") })
 @Entity
 @Table(name = "unit_network", schema = "ruleform")
 public class UnitNetwork extends NetworkRuleform<Unit> {
 
-    public static final String GET_CHILDREN           = "unitNetwork"
-                                                        + GET_CHILDREN_SUFFIX;
-    public static final String GET_NETWORKS           = "unitNetwork"
-                                                        + GET_NETWORKS_SUFFIX;
-    public static final String GET_USED_RELATIONSHIPS = "unitNetwork"
-                                                        + USED_RELATIONSHIPS_SUFFIX;
-    private static final long  serialVersionUID       = 1L;
-    // many-to-one
-    // association to Agency
+	public static final String GET_CHILDREN = "unitNetwork"
+			+ GET_CHILDREN_SUFFIX;
+	public static final String GET_NETWORKS = "unitNetwork"
+			+ GET_NETWORKS_SUFFIX;
+	public static final String GET_USED_RELATIONSHIPS = "unitNetwork"
+			+ USED_RELATIONSHIPS_SUFFIX;
+	private static final long serialVersionUID = 1L;
+	// many-to-one
+	// association to Agency
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child")
-    private Unit               child;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child")
+	private Unit child;
 
-    // bi-directional many-to-one association to Agency
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "parent")
-    private Unit               parent;
+	// bi-directional many-to-one association to Agency
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "parent")
+	private Unit parent;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(insertable = false, name = "premise1")
-    private UnitNetwork        premise1;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(insertable = false, name = "premise1")
+	private UnitNetwork premise1;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(insertable = false, name = "premise2")
-    private UnitNetwork        premise2;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(insertable = false, name = "premise2")
+	private UnitNetwork premise2;
 
-    /**
-     *
-     */
-    public UnitNetwork() {
-        super();
-    }
+	/**
+	 *
+	 */
+	public UnitNetwork() {
+		super();
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public UnitNetwork(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public UnitNetwork(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param relationship
-     * @param updatedBy
-     */
-    public UnitNetwork(Relationship relationship, Agency updatedBy) {
-        super(relationship, updatedBy);
-    }
+	/**
+	 * @param relationship
+	 * @param updatedBy
+	 */
+	public UnitNetwork(Relationship relationship, Agency updatedBy) {
+		super(relationship, updatedBy);
+	}
 
-    /**
-     * @param relationship
-     * @param updatedBy
-     */
-    public UnitNetwork(Unit parent, Relationship relationship, Unit child,
-                       Agency updatedBy) {
-        super(relationship, updatedBy);
-        this.parent = parent;
-        this.child = child;
-    }
+	/**
+	 * @param relationship
+	 * @param updatedBy
+	 */
+	public UnitNetwork(Unit parent, Relationship relationship, Unit child,
+			Agency updatedBy) {
+		super(relationship, updatedBy);
+		this.parent = parent;
+		this.child = child;
+	}
 
-    /**
-     * @param id
-     */
-    public UnitNetwork(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public UnitNetwork(UUID id) {
+		super(id);
+	}
 
-    @Override
-    public void delete(Triggers triggers) {
-        triggers.delete(this);
-    }
+	@Override
+	public void delete(Triggers triggers) {
+		triggers.delete(this);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#getChild()
-     */
-    @Override
-    @JsonGetter
-    public Unit getChild() {
-        return child;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#getChild()
+	 */
+	@Override
+	@JsonGetter
+	public Unit getChild() {
+		return child;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#getParent()
-     */
-    @Override
-    @JsonGetter
-    public Unit getParent() {
-        return parent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#getParent()
+	 */
+	@Override
+	@JsonGetter
+	public Unit getParent() {
+		return parent;
+	}
 
-    /**
-     * @return the premise1
-     */
-    @Override
-    public UnitNetwork getPremise1() {
-        return premise1;
-    }
+	/**
+	 * @return the premise1
+	 */
+	@Override
+	public UnitNetwork getPremise1() {
+		return premise1;
+	}
 
-    /**
-     * @return the premise2
-     */
-    @Override
-    @JsonGetter
-    public UnitNetwork getPremise2() {
-        return premise2;
-    }
+	/**
+	 * @return the premise2
+	 */
+	@Override
+	@JsonGetter
+	public UnitNetwork getPremise2() {
+		return premise2;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, UnitNetwork> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.unitNetwork;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, UnitNetwork> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.unitNetwork;
+	}
 
-    @Override
-    public void persist(Triggers triggers) {
-        triggers.persist(this);
-    }
+	@Override
+	public void persist(Triggers triggers) {
+		triggers.persist(this);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.NetworkRuleform#setChild(com.chiralbehaviors
-     * .CoRE.ExistentialRuleform)
-     */
-    @Override
-    public void setChild(Unit child) {
-        this.child = child;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.NetworkRuleform#setChild(com.chiralbehaviors
+	 * .CoRE.ExistentialRuleform)
+	 */
+	@Override
+	public void setChild(Unit child) {
+		this.child = child;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#setParent(com.chiralbehaviors.CoRE.ExistentialRuleform)
-     */
-    @Override
-    public void setParent(Unit parent) {
-        this.parent = parent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#setParent(com.
+	 * chiralbehaviors.CoRE.ExistentialRuleform)
+	 */
+	@Override
+	public void setParent(Unit parent) {
+		this.parent = parent;
+	}
 }

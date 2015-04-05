@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2014 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -33,31 +33,32 @@ import com.chiralbehaviors.CoRE.product.Product;
  *
  */
 public class WorkspaceSnapshot {
-    protected final List<WorkspaceAuthorization> auths;
+	protected final List<WorkspaceAuthorization> auths;
 
-    public WorkspaceSnapshot() {
-        auths = null;
-    }
+	public WorkspaceSnapshot() {
+		auths = null;
+	}
 
-    public WorkspaceSnapshot(List<WorkspaceAuthorization> auths) {
-        this.auths = auths;
-    }
+	public WorkspaceSnapshot(List<WorkspaceAuthorization> auths) {
+		this.auths = auths;
+	}
 
-    public WorkspaceSnapshot(Product definingProduct, EntityManager em) {
-        TypedQuery<WorkspaceAuthorization> query = em.createQuery("SELECT auth FROM WorkspaceAuthorization auth "
-                                                                          + "WHERE auth.definingProduct = :product",
-                                                                  WorkspaceAuthorization.class);
-        query.setParameter("product", definingProduct);
-        auths = new ArrayList<>(query.getResultList());
-    }
+	public WorkspaceSnapshot(Product definingProduct, EntityManager em) {
+		TypedQuery<WorkspaceAuthorization> query = em.createQuery(
+				"SELECT auth FROM WorkspaceAuthorization auth "
+						+ "WHERE auth.definingProduct = :product",
+				WorkspaceAuthorization.class);
+		query.setParameter("product", definingProduct);
+		auths = new ArrayList<>(query.getResultList());
+	}
 
-    public List<WorkspaceAuthorization> getAuths() {
-        return auths;
-    }
+	public List<WorkspaceAuthorization> getAuths() {
+		return auths;
+	}
 
-    public void retarget(EntityManager em) {
-        for (WorkspaceAuthorization auth : auths) {
-            em.persist(auth);
-        }
-    }
+	public void retarget(EntityManager em) {
+		for (WorkspaceAuthorization auth : auths) {
+			em.persist(auth);
+		}
+	}
 }

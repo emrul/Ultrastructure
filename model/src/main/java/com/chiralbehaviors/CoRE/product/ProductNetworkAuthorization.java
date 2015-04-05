@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -43,94 +43,96 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "product_network_authorization", schema = "ruleform")
 public class ProductNetworkAuthorization extends NetworkAuthorization<Product> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Product
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "authorized_parent")
-    private Product           authorizedParent;
+	// bi-directional many-to-one association to Product
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "authorized_parent")
+	private Product authorizedParent;
 
-    // bi-directional many-to-one association to Product
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "classifier")
-    private Product           classifier;
+	// bi-directional many-to-one association to Product
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "classifier")
+	private Product classifier;
 
-    /**
-     *
-     */
-    public ProductNetworkAuthorization() {
-        super();
-    }
+	/**
+	 *
+	 */
+	public ProductNetworkAuthorization() {
+		super();
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public ProductNetworkAuthorization(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public ProductNetworkAuthorization(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param id
-     */
-    public ProductNetworkAuthorization(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public ProductNetworkAuthorization(UUID id) {
+		super(id);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getAuthorizedParent
-     * ()
-     */
-    @Override
-    @JsonGetter
-    public Product getAuthorizedParent() {
-        return authorizedParent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getAuthorizedParent
+	 * ()
+	 */
+	@Override
+	@JsonGetter
+	public Product getAuthorizedParent() {
+		return authorizedParent;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getClassifier()
-     */
-    @Override
-    @JsonGetter
-    public Product getClassifier() {
-        return classifier;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getClassifier()
+	 */
+	@Override
+	@JsonGetter
+	public Product getClassifier() {
+		return classifier;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, ProductNetworkAuthorization> getWorkspaceAuthAttribute() {
-        return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, ProductNetworkAuthorization> getWorkspaceAuthAttribute() {
+		return null;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setAuthorizedParent
-     * (com.chiralbehaviors.CoRE.network.Networked)
-     */
-    @Override
-    public void setAuthorizedParent(Product parent) {
-        authorizedParent = parent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setAuthorizedParent
+	 * (com.chiralbehaviors.CoRE.network.Networked)
+	 */
+	@Override
+	public void setAuthorizedParent(Product parent) {
+		authorizedParent = parent;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setClassifier(com
-     * .chiralbehaviors.CoRE.network.Networked)
-     */
-    @Override
-    public void setClassifier(Product classifier) {
-        this.classifier = classifier;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setClassifier(com
+	 * .chiralbehaviors.CoRE.network.Networked)
+	 */
+	@Override
+	public void setClassifier(Product classifier) {
+		this.classifier = classifier;
+	}
 }

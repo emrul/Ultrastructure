@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -34,37 +34,37 @@ import com.chiralbehaviors.CoRE.test.DatabaseTest;
 
 public class AgencyTest extends DatabaseTest {
 
-    @Before
-    public void initData() {
-        Agency core = new Agency("CoRE");
-        core.setUpdatedBy(core);
-        em.persist(core);
+	@Before
+	public void initData() {
+		Agency core = new Agency("CoRE");
+		core.setUpdatedBy(core);
+		em.persist(core);
 
-        Agency foo = new Agency("Foo", "More Foo", core);
-        em.persist(foo);
-        em.flush();
-        em.clear();
-    }
+		Agency foo = new Agency("Foo", "More Foo", core);
+		em.persist(foo);
+		em.flush();
+		em.clear();
+	}
 
-    @Test
-    public void testEquals() {
-        TypedQuery<Agency> query = em.createNamedQuery("agency.findByName",
-                                                       Agency.class);
+	@Test
+	public void testEquals() {
+		TypedQuery<Agency> query = em.createNamedQuery("agency.findByName",
+				Agency.class);
 
-        query.setParameter("name", "CoRE");
-        Agency test = query.getSingleResult();
+		query.setParameter("name", "CoRE");
+		Agency test = query.getSingleResult();
 
-        query.setParameter("name", "Foo");
-        Agency foo = query.getSingleResult();
+		query.setParameter("name", "Foo");
+		Agency foo = query.getSingleResult();
 
-        System.out.println("Test Class: " + test.getClass());
-        System.out.println("Foo Updated By Class (Proxy): "
-                           + foo.getUpdatedBy().getClass());
-        Assert.assertEquals(test, foo.getUpdatedBy());
+		System.out.println("Test Class: " + test.getClass());
+		System.out.println("Foo Updated By Class (Proxy): "
+				+ foo.getUpdatedBy().getClass());
+		Assert.assertEquals(test, foo.getUpdatedBy());
 
-        Assert.assertTrue(test.equals(foo.getUpdatedBy()));
-        Assert.assertTrue(foo.getUpdatedBy().equals(test));
+		Assert.assertTrue(test.equals(foo.getUpdatedBy()));
+		Assert.assertTrue(foo.getUpdatedBy().equals(test));
 
-    }
+	}
 
 }

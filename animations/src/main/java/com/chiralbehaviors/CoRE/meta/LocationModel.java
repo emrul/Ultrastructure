@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ import com.chiralbehaviors.CoRE.location.LocationNetwork;
  *
  */
 public interface LocationModel
-        extends
-        NetworkedModel<Location, LocationNetwork, LocationAttributeAuthorization, LocationAttribute> {
+		extends
+		NetworkedModel<Location, LocationNetwork, LocationAttributeAuthorization, LocationAttribute> {
 
 }

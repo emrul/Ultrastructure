@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2014 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@ import com.chiralbehaviors.CoRE.Ruleform;
  */
 public interface EditableWorkspace extends Workspace {
 
-    <T extends Ruleform> void add(T ruleform);
+	<T extends Ruleform> void add(T ruleform);
 
-    <T extends Ruleform> void put(String key, T ruleform);
+	<T extends Ruleform> void put(String key, T ruleform);
 }

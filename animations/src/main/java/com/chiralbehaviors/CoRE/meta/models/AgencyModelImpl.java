@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -45,9 +45,9 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  *
  */
 public class AgencyModelImpl
-		extends
-		AbstractNetworkedModel<Agency, AgencyNetwork, AgencyAttributeAuthorization, AgencyAttribute>
-		implements AgencyModel {
+extends
+AbstractNetworkedModel<Agency, AgencyNetwork, AgencyAttributeAuthorization, AgencyAttribute>
+implements AgencyModel {
 
 	/**
 	 * @param em
@@ -58,7 +58,7 @@ public class AgencyModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
 	 * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -75,7 +75,26 @@ public class AgencyModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
+	 * chiralbehaviors.CoRE.network.Aspect,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute)
+	 */
+	@Override
+	public void authorizeEnum(Aspect<Agency> aspect, Attribute attribute,
+			Attribute enumAttribute) {
+		AgencyAttributeAuthorization auth = new AgencyAttributeAuthorization(
+				aspect.getClassification(), aspect.getClassifier(), attribute,
+				kernel.getCoreAnimationSoftware());
+		auth.setValidatingAttribute(enumAttribute);
+		em.persist(auth);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
 	 * .CoRE.network .Networked)
@@ -102,7 +121,7 @@ public class AgencyModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
 	 * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -119,7 +138,7 @@ public class AgencyModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
 	 * .CoRE.meta .Aspect<RuleForm>[])
@@ -156,6 +175,36 @@ public class AgencyModelImpl
 	}
 
 	/**
+	 * @param attributeValue
+	 * @return
+	 */
+	private AgencyAttributeAuthorization getValidatingAuthorization(
+			AgencyAttribute attributeValue) {
+		String sql = "SELECT  p FROM AgencyAttributeAuthorization p "
+				+ "WHERE p.validatingAttribute IS NOT NULL "
+				+ "AND p.authorizedAttribute = :attribute ";
+		TypedQuery<AgencyAttributeAuthorization> query = em.createQuery(sql,
+				AgencyAttributeAuthorization.class);
+		query.setParameter("attribute", attributeValue.getAttribute());
+		List<AgencyAttributeAuthorization> auths = query.getResultList();
+		TypedQuery<AgencyNetwork> networkQuery = em.createNamedQuery(
+				AgencyNetwork.GET_NETWORKS, AgencyNetwork.class);
+		networkQuery.setParameter("parent", attributeValue.getAgency());
+		for (AgencyAttributeAuthorization auth : auths) {
+			networkQuery.setParameter("relationship", auth.getClassification());
+			networkQuery.setParameter("child", auth.getClassifier());
+			try {
+				if (networkQuery.getSingleResult() != null) {
+					return auth;
+				}
+			} catch (NoResultException e) {
+				// keep going
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @param agency
 	 * @param aspect
 	 */
@@ -178,7 +227,7 @@ public class AgencyModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
 	 * chiralbehaviors.CoRE.ExistentialRuleform,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
@@ -217,54 +266,6 @@ public class AgencyModelImpl
 		}
 
 		em.persist(attributeValue);
-
-	}
-
-	/**
-	 * @param attributeValue
-	 * @return
-	 */
-	private AgencyAttributeAuthorization getValidatingAuthorization(
-			AgencyAttribute attributeValue) {
-		String sql = "SELECT  p FROM AgencyAttributeAuthorization p "
-				+ "WHERE p.validatingAttribute IS NOT NULL "
-				+ "AND p.authorizedAttribute = :attribute ";
-		TypedQuery<AgencyAttributeAuthorization> query = em.createQuery(sql,
-				AgencyAttributeAuthorization.class);
-		query.setParameter("attribute", attributeValue.getAttribute());
-		List<AgencyAttributeAuthorization> auths = query.getResultList();
-		TypedQuery<AgencyNetwork> networkQuery = em.createNamedQuery(
-				AgencyNetwork.GET_NETWORKS, AgencyNetwork.class);
-		networkQuery.setParameter("parent", attributeValue.getAgency());
-		for (AgencyAttributeAuthorization auth : auths) {
-			networkQuery.setParameter("relationship", auth.getClassification());
-			networkQuery.setParameter("child", auth.getClassifier());
-			try {
-				if (networkQuery.getSingleResult() != null) {
-					return auth;
-				}
-			} catch (NoResultException e) {
-				// keep going
-			}
-		}
-		return null;
-	}
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
-	 * chiralbehaviors.CoRE.network.Aspect,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute)
-	 */
-	@Override
-	public void authorizeEnum(Aspect<Agency> aspect, Attribute attribute,
-			Attribute enumAttribute) {
-		AgencyAttributeAuthorization auth = new AgencyAttributeAuthorization(
-				aspect.getClassification(), aspect.getClassifier(), attribute,
-				kernel.getCoreAnimationSoftware());
-		auth.setValidatingAttribute(enumAttribute);
-		em.persist(auth);
 
 	}
 }

@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -48,171 +48,173 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-               @NamedQuery(name = FIND_ALL, query = "SELECT j FROM JobChronology j"),
-               @NamedQuery(name = FIND_FOR_JOB, query = "SELECT j FROM JobChronology j "
-                                                        + "WHERE j.job = :job ORDER BY j.sequenceNumber "),
-               @NamedQuery(name = FIND_FOR_PRODUCT, query = "SELECT j FROM JobChronology j "
-                                                            + "WHERE j.product = :product "),
-               @NamedQuery(name = HIGHEST_SEQUENCE_FOR_JOB, query = "SELECT MAX(j.sequenceNumber) FROM JobChronology j "
-                                                                    + "WHERE j.job = :job"),
-               @NamedQuery(name = GET_LOG_FOR_SEQUENCE, query = "SELECT j from JobChronology j "
-                                                                + "WHERE j.job = :job "
-                                                                + "    AND j.sequenceNumber = :sequence") })
+		@NamedQuery(name = FIND_ALL, query = "SELECT j FROM JobChronology j"),
+		@NamedQuery(name = FIND_FOR_JOB, query = "SELECT j FROM JobChronology j "
+				+ "WHERE j.job = :job ORDER BY j.sequenceNumber "),
+		@NamedQuery(name = FIND_FOR_PRODUCT, query = "SELECT j FROM JobChronology j "
+				+ "WHERE j.product = :product "),
+		@NamedQuery(name = HIGHEST_SEQUENCE_FOR_JOB, query = "SELECT MAX(j.sequenceNumber) FROM JobChronology j "
+				+ "WHERE j.job = :job"),
+		@NamedQuery(name = GET_LOG_FOR_SEQUENCE, query = "SELECT j from JobChronology j "
+				+ "WHERE j.job = :job "
+				+ "    AND j.sequenceNumber = :sequence") })
 @Entity
 @Table(name = "job_chronology", schema = "ruleform")
 public class JobChronology extends AbstractProtocol {
-    public static final String FIND_ALL                 = "jobChronology"
-                                                          + FIND_ALL_SUFFIX;
-    public static final String FIND_FOR_JOB             = "jobChronology.findForJob";
-    public static final String FIND_FOR_PRODUCT         = "jobChronology.findForProduct";
-    public static final String GET_LOG_FOR_SEQUENCE     = "jobChronology.getLogForSequenc";
-    public static final String HIGHEST_SEQUENCE_FOR_JOB = "jobChronology.highestSequenceForJob";
-    private static final long  serialVersionUID         = 1L;
+	public static final String FIND_ALL = "jobChronology" + FIND_ALL_SUFFIX;
+	public static final String FIND_FOR_JOB = "jobChronology.findForJob";
+	public static final String FIND_FOR_PRODUCT = "jobChronology.findForProduct";
+	public static final String GET_LOG_FOR_SEQUENCE = "jobChronology.getLogForSequenc";
+	public static final String HIGHEST_SEQUENCE_FOR_JOB = "jobChronology.highestSequenceForJob";
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Job
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "job")
-    private Job                job;
+	// bi-directional many-to-one association to Job
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "job")
+	private Job job;
 
-    @Column(name = "sequence_number")
-    private int                sequenceNumber           = 0;
+	@Column(name = "sequence_number")
+	private int sequenceNumber = 0;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "status")
-    private StatusCode         status;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "status")
+	private StatusCode status;
 
-    public JobChronology() {
-    }
+	public JobChronology() {
+	}
 
-    public JobChronology(Job job, String notes) {
-        super(notes, job.getUpdatedBy());
-        initializeFrom(job);
-    }
+	public JobChronology(Job job, String notes) {
+		super(notes, job.getUpdatedBy());
+		initializeFrom(job);
+	}
 
-    public JobChronology(Job job, String notes, int sequenceNumber) {
-        super(notes, job.getUpdatedBy());
-        initializeFrom(job);
-        setSequenceNumber(sequenceNumber);
-    }
+	public JobChronology(Job job, String notes, int sequenceNumber) {
+		super(notes, job.getUpdatedBy());
+		initializeFrom(job);
+		setSequenceNumber(sequenceNumber);
+	}
 
-    /**
-     * @param id
-     */
-    public JobChronology(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public JobChronology(UUID id) {
+		super(id);
+	}
 
-    public Job getJob() {
-        return job;
-    }
+	public Job getJob() {
+		return job;
+	}
 
-    public int getSequenceNumber() {
-        return sequenceNumber;
-    }
+	public int getSequenceNumber() {
+		return sequenceNumber;
+	}
 
-    /**
-     * @return the status
-     */
-    public StatusCode getStatus() {
-        return status;
-    }
+	/**
+	 * @return the status
+	 */
+	public StatusCode getStatus() {
+		return status;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, JobChronology> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.jobChronology;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, JobChronology> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.jobChronology;
+	}
 
-    /**
-     * @param job
-     */
-    public void setJob(Job job) {
-        this.job = job;
-    }
+	protected void initializeFrom(Job job) {
+		setJob(job);
+		setStatus(job.getStatus());
+		copyFrom(job);
+	}
 
-    /**
-     * @param sequenceNumber
-     *            the sequence to set
-     */
-    public void setSequenceNumber(int sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
+	/**
+	 * @param job
+	 */
+	public void setJob(Job job) {
+		this.job = job;
+	}
 
-    /**
-     * @param status
-     *            the status to set
-     */
-    public void setStatus(StatusCode status) {
-        this.status = status;
-    }
+	/**
+	 * @param sequenceNumber
+	 *            the sequence to set
+	 */
+	public void setSequenceNumber(int sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
+	}
 
-    @Override
-    public String toString() {
-        return String.format("JobChronology [status=%s, %s, sequenceNumber=%s, notes=%s]",
-                             getStatus().getName(), getToString(),
-                             sequenceNumber, getNotes());
-    }
+	/**
+	 * @param status
+	 *            the status to set
+	 */
+	public void setStatus(StatusCode status) {
+		this.status = status;
+	}
 
-    @SuppressWarnings("unused")
-    private void validate() {
-        if (getJob() == null) {
-            throw new IllegalStateException();
-        }
-        if (getStatus() == null) {
-            throw new IllegalStateException();
-        }
-        if (getAssignTo() == null) {
-            throw new IllegalStateException();
-        }
-        if (getAssignToAttribute() == null) {
-            throw new IllegalStateException();
-        }
-        if (getDeliverFrom() == null) {
-            throw new IllegalStateException();
-        }
-        if (getDeliverFromAttribute() == null) {
-            throw new IllegalStateException();
-        }
-        if (getDeliverTo() == null) {
-            throw new IllegalStateException();
-        }
-        if (getDeliverToAttribute() == null) {
-            throw new IllegalStateException();
-        }
-        if (getProduct() == null) {
-            throw new IllegalStateException();
-        }
-        if (getProductAttribute() == null) {
-            throw new IllegalStateException();
-        }
-        if (getQuantity() == null) {
-            throw new IllegalStateException();
-        }
-        if (getQuantityUnit() == null) {
-            throw new IllegalStateException();
-        }
-        if (getRequester() == null) {
-            throw new IllegalStateException();
-        }
-        if (getRequesterAttribute() == null) {
-            throw new IllegalStateException();
-        }
-        if (getService() == null) {
-            throw new IllegalStateException();
-        }
-        if (getServiceAttribute() == null) {
-            throw new IllegalStateException();
-        }
-    }
+	@Override
+	public String toString() {
+		return String.format(
+				"JobChronology [status=%s, %s, sequenceNumber=%s, notes=%s]",
+				getStatus().getName(), getToString(), sequenceNumber,
+				getNotes());
+	}
 
-    protected void initializeFrom(Job job) {
-        setJob(job);
-        setStatus(job.getStatus());
-        copyFrom(job);
-    }
+	@SuppressWarnings("unused")
+	private void validate() {
+		if (getJob() == null) {
+			throw new IllegalStateException();
+		}
+		if (getStatus() == null) {
+			throw new IllegalStateException();
+		}
+		if (getAssignTo() == null) {
+			throw new IllegalStateException();
+		}
+		if (getAssignToAttribute() == null) {
+			throw new IllegalStateException();
+		}
+		if (getDeliverFrom() == null) {
+			throw new IllegalStateException();
+		}
+		if (getDeliverFromAttribute() == null) {
+			throw new IllegalStateException();
+		}
+		if (getDeliverTo() == null) {
+			throw new IllegalStateException();
+		}
+		if (getDeliverToAttribute() == null) {
+			throw new IllegalStateException();
+		}
+		if (getProduct() == null) {
+			throw new IllegalStateException();
+		}
+		if (getProductAttribute() == null) {
+			throw new IllegalStateException();
+		}
+		if (getQuantity() == null) {
+			throw new IllegalStateException();
+		}
+		if (getQuantityUnit() == null) {
+			throw new IllegalStateException();
+		}
+		if (getRequester() == null) {
+			throw new IllegalStateException();
+		}
+		if (getRequesterAttribute() == null) {
+			throw new IllegalStateException();
+		}
+		if (getService() == null) {
+			throw new IllegalStateException();
+		}
+		if (getServiceAttribute() == null) {
+			throw new IllegalStateException();
+		}
+	}
 }

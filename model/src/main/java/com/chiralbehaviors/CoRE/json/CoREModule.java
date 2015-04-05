@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -30,17 +30,17 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
  */
 public class CoREModule extends SimpleModule {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public CoREModule() {
-        super("CoREModule");
-    }
+	public CoREModule() {
+		super("CoREModule");
+	}
 
-    @Override
-    public void setupModule(SetupContext context) {
+	@Override
+	public void setupModule(SetupContext context) {
 
-        context.setMixInAnnotations(Ruleform.class,
-                                    PolymorphicRuleformMixin.class);
-        super.setupModule(context);
-    }
+		context.setMixInAnnotations(Ruleform.class,
+				PolymorphicRuleformMixin.class);
+		super.setupModule(context);
+	}
 }

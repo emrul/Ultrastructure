@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -46,86 +46,87 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "product_attribute_authorization", schema = "ruleform")
 public class ProductAttributeAuthorization extends
-        ClassifiedAttributeAuthorization<Product> {
-    private static final long serialVersionUID = 1L;
+		ClassifiedAttributeAuthorization<Product> {
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Product
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "classifier")
-    private Product           classifier;
+	// bi-directional many-to-one association to Product
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "classifier")
+	private Product classifier;
 
-    public ProductAttributeAuthorization() {
-    }
+	public ProductAttributeAuthorization() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public ProductAttributeAuthorization(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public ProductAttributeAuthorization(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param classification
-     * @param updatedBy
-     */
-    public ProductAttributeAuthorization(Relationship classification,
-                                         Agency updatedBy) {
-        super(classification, updatedBy);
-    }
+	/**
+	 * @param classification
+	 * @param updatedBy
+	 */
+	public ProductAttributeAuthorization(Relationship classification,
+			Agency updatedBy) {
+		super(classification, updatedBy);
+	}
 
-    /**
-     * @param classification
-     * @param authorized
-     * @param updatedBy
-     */
-    public ProductAttributeAuthorization(Relationship classification,
-                                         Attribute authorized, Agency updatedBy) {
-        super(classification, authorized, updatedBy);
-    }
+	/**
+	 * @param classification
+	 * @param authorized
+	 * @param updatedBy
+	 */
+	public ProductAttributeAuthorization(Relationship classification,
+			Attribute authorized, Agency updatedBy) {
+		super(classification, authorized, updatedBy);
+	}
 
-    public ProductAttributeAuthorization(Relationship classification,
-                                         Product classifier,
-                                         Attribute authorized, Agency updatedBy) {
-        super(classification, authorized, updatedBy);
-        this.classifier = classifier;
-    }
+	public ProductAttributeAuthorization(Relationship classification,
+			Product classifier, Attribute authorized, Agency updatedBy) {
+		super(classification, authorized, updatedBy);
+		this.classifier = classifier;
+	}
 
-    /**
-     * @param id
-     */
-    public ProductAttributeAuthorization(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public ProductAttributeAuthorization(UUID id) {
+		super(id);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-     * getClassifier()
-     */
-    @Override
-    @JsonGetter
-    public Product getClassifier() {
-        return classifier;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+	 * getClassifier()
+	 */
+	@Override
+	@JsonGetter
+	public Product getClassifier() {
+		return classifier;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, ProductAttributeAuthorization> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.productAttributeAuthorization;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, ProductAttributeAuthorization> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.productAttributeAuthorization;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-     * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
-     */
-    @Override
-    public void setClassifier(Product classifier) {
-        this.classifier = classifier;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+	 * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
+	 */
+	@Override
+	public void setClassifier(Product classifier) {
+		this.classifier = classifier;
+	}
 }

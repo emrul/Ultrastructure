@@ -37,29 +37,29 @@ import com.hellblazer.utils.Tuple;
  */
 public class StatusCodeSequencingTriggerTest extends AbstractModelTest {
 
-    @Test
-    public void test2InitialStates() throws SQLException {
-        em.getTransaction().begin();
-        Agency core = kernel.getCore();
-        Product service = kernel.getNotApplicableProduct();
-        StatusCode a = new StatusCode("A", null, core);
-        em.persist(a);
-        StatusCode b = new StatusCode("B", null, core);
-        em.persist(b);
-        StatusCode x = new StatusCode("X", null, core);
-        em.persist(x);
+	@Test
+	public void test2InitialStates() throws SQLException {
+		em.getTransaction().begin();
+		Agency core = kernel.getCore();
+		Product service = kernel.getNotApplicableProduct();
+		StatusCode a = new StatusCode("A", null, core);
+		em.persist(a);
+		StatusCode b = new StatusCode("B", null, core);
+		em.persist(b);
+		StatusCode x = new StatusCode("X", null, core);
+		em.persist(x);
 
-        List<Tuple<StatusCode, StatusCode>> codes = new ArrayList<>();
-        codes.add(new Tuple<StatusCode, StatusCode>(a, x));
-        codes.add(new Tuple<StatusCode, StatusCode>(b, x));
-        model.getJobModel().createStatusCodeSequencings(service, codes, core);
-        try {
-            em.getTransaction().commit();
-            fail("Insert should not have succeeded");
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-        }
-    }
+		List<Tuple<StatusCode, StatusCode>> codes = new ArrayList<>();
+		codes.add(new Tuple<StatusCode, StatusCode>(a, x));
+		codes.add(new Tuple<StatusCode, StatusCode>(b, x));
+		model.getJobModel().createStatusCodeSequencings(service, codes, core);
+		try {
+			em.getTransaction().commit();
+			fail("Insert should not have succeeded");
+		} catch (Exception e) {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+		}
+	}
 }

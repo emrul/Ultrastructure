@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -42,192 +42,192 @@ import com.chiralbehaviors.CoRE.time.IntervalNetwork;
  *
  */
 public interface Kernel {
-    Agency getAgency();
+	Agency getAgency();
 
-    Agency getAnyAgency();
+	Agency getAnyAgency();
 
-    Attribute getAnyAttribute();
+	Attribute getAnyAttribute();
 
-    Interval getAnyInterval();
+	Interval getAnyInterval();
 
-    Location getAnyLocation();
+	Location getAnyLocation();
 
-    Product getAnyProduct();
+	Product getAnyProduct();
 
-    Relationship getAnyRelationship();
+	Relationship getAnyRelationship();
 
-    StatusCode getAnyStatusCode();
+	StatusCode getAnyStatusCode();
 
-    Unit getAnyUnit();
+	Unit getAnyUnit();
 
-    Attribute getAttribute();
+	Attribute getAttribute();
 
-    Relationship getContains();
+	Relationship getContains();
 
-    Agency getCopyAgency();
+	Agency getCopyAgency();
 
-    Attribute getCopyAttribute();
+	Attribute getCopyAttribute();
 
-    Interval getCopyInterval();
+	Interval getCopyInterval();
 
-    Location getCopyLocation();
+	Location getCopyLocation();
 
-    Product getCopyProduct();
+	Product getCopyProduct();
 
-    Relationship getCopyRelationship();
+	Relationship getCopyRelationship();
 
-    StatusCode getCopyStatusCode();
+	StatusCode getCopyStatusCode();
 
-    Unit getCopyUnit();
+	Unit getCopyUnit();
 
-    Agency getCore();
+	Agency getCore();
 
-    Agency getCoreAnimationSoftware();
+	Agency getCoreAnimationSoftware();
 
-    Agency getCoreModel();
+	Agency getCoreModel();
 
-    Agency getCoreUser();
+	Agency getCoreUser();
 
-    Unit getDays();
+	Unit getDays();
 
-    Relationship getDeveloped();
+	Relationship getDeveloped();
 
-    Relationship getDevelopedBy();
+	Relationship getDevelopedBy();
 
-    Relationship getEquals();
+	Relationship getEquals();
 
-    Relationship getFormerMemberOf();
+	Relationship getFormerMemberOf();
 
-    Relationship getGreaterThan();
+	Relationship getGreaterThan();
 
-    Relationship getGreaterThanOrEqual();
+	Relationship getGreaterThanOrEqual();
 
-    Relationship getHadMember();
+	Relationship getHadMember();
 
-    Relationship getHasException();
+	Relationship getHasException();
 
-    Relationship getHasHead();
+	Relationship getHasHead();
 
-    Relationship getHasMember();
+	Relationship getHasMember();
 
-    Relationship getHasVersion();
+	Relationship getHasVersion();
 
-    Relationship getHeadOf();
+	Relationship getHeadOf();
 
-    Unit getHours();
+	Unit getHours();
 
-    Relationship getIncludes();
+	Relationship getIncludes();
 
-    Agency getInverseSoftware();
+	Agency getInverseSoftware();
 
-    Relationship getInWorkspace();
+	Relationship getInWorkspace();
 
-    Relationship getIsA();
+	Relationship getIsA();
 
-    Relationship getIsContainedIn();
+	Relationship getIsContainedIn();
 
-    Relationship getIsExceptionTo();
+	Relationship getIsExceptionTo();
 
-    Relationship getIsLocationOf();
+	Relationship getIsLocationOf();
 
-    Product getKernelWorkspace();
+	Product getKernelWorkspace();
 
-    Relationship getLessThan();
+	Relationship getLessThan();
 
-    Relationship getLessThanOrEqual();
+	Relationship getLessThanOrEqual();
 
-    Location getLocation();
+	Location getLocation();
 
-    Attribute getLoginAttribute();
+	Attribute getLoginAttribute();
 
-    Relationship getMapsToLocation();
+	Relationship getMapsToLocation();
 
-    Relationship getMemberOf();
+	Relationship getMemberOf();
 
-    Unit getMicroseconds();
+	Unit getMicroseconds();
 
-    Unit getMilliseconds();
+	Unit getMilliseconds();
 
-    Unit getMinutes();
+	Unit getMinutes();
 
-    Unit getNanoseconds();
+	Unit getNanoseconds();
 
-    Agency getNotApplicableAgency();
+	Agency getNotApplicableAgency();
 
-    Attribute getNotApplicableAttribute();
+	Attribute getNotApplicableAttribute();
 
-    Interval getNotApplicableInterval();
+	Interval getNotApplicableInterval();
 
-    Location getNotApplicableLocation();
+	Location getNotApplicableLocation();
 
-    Product getNotApplicableProduct();
+	Product getNotApplicableProduct();
 
-    Relationship getNotApplicableRelationship();
+	Relationship getNotApplicableRelationship();
 
-    StatusCode getNotApplicableStatusCode();
+	StatusCode getNotApplicableStatusCode();
 
-    Unit getNotApplicableUnit();
+	Unit getNotApplicableUnit();
 
-    Relationship getOwnedBy();
+	Relationship getOwnedBy();
 
-    Relationship getOwns();
+	Relationship getOwns();
 
-    Attribute getPasswordHashAttribute();
+	Attribute getPasswordHashAttribute();
 
-    Product getProduct();
+	Product getProduct();
 
-    Agency getPropagationSoftware();
+	Agency getPropagationSoftware();
 
-    Relationship getPrototype();
+	Relationship getPrototype();
 
-    Relationship getPrototypeOf();
+	Relationship getPrototypeOf();
 
-    AgencyNetwork getRootAgencyNetwork();
+	AgencyNetwork getRootAgencyNetwork();
 
-    AttributeNetwork getRootAttributeNetwork();
+	AttributeNetwork getRootAttributeNetwork();
 
-    IntervalNetwork getRootIntervalNetwork();
+	IntervalNetwork getRootIntervalNetwork();
 
-    LocationNetwork getRootLocationNetwork();
+	LocationNetwork getRootLocationNetwork();
 
-    ProductNetwork getRootProductNetwork();
+	ProductNetwork getRootProductNetwork();
 
-    RelationshipNetwork getRootRelationshipNetwork();
+	RelationshipNetwork getRootRelationshipNetwork();
 
-    StatusCodeNetwork getRootStatusCodeNetwork();
+	StatusCodeNetwork getRootStatusCodeNetwork();
 
-    UnitNetwork getRootUnitNetwork();
+	UnitNetwork getRootUnitNetwork();
 
-    Agency getSameAgency();
+	Agency getSameAgency();
 
-    Attribute getSameAttribute();
+	Attribute getSameAttribute();
 
-    Interval getSameInterval();
+	Interval getSameInterval();
 
-    Location getSameLocation();
+	Location getSameLocation();
 
-    Product getSameProduct();
+	Product getSameProduct();
 
-    Relationship getSameRelationship();
+	Relationship getSameRelationship();
 
-    StatusCode getSameStatusCode();
+	StatusCode getSameStatusCode();
 
-    Unit getSameUnit();
+	Unit getSameUnit();
 
-    Unit getSeconds();
+	Unit getSeconds();
 
-    Agency getSpecialSystemAgency();
+	Agency getSpecialSystemAgency();
 
-    Agency getSuperUser();
+	Agency getSuperUser();
 
-    StatusCode getUnset();
+	StatusCode getUnset();
 
-    Unit getUnsetUnit();
+	Unit getUnsetUnit();
 
-    Relationship getVersionOf();
+	Relationship getVersionOf();
 
-    Product getWorkspace();
+	Product getWorkspace();
 
-    Relationship getWorkspaceOf();
+	Relationship getWorkspaceOf();
 
 }

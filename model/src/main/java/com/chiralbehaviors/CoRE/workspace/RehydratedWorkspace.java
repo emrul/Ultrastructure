@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2014 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -35,75 +35,86 @@ import com.chiralbehaviors.CoRE.Ruleform;
  */
 public class RehydratedWorkspace extends WorkspaceSnapshot implements Workspace {
 
-    private final Map<String, Ruleform> cache = new HashMap<>();
+	private final Map<String, Ruleform> cache = new HashMap<>();
 
-    public void cache() {
-        for (WorkspaceAuthorization auth : auths) {
-            if (auth.getKey() != null) {
-                cache.put(auth.getKey(), auth.getEntity());
-            }
-        }
-    }
+	public void cache() {
+		for (WorkspaceAuthorization auth : auths) {
+			if (auth.getKey() != null) {
+				cache.put(auth.getKey(), auth.getEntity());
+			}
+		}
+	}
 
-    /**
-     * @param em
-     */
-    public void detach(EntityManager em) {
-        for (WorkspaceAuthorization auth : auths) {
-            em.detach(auth);
-        }
-    }
+	/**
+	 * @param em
+	 */
+	public void detach(EntityManager em) {
+		for (WorkspaceAuthorization auth : auths) {
+			em.detach(auth);
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.workspace.Workspace#get(java.lang.String)
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends Ruleform> T get(String key) {
-        return (T) cache.get(key);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.workspace.Workspace#get(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Ruleform> T get(String key) {
+		return (T) cache.get(key);
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.workspace.Workspace#getAccesor(java.lang.Class)
-     */
-    @Override
-    public <T> T getAccessor(Class<T> accessorInterface) {
-        return WorkspaceAccessHandler.getAccesor(accessorInterface, this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.workspace.Workspace#getAccesor(java.lang.Class)
+	 */
+	@Override
+	public <T> T getAccessor(Class<T> accessorInterface) {
+		return WorkspaceAccessHandler.getAccesor(accessorInterface, this);
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.workspace.Workspace#getCollection(java.lang.Class)
-     */
-    @Override
-    public <T extends Ruleform> List<T> getCollection(Class<T> ruleformClass) {
-        throw new UnsupportedOperationException();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.workspace.Workspace#getCollection(java.lang.
+	 * Class)
+	 */
+	@Override
+	public <T extends Ruleform> List<T> getCollection(Class<T> ruleformClass) {
+		throw new UnsupportedOperationException();
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.workspace.Workspace#getSnapshot()
-     */
-    @Override
-    public WorkspaceSnapshot getSnapshot() {
-        return this;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.workspace.Workspace#getSnapshot()
+	 */
+	@Override
+	public WorkspaceSnapshot getSnapshot() {
+		return this;
+	}
 
-    @Override
-    public void refreshFrom(EntityManager em) {
-        for (WorkspaceAuthorization auth : auths) {
-            em.getEntityManagerFactory().getCache().evict(WorkspaceAuthorization.class,
-                                                          auth.getId());
-            em.refresh(auth);
-        }
-    }
+	@Override
+	public void refreshFrom(EntityManager em) {
+		for (WorkspaceAuthorization auth : auths) {
+			em.getEntityManagerFactory().getCache()
+					.evict(WorkspaceAuthorization.class, auth.getId());
+			em.refresh(auth);
+		}
+	}
 
-    @Override
-    public void replaceFrom(EntityManager em) {
-        List<WorkspaceAuthorization> oldAuths = new ArrayList<WorkspaceAuthorization>(
-                                                                                      auths);
-        auths.clear();
-        for (WorkspaceAuthorization auth : oldAuths) {
-            auths.add(em.merge(auth));
-        }
-        cache();
-    }
+	@Override
+	public void replaceFrom(EntityManager em) {
+		List<WorkspaceAuthorization> oldAuths = new ArrayList<WorkspaceAuthorization>(
+				auths);
+		auths.clear();
+		for (WorkspaceAuthorization auth : oldAuths) {
+			auths.add(em.merge(auth));
+		}
+		cache();
+	}
 }

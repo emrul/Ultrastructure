@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -32,9 +32,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 public interface Attributable<AttributeType extends Ruleform> {
-    @JsonIgnore
-    <A extends AttributeType> Set<A> getAttributes();
+	@JsonIgnore
+	<A extends AttributeType> Set<A> getAttributes();
 
-    @JsonIgnore
-    <A extends AttributeType> void setAttributes(Set<A> attributes);
+	@JsonIgnore
+	<A extends AttributeType> void setAttributes(Set<A> attributes);
 }

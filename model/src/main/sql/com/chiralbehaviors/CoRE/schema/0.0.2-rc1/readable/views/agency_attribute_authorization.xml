@@ -18,6 +18,7 @@
 			    base_table.integer_value, 
 			    base_table.numeric_value, 
 			    base_table.notes, 
+			    va.name AS validating_attribute,
 			    up.name AS updated_by, 
 			    base_table.version
 			 FROM agency_attribute_authorization base_table
@@ -25,7 +26,8 @@
 			 LEFT JOIN relationship cls ON base_table.classification = cls.id
 			 LEFT JOIN agency b ON base_table.classifier = b.id
 			 LEFT JOIN attribute att ON base_table.authorized_attribute = att.id
-			 LEFT JOIN agency up ON base_table.updated_by = up.id;
+			 LEFT JOIN agency up ON base_table.updated_by = up.id
+			 LEFT JOIN attribute va ON base_table.validating_attribute = va.id;
 			
 			ALTER TABLE readable.agency_attribute_authorization
 			  OWNER TO core;

@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -39,40 +39,42 @@ import com.chiralbehaviors.CoRE.network.RelationshipNetwork;
  */
 public class RelationshipModelTest extends AbstractModelTest {
 
-    @Test
-    public void testSimpleNetworkPropagation() {
-        Agency core = model.getKernel().getCore();
-        Relationship equals = model.getKernel().getEquals();
+	@Test
+	public void testSimpleNetworkPropagation() {
+		Agency core = model.getKernel().getCore();
+		Relationship equals = model.getKernel().getEquals();
 
-        em.getTransaction().begin();
+		em.getTransaction().begin();
 
-        Relationship equals2 = new Relationship("equals 2",
-                                                "an alias for equals", core);
-        equals2.setInverse(equals2);
-        em.persist(equals2);
-        NetworkInference aEqualsA = new NetworkInference(equals, equals2,
-                                                         equals, core);
-        em.persist(aEqualsA);
-        Relationship a = new Relationship("A", core);
-        a.setInverse(a);
-        em.persist(a);
-        Relationship b = new Relationship("B", core);
-        b.setInverse(b);
-        em.persist(b);
-        Relationship c = new Relationship("C", core);
-        c.setInverse(c);
-        em.persist(c);
-        RelationshipNetwork edgeA = new RelationshipNetwork(a, equals, b, core);
-        em.persist(edgeA);
-        RelationshipNetwork edgeB = new RelationshipNetwork(b, equals2, c, core);
-        em.persist(edgeB);
+		Relationship equals2 = new Relationship("equals 2",
+				"an alias for equals", core);
+		equals2.setInverse(equals2);
+		em.persist(equals2);
+		NetworkInference aEqualsA = new NetworkInference(equals, equals2,
+				equals, core);
+		em.persist(aEqualsA);
+		Relationship a = new Relationship("A", core);
+		a.setInverse(a);
+		em.persist(a);
+		Relationship b = new Relationship("B", core);
+		b.setInverse(b);
+		em.persist(b);
+		Relationship c = new Relationship("C", core);
+		c.setInverse(c);
+		em.persist(c);
+		RelationshipNetwork edgeA = new RelationshipNetwork(a, equals, b, core);
+		em.persist(edgeA);
+		RelationshipNetwork edgeB = new RelationshipNetwork(b, equals2, c, core);
+		em.persist(edgeB);
 
-        em.flush();
+		em.flush();
 
-        TypedQuery<RelationshipNetwork> query = em.createQuery("SELECT edge FROM RelationshipNetwork edge WHERE edge.inference.id <> :id",
-                                                               RelationshipNetwork.class);
-        query.setParameter("id", new UUID(0, 0));
-        List<RelationshipNetwork> edges = query.getResultList();
-        assertEquals(2, edges.size());
-    }
+		TypedQuery<RelationshipNetwork> query = em
+				.createQuery(
+						"SELECT edge FROM RelationshipNetwork edge WHERE edge.inference.id <> :id",
+						RelationshipNetwork.class);
+		query.setParameter("id", new UUID(0, 0));
+		List<RelationshipNetwork> edges = query.getResultList();
+		assertEquals(2, edges.size());
+	}
 }

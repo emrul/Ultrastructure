@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -45,89 +45,88 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "agency_attribute_authorization", schema = "ruleform")
 public class RelationshipAttributeAuthorization extends
-        ClassifiedAttributeAuthorization<Relationship> {
-    private static final long serialVersionUID = 1L;
+		ClassifiedAttributeAuthorization<Relationship> {
+	private static final long serialVersionUID = 1L;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "classifier")
-    private Relationship      classifier;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "classifier")
+	private Relationship classifier;
 
-    public RelationshipAttributeAuthorization() {
-    }
+	public RelationshipAttributeAuthorization() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public RelationshipAttributeAuthorization(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public RelationshipAttributeAuthorization(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param id
-     * @param classification
-     * @param updatedBy
-     */
-    public RelationshipAttributeAuthorization(Relationship classification,
-                                              Agency updatedBy) {
-        super(classification, updatedBy);
-    }
+	/**
+	 * @param id
+	 * @param classification
+	 * @param updatedBy
+	 */
+	public RelationshipAttributeAuthorization(Relationship classification,
+			Agency updatedBy) {
+		super(classification, updatedBy);
+	}
 
-    /**
-     * @param id
-     * @param classification
-     * @param authorized
-     * @param updatedBy
-     */
-    public RelationshipAttributeAuthorization(Relationship classification,
-                                              Attribute authorized,
-                                              Agency updatedBy) {
-        super(classification, authorized, updatedBy);
-    }
+	/**
+	 * @param id
+	 * @param classification
+	 * @param authorized
+	 * @param updatedBy
+	 */
+	public RelationshipAttributeAuthorization(Relationship classification,
+			Attribute authorized, Agency updatedBy) {
+		super(classification, authorized, updatedBy);
+	}
 
-    public RelationshipAttributeAuthorization(Relationship classification,
-                                              Relationship classifier,
-                                              Attribute authorized,
-                                              Agency updatedBy) {
-        this(classification, authorized, updatedBy);
-        this.classifier = classifier;
-    }
+	public RelationshipAttributeAuthorization(Relationship classification,
+			Relationship classifier, Attribute authorized, Agency updatedBy) {
+		this(classification, authorized, updatedBy);
+		this.classifier = classifier;
+	}
 
-    /**
-     * @param id
-     */
-    public RelationshipAttributeAuthorization(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public RelationshipAttributeAuthorization(UUID id) {
+		super(id);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-     * getClassifier()
-     */
-    @Override
-    @JsonGetter
-    public Relationship getClassifier() {
-        return classifier;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+	 * getClassifier()
+	 */
+	@Override
+	@JsonGetter
+	public Relationship getClassifier() {
+		return classifier;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, RelationshipAttributeAuthorization> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.relationshipAttributeAuthorization;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, RelationshipAttributeAuthorization> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.relationshipAttributeAuthorization;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-     * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
-     */
-    @Override
-    public void setClassifier(Relationship classifier) {
-        this.classifier = classifier;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+	 * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
+	 */
+	@Override
+	public void setClassifier(Relationship classifier) {
+		this.classifier = classifier;
+	}
 }

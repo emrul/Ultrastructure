@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -41,37 +41,39 @@ import com.chiralbehaviors.CoRE.product.ProductNetwork;
  */
 public class ProductModelTest extends AbstractModelTest {
 
-    @Test
-    public void testSimpleNetworkPropagation() {
-        Agency core = model.getKernel().getCore();
-        Relationship equals = model.getKernel().getEquals();
+	@Test
+	public void testSimpleNetworkPropagation() {
+		Agency core = model.getKernel().getCore();
+		Relationship equals = model.getKernel().getEquals();
 
-        em.getTransaction().begin();
+		em.getTransaction().begin();
 
-        Relationship equals2 = new Relationship("equals 2",
-                                                "an alias for equals", core);
-        equals2.setInverse(equals2);
-        em.persist(equals2);
-        NetworkInference aEqualsA = new NetworkInference(equals, equals2,
-                                                         equals, core);
-        em.persist(aEqualsA);
-        Product a = new Product("A", "A", core);
-        em.persist(a);
-        Product b = new Product("B", "B", core);
-        em.persist(b);
-        Product c = new Product("C", "C", core);
-        em.persist(c);
-        ProductNetwork edgeA = new ProductNetwork(a, equals, b, core);
-        em.persist(edgeA);
-        ProductNetwork edgeB = new ProductNetwork(b, equals2, c, core);
-        em.persist(edgeB);
+		Relationship equals2 = new Relationship("equals 2",
+				"an alias for equals", core);
+		equals2.setInverse(equals2);
+		em.persist(equals2);
+		NetworkInference aEqualsA = new NetworkInference(equals, equals2,
+				equals, core);
+		em.persist(aEqualsA);
+		Product a = new Product("A", "A", core);
+		em.persist(a);
+		Product b = new Product("B", "B", core);
+		em.persist(b);
+		Product c = new Product("C", "C", core);
+		em.persist(c);
+		ProductNetwork edgeA = new ProductNetwork(a, equals, b, core);
+		em.persist(edgeA);
+		ProductNetwork edgeB = new ProductNetwork(b, equals2, c, core);
+		em.persist(edgeB);
 
-        em.flush();
+		em.flush();
 
-        TypedQuery<ProductNetwork> query = em.createQuery("SELECT edge FROM ProductNetwork edge WHERE edge.inference.id <> :id",
-                                                          ProductNetwork.class);
-        query.setParameter("id", new UUID(0, 0));
-        List<ProductNetwork> edges = query.getResultList();
-        assertEquals(2, edges.size());
-    }
+		TypedQuery<ProductNetwork> query = em
+				.createQuery(
+						"SELECT edge FROM ProductNetwork edge WHERE edge.inference.id <> :id",
+						ProductNetwork.class);
+		query.setParameter("id", new UUID(0, 0));
+		List<ProductNetwork> edges = query.getResultList();
+		assertEquals(2, edges.size());
+	}
 }

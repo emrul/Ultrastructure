@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -44,9 +44,9 @@ import com.chiralbehaviors.CoRE.product.ProductNetwork;
  *
  */
 public class ProductModelImpl
-		extends
-		AbstractNetworkedModel<Product, ProductNetwork, ProductAttributeAuthorization, ProductAttribute>
-		implements ProductModel {
+extends
+AbstractNetworkedModel<Product, ProductNetwork, ProductAttributeAuthorization, ProductAttribute>
+implements ProductModel {
 
 	/**
 	 * @param em
@@ -57,7 +57,7 @@ public class ProductModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
 	 * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -74,7 +74,26 @@ public class ProductModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
+	 * chiralbehaviors.CoRE.network.Aspect,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute)
+	 */
+	@Override
+	public void authorizeEnum(Aspect<Product> aspect, Attribute attribute,
+			Attribute enumAttribute) {
+		ProductAttributeAuthorization auth = new ProductAttributeAuthorization(
+				aspect.getClassification(), aspect.getClassifier(), attribute,
+				kernel.getCoreAnimationSoftware());
+		auth.setValidatingAttribute(enumAttribute);
+		em.persist(auth);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
 	 * .CoRE.network .Networked)
@@ -101,7 +120,7 @@ public class ProductModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
 	 * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -118,7 +137,7 @@ public class ProductModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
 	 * .CoRE.meta .Aspect<RuleForm>[])
@@ -156,6 +175,36 @@ public class ProductModelImpl
 	}
 
 	/**
+	 * @param attributeValue
+	 * @return
+	 */
+	private ProductAttributeAuthorization getValidatingAuthorization(
+			ProductAttribute attributeValue) {
+		String sql = "SELECT  p FROM ProductAttributeAuthorization p "
+				+ "WHERE p.validatingAttribute IS NOT NULL "
+				+ "AND p.authorizedAttribute = :attribute ";
+		TypedQuery<ProductAttributeAuthorization> query = em.createQuery(sql,
+				ProductAttributeAuthorization.class);
+		query.setParameter("attribute", attributeValue.getAttribute());
+		List<ProductAttributeAuthorization> auths = query.getResultList();
+		TypedQuery<ProductNetwork> networkQuery = em.createNamedQuery(
+				ProductNetwork.GET_NETWORKS, ProductNetwork.class);
+		networkQuery.setParameter("parent", attributeValue.getProduct());
+		for (ProductAttributeAuthorization auth : auths) {
+			networkQuery.setParameter("relationship", auth.getClassification());
+			networkQuery.setParameter("child", auth.getClassifier());
+			try {
+				if (networkQuery.getSingleResult() != null) {
+					return auth;
+				}
+			} catch (NoResultException e) {
+				// keep going
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @param product
 	 * @param aspect
 	 */
@@ -178,26 +227,7 @@ public class ProductModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
-	 * chiralbehaviors.CoRE.network.Aspect,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute)
-	 */
-	@Override
-	public void authorizeEnum(Aspect<Product> aspect, Attribute attribute,
-			Attribute enumAttribute) {
-		ProductAttributeAuthorization auth = new ProductAttributeAuthorization(
-				aspect.getClassification(), aspect.getClassifier(), attribute,
-				kernel.getCoreAnimationSoftware());
-		auth.setValidatingAttribute(enumAttribute);
-		em.persist(auth);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
 	 * chiralbehaviors.CoRE.ExistentialRuleform,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
@@ -237,35 +267,5 @@ public class ProductModelImpl
 
 		em.persist(attributeValue);
 
-	}
-
-	/**
-	 * @param attributeValue
-	 * @return
-	 */
-	private ProductAttributeAuthorization getValidatingAuthorization(
-			ProductAttribute attributeValue) {
-		String sql = "SELECT  p FROM ProductAttributeAuthorization p "
-				+ "WHERE p.validatingAttribute IS NOT NULL "
-				+ "AND p.authorizedAttribute = :attribute ";
-		TypedQuery<ProductAttributeAuthorization> query = em.createQuery(sql,
-				ProductAttributeAuthorization.class);
-		query.setParameter("attribute", attributeValue.getAttribute());
-		List<ProductAttributeAuthorization> auths = query.getResultList();
-		TypedQuery<ProductNetwork> networkQuery = em.createNamedQuery(
-				ProductNetwork.GET_NETWORKS, ProductNetwork.class);
-		networkQuery.setParameter("parent", attributeValue.getProduct());
-		for (ProductAttributeAuthorization auth : auths) {
-			networkQuery.setParameter("relationship", auth.getClassification());
-			networkQuery.setParameter("child", auth.getClassifier());
-			try {
-				if (networkQuery.getSingleResult() != null) {
-					return auth;
-				}
-			} catch (NoResultException e) {
-				// keep going
-			}
-		}
-		return null;
 	}
 }

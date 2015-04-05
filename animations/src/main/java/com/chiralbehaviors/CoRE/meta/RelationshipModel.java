@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -29,20 +29,20 @@ import com.chiralbehaviors.CoRE.network.RelationshipNetwork;
  *
  */
 public interface RelationshipModel
-        extends
-        NetworkedModel<Relationship, RelationshipNetwork, RelationshipAttributeAuthorization, RelationshipAttribute> {
+		extends
+		NetworkedModel<Relationship, RelationshipNetwork, RelationshipAttributeAuthorization, RelationshipAttribute> {
 
-    /**
-     * Creates two relationships and sets them as inverses of each other
-     *
-     * @param rel1Name
-     * @param rel1Description
-     * @param rel2Name
-     * @param rel2Description
-     * @return The relationship created with rel1Name. The second relationship
-     *         can be retrieved by calling getInverse() on the return value.
-     */
-    Relationship create(String rel1Name, String rel1Description,
-                        String rel2Name, String rel2Description);
+	/**
+	 * Creates two relationships and sets them as inverses of each other
+	 *
+	 * @param rel1Name
+	 * @param rel1Description
+	 * @param rel2Name
+	 * @param rel2Description
+	 * @return The relationship created with rel1Name. The second relationship
+	 *         can be retrieved by calling getInverse() on the return value.
+	 */
+	Relationship create(String rel1Name, String rel1Description,
+			String rel2Name, String rel2Description);
 
 }

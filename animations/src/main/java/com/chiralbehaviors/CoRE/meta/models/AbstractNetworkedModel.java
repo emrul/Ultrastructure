@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -76,679 +76,701 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  *
  */
 abstract public class AbstractNetworkedModel<RuleForm extends ExistentialRuleform<RuleForm, Network>, Network extends NetworkRuleform<RuleForm>, AttributeAuthorization extends ClassifiedAttributeAuthorization<RuleForm>, AttributeType extends AttributeValue<RuleForm>>
-        implements
-        NetworkedModel<RuleForm, Network, AttributeAuthorization, AttributeType> {
+		implements
+		NetworkedModel<RuleForm, Network, AttributeAuthorization, AttributeType> {
 
-    private static Logger log            = LoggerFactory.getLogger(AbstractNetworkedModel.class);
+	/**
+	 * @param attr
+	 */
+	public static void defaultValue(AttributeValue<?> attr) {
+		switch (attr.getAttribute().getValueType()) {
+		case BINARY: {
+			attr.setBinaryValue(new byte[0]);
+			break;
+		}
+		case BOOLEAN: {
+			attr.setBooleanValue(false);
+			break;
+		}
+		case INTEGER: {
+			attr.setIntegerValue(-1);
+			break;
+		}
+		case NUMERIC: {
+			attr.setNumericValue(new BigDecimal(-1));
+			break;
+		}
+		case TEXT: {
+			attr.setTextValue("");
+			break;
+		}
+		case TIMESTAMP: {
+			attr.setTimestampValue(new Timestamp(0));
+			break;
+		}
+		}
+	}
 
-    private static int    MAX_DEDUCTIONS = 1000;
+	private static Logger log = LoggerFactory
+			.getLogger(AbstractNetworkedModel.class);
 
-    /**
-     * @param attr
-     */
-    public static void defaultValue(AttributeValue<?> attr) {
-        switch (attr.getAttribute().getValueType()) {
-            case BINARY: {
-                attr.setBinaryValue(new byte[0]);
-                break;
-            }
-            case BOOLEAN: {
-                attr.setBooleanValue(false);
-                break;
-            }
-            case INTEGER: {
-                attr.setIntegerValue(-1);
-                break;
-            }
-            case NUMERIC: {
-                attr.setNumericValue(new BigDecimal(-1));
-                break;
-            }
-            case TEXT: {
-                attr.setTextValue("");
-                break;
-            }
-            case TIMESTAMP: {
-                attr.setTimestampValue(new Timestamp(0));
-                break;
-            }
-        }
-    }
+	private static int MAX_DEDUCTIONS = 1000;
 
-    private final Class<AttributeType>             attribute;
+	private final Class<AttributeType> attribute;
 
-    private final Class<AttributeAuthorization>    authorization;
-    private final Class<RuleForm>                  entity;
-    private final Class<NetworkRuleform<RuleForm>> network;
-    private final String                           networkPrefix;
-    private final String                           prefix;
-    protected final EntityManager                  em;
-    protected final Kernel                         kernel;
+	private final Class<AttributeAuthorization> authorization;
+	private final Class<RuleForm> entity;
+	private final Class<NetworkRuleform<RuleForm>> network;
+	private final String networkPrefix;
+	private final String prefix;
+	protected final EntityManager em;
+	protected final Kernel kernel;
 
-    @SuppressWarnings("unchecked")
-    public AbstractNetworkedModel(Model model) {
-        this.em = model.getEntityManager();
-        this.kernel = model.getKernel();
-        entity = extractedEntity();
-        authorization = extractedAuthorization();
-        attribute = extractedAttribute();
-        network = (Class<NetworkRuleform<RuleForm>>) extractedNetwork();
-        prefix = ModelImpl.prefixFor(entity);
-        networkPrefix = ModelImpl.prefixFor(network);
-    }
+	@SuppressWarnings("unchecked")
+	public AbstractNetworkedModel(Model model) {
+		this.em = model.getEntityManager();
+		this.kernel = model.getKernel();
+		entity = extractedEntity();
+		authorization = extractedAuthorization();
+		attribute = extractedAttribute();
+		network = (Class<NetworkRuleform<RuleForm>>) extractedNetwork();
+		prefix = ModelImpl.prefixFor(entity);
+		networkPrefix = ModelImpl.prefixFor(network);
+	}
 
-    public void createInverseRelationship(RuleForm parent, Relationship r,
-                                          RuleForm child, Agency updatedBy) {
-        child.link(r.getInverse(), parent, updatedBy,
-                   kernel.getInverseSoftware(), em);
-    }
+	private void addTransitiveRelationships(Network edge,
+			Set<Relationship> inverses, Set<RuleForm> visited,
+			Set<Relationship> relationships) {
+		Relationship relationship = edge.getRelationship();
+		if (inverses.contains(relationship)) {
+			return;
+		}
+		if (!relationships.add(relationship)) {
+			return;
+		}
+		inverses.add(relationship.getInverse());
+		RuleForm child = edge.getChild();
+		for (Network network : child.getNetworkByParent()) {
+			RuleForm traversing = network.getChild();
+			if (visited.add(traversing)) {
+				addTransitiveRelationships(network, inverses, visited,
+						relationships);
+			}
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#find(long)
-     */
-    @Override
-    public RuleForm find(UUID id) {
-        RuleForm rf = em.find(entity, id);
-        return rf;
-    }
+	private void alterDeductionTablesForNextPass() {
+		em.createNativeQuery("TRUNCATE TABLE last_pass_rules").executeUpdate();
+		em.createNativeQuery(
+				"ALTER TABLE current_pass_rules RENAME TO temp_last_pass_rules")
+				.executeUpdate();
+		em.createNativeQuery(
+				"ALTER TABLE last_pass_rules RENAME TO current_pass_rules")
+				.executeUpdate();
+		em.createNativeQuery(
+				"ALTER TABLE temp_last_pass_rules RENAME TO last_pass_rules")
+				.executeUpdate();
+		em.createNativeQuery("TRUNCATE working_memory").executeUpdate();
+	}
 
-    @Override
-    public List<RuleForm> findAll() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<RuleForm> cq = cb.createQuery(entity);
-        cq.from(entity);
-        return em.createQuery(cq).getResultList();
-    }
+	private void createCurrentPassRules() {
+		em.createNativeQuery(
+				"CREATE TEMPORARY TABLE current_pass_rules ("
+						+ "id uuid NOT NULL," + "parent uuid NOT NULL,"
+						+ "relationship uuid NOT NULL,"
+						+ "child uuid NOT NULL," + "premise1 uuid NOT NULL,"
+						+ "premise2 uuid NOT NULL,"
+						+ "inference uuid NOT NULL )").executeUpdate();
+	}
 
-    private void generateInverses() {
-        long then = System.currentTimeMillis();
-        int inverses = em.createNamedQuery(String.format("%s%s", networkPrefix,
-                                                         GENERATE_NETWORK_INVERSES_SUFFIX)).executeUpdate();
-        if (log.isTraceEnabled()) {
-            log.trace(String.format("created %s inverse rules of %s in %s ms",
-                                    inverses, networkPrefix,
-                                    System.currentTimeMillis() - then));
-        }
-    }
+	private void createDeductionTemporaryTables() {
+		em.createNativeQuery("DROP TABLE IF EXISTS last_pass_rules")
+				.executeUpdate();
+		em.createNativeQuery("DROP TABLE IF EXISTS current_pass_rules")
+				.executeUpdate();
+		em.createNativeQuery("DROP TABLE IF EXISTS working_memory")
+				.executeUpdate();
+		createWorkingMemory();
+		createCurrentPassRules();
+		createLastPassRules();
+	}
 
-    @Override
-    public <ValueType> List<ValueType> getAllowedValues(Attribute attribute,
-                                                        Agency groupingAgency) {
-        return getAllowedValues(attribute,
-                                getAttributeAuthorizations(groupingAgency,
-                                                           attribute));
-    }
+	public void createInverseRelationship(RuleForm parent, Relationship r,
+			RuleForm child, Agency updatedBy) {
+		child.link(r.getInverse(), parent, updatedBy,
+				kernel.getInverseSoftware(), em);
+	}
 
-    @Override
-    public <ValueType> List<ValueType> getAllowedValues(Attribute attribute,
-                                                        Aspect<RuleForm> aspect) {
-        return getAllowedValues(attribute,
-                                getAttributeAuthorizations(aspect, attribute));
-    }
+	private void createLastPassRules() {
+		em.createNativeQuery(
+				"CREATE TEMPORARY TABLE last_pass_rules ("
+						+ "id uuid NOT NULL," + "parent uuid NOT NULL,"
+						+ "relationship uuid NOT NULL,"
+						+ "child uuid NOT NULL," + "premise1 uuid NOT NULL,"
+						+ "premise2 uuid NOT NULL,"
+						+ "inference uuid NOT NULL )").executeUpdate();
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributeAuthorizations(com
-     * .hellblazer.CoRE.agency.Agency)
-     */
-    @Override
-    public List<AttributeAuthorization> getAttributeAuthorizations(Agency groupingAgency) {
-        TypedQuery<AttributeAuthorization> query = em.createNamedQuery(prefix
-                                                                               + FIND_GROUPED_ATTRIBUTE_ATHORIZATIONS_SUFFIX,
-                                                                       authorization);
-        query.setParameter("groupingAgency", groupingAgency);
-        return query.getResultList();
-    }
+	private void createWorkingMemory() {
+		em.createNativeQuery(
+				"CREATE TEMPORARY TABLE working_memory("
+						+ "parent uuid NOT NULL,"
+						+ "relationship uuid NOT NULL,"
+						+ "child uuid NOT NULL," + "premise1 uuid NOT NULL,"
+						+ "premise2 uuid NOT NULL,"
+						+ "inference uuid NOT NULL )").executeUpdate();
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributeAuthorizations(com
-     * .hellblazer.CoRE.agency.Agency, com.chiralbehaviors.CoRE.attribute.Attribute)
-     */
-    @Override
-    public List<AttributeAuthorization> getAttributeAuthorizations(Agency groupingAgency,
-                                                                   Attribute attribute) {
-        TypedQuery<AttributeAuthorization> query = em.createNamedQuery(prefix
-                                                                               + FIND_GROUPED_ATTRIBUTE_ATHORIZATIONS_FOR_ATTRIBUTE_SUFFIX,
-                                                                       authorization);
-        query.setParameter("groupingAgency", groupingAgency);
-        query.setParameter("attribute", attribute);
-        return query.getResultList();
-    }
+	// Deduce the new rules
+	private void deduce() {
+		int deductions = em.createNamedQuery(
+				networkPrefix + DEDUCE_NEW_NETWORK_RULES_SUFFIX)
+				.executeUpdate();
+		if (log.isTraceEnabled()) {
+			log.trace(String.format("deduced %s rules", deductions));
 
-    @Override
-    public List<AttributeAuthorization> getAttributeAuthorizations(Aspect<RuleForm> aspect) {
-        TypedQuery<AttributeAuthorization> query = em.createNamedQuery(prefix
-                                                                               + FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS_SUFFIX,
-                                                                       authorization);
-        query.setParameter("classification", aspect.getClassification());
-        query.setParameter("classifier", aspect.getClassifier());
-        return query.getResultList();
-    }
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributeAuthorizations(com
-     * .hellblazer.CoRE.meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute)
-     */
-    @Override
-    public List<AttributeAuthorization> getAttributeAuthorizations(Aspect<RuleForm> aspect,
-                                                                   Attribute attribute) {
-        TypedQuery<AttributeAuthorization> query = em.createNamedQuery(prefix
-                                                                               + FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS_FOR_ATTRIBUTE_SUFFIX,
-                                                                       authorization);
-        query.setParameter("classification", aspect.getClassification());
-        query.setParameter("classifier", aspect.getClassifier());
-        query.setParameter("attribute", attribute);
-        return query.getResultList();
-    }
+	@SuppressWarnings("unchecked")
+	private Class<AttributeType> extractedAttribute() {
+		return (Class<AttributeType>) ((ParameterizedType) this.getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[3];
+	}
 
-    @Override
-    public List<AttributeType> getAttributesClassifiedBy(RuleForm ruleform,
-                                                         Agency groupingAgency) {
-        TypedQuery<AttributeType> query = em.createNamedQuery(prefix
-                                                                      + FIND_GROUPED_ATTRIBUTE_VALUES_SUFFIX,
-                                                              attribute);
-        query.setParameter("ruleform", ruleform);
-        query.setParameter("agency", groupingAgency);
-        return query.getResultList();
-    }
+	@SuppressWarnings("unchecked")
+	private Class<AttributeAuthorization> extractedAuthorization() {
+		return (Class<AttributeAuthorization>) ((ParameterizedType) this
+				.getClass().getGenericSuperclass()).getActualTypeArguments()[2];
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributesClassifiedBy(com
-     * .hellblazer.CoRE.ExistentialRuleform, com.chiralbehaviors.CoRE.meta.Aspect)
-     */
-    @Override
-    public List<AttributeType> getAttributesClassifiedBy(RuleForm ruleform,
-                                                         Aspect<RuleForm> aspect) {
-        TypedQuery<AttributeType> query = em.createNamedQuery(prefix
-                                                                      + FIND_CLASSIFIED_ATTRIBUTE_VALUES_SUFFIX,
-                                                              attribute);
-        query.setParameter("ruleform", ruleform);
-        query.setParameter("classifier", aspect.getClassifier());
-        query.setParameter("classification", aspect.getClassification());
-        return query.getResultList();
-    }
+	@SuppressWarnings("unchecked")
+	private Class<RuleForm> extractedEntity() {
+		return (Class<RuleForm>) ((ParameterizedType) this.getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0];
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributesGroupedBy(com.chiralbehaviors
-     * .CoRE.ExistentialRuleform, com.chiralbehaviors.CoRE.agency.Agency)
-     */
-    @Override
-    public List<AttributeType> getAttributesGroupedBy(RuleForm ruleform,
-                                                      Agency groupingAgency) {
-        TypedQuery<AttributeType> query = em.createNamedQuery(prefix
-                                                                      + FIND_GROUPED_ATTRIBUTE_VALUES_SUFFIX,
-                                                              attribute);
-        query.setParameter("ruleform", ruleform);
-        query.setParameter("agency", groupingAgency);
-        return query.getResultList();
-    }
+	@SuppressWarnings("unchecked")
+	private Class<Network> extractedNetwork() {
+		return (Class<Network>) ((ParameterizedType) this.getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[1];
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#getChild(com.chiralbehaviors.CoRE.ExistentialRuleform, com.chiralbehaviors.CoRE.network.Relationship)
-     */
-    @Override
-    public RuleForm getChild(RuleForm parent, Relationship relationship) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<RuleForm> query = cb.createQuery(entity);
-        Root<NetworkRuleform<RuleForm>> networkRoot = query.from(network);
-        Path<RuleForm> path;
-        try {
-            path = networkRoot.get("child");
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-        query.select(path).where(cb.and(cb.equal(networkRoot.get("parent"),
-                                                 parent),
-                                        cb.equal(networkRoot.get("relationship"),
-                                                 relationship)));
-        TypedQuery<RuleForm> q = em.createQuery(query);
-        return q.getSingleResult();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#find(long)
+	 */
+	@Override
+	public RuleForm find(UUID id) {
+		RuleForm rf = em.find(entity, id);
+		return rf;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getNetwork(com.chiralbehaviors.CoRE
-     * .network.Networked, com.chiralbehaviors.CoRE.network.Relationship)
-     */
-    @Override
-    public List<RuleForm> getChildren(RuleForm parent, Relationship relationship) {
-        String prefix = parent.getClass().getSimpleName().toLowerCase()
-                        + "Network";
-        @SuppressWarnings("unchecked")
-        TypedQuery<RuleForm> q = (TypedQuery<RuleForm>) em.createNamedQuery(prefix
-                                                                                    + ExistentialRuleform.GET_CHILDREN_SUFFIX,
-                                                                            parent.getClass());
-        q.setParameter("parent", parent);
-        q.setParameter("relationship", relationship);
-        List<RuleForm> resultList = q.getResultList();
-        return resultList;
-    }
+	@Override
+	public List<RuleForm> findAll() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<RuleForm> cq = cb.createQuery(entity);
+		cq.from(entity);
+		return em.createQuery(cq).getResultList();
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getFacet(com.chiralbehaviors.CoRE.
-     * ExistentialRuleform, com.chiralbehaviors.CoRE.meta.Aspect)
-     */
-    @Override
-    public Facet<RuleForm, AttributeType> getFacet(RuleForm ruleform,
-                                                   Aspect<RuleForm> aspect) {
-        return new Facet<RuleForm, AttributeType>(
-                                                  aspect,
-                                                  ruleform,
-                                                  getAttributesClassifiedBy(ruleform,
-                                                                            aspect)) {
-        };
-    }
+	private void generateInverses() {
+		long then = System.currentTimeMillis();
+		int inverses = em.createNamedQuery(
+				String.format("%s%s", networkPrefix,
+						GENERATE_NETWORK_INVERSES_SUFFIX)).executeUpdate();
+		if (log.isTraceEnabled()) {
+			log.trace(String.format("created %s inverse rules of %s in %s ms",
+					inverses, networkPrefix, System.currentTimeMillis() - then));
+		}
+	}
 
-    @Override
-    public RuleForm getImmediateChild(RuleForm parent, Relationship relationship) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<RuleForm> query = cb.createQuery(entity);
-        Root<NetworkRuleform<RuleForm>> networkRoot = query.from(network);
-        Path<RuleForm> path;
-        try {
-            path = networkRoot.get("child");
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-        query.select(path).where(cb.and(cb.equal(networkRoot.get("parent"),
-                                                 parent),
-                                        cb.equal(networkRoot.get("relationship"),
-                                                 relationship),
-                                        cb.equal(networkRoot.get("inference").get("id"),
-                                                 new UUID(0, 0))));
-        TypedQuery<RuleForm> q = em.createQuery(query);
-        return q.getSingleResult();
-    }
+	@Override
+	public <ValueType> List<ValueType> getAllowedValues(Attribute attribute,
+			Agency groupingAgency) {
+		return getAllowedValues(attribute,
+				getAttributeAuthorizations(groupingAgency, attribute));
+	}
 
-    @Override
-    public List<RuleForm> getImmediateChildren(RuleForm parent,
-                                               Relationship relationship) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<RuleForm> query = cb.createQuery(entity);
-        Root<NetworkRuleform<RuleForm>> networkRoot = query.from(network);
-        Path<RuleForm> path;
-        try {
-            path = networkRoot.get("child");
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-        query.select(path).where(cb.and(cb.equal(networkRoot.get("parent"),
-                                                 parent),
-                                        cb.equal(networkRoot.get("relationship"),
-                                                 relationship),
-                                        cb.equal(networkRoot.get("inference").get("id"),
-                                                 new UUID(0, 0))));
-        TypedQuery<RuleForm> q = em.createQuery(query);
-        return q.getResultList();
-    }
+	@Override
+	public <ValueType> List<ValueType> getAllowedValues(Attribute attribute,
+			Aspect<RuleForm> aspect) {
+		return getAllowedValues(attribute,
+				getAttributeAuthorizations(aspect, attribute));
+	}
 
-    @Override
-    public Collection<Network> getImmediateNetworkEdges(RuleForm parent) {
-        List<Network> edges = new ArrayList<Network>();
-        for (Network edge : parent.getNetworkByParent()) {
-            if (!edge.isInferred()) {
-                edges.add(edge);
-            }
-        }
-        return edges;
-    }
+	/**
+	 * @param attribute
+	 * @param authorizations
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected <ValueType> List<ValueType> getAllowedValues(Attribute attribute,
+			List<AttributeAuthorization> authorizations) {
+		switch (attribute.getValueType()) {
+		case BOOLEAN: {
+			return (List<ValueType>) Arrays.asList(Boolean.TRUE, Boolean.FALSE);
+		}
+		case BINARY: {
+			return Collections.EMPTY_LIST;
+		}
+		default:
+		}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getImmediateRelationships(com
-     * .hellblazer.CoRE.ExistentialRuleform)
-     */
-    @Override
-    public Collection<Relationship> getImmediateRelationships(RuleForm parent) {
-        Set<Relationship> relationships = new HashSet<Relationship>();
-        Set<Relationship> inverses = new HashSet<Relationship>();
-        for (Network network : parent.getNetworkByParent()) {
-            if (!network.isInferred()) {
-                Relationship relationship = network.getRelationship();
-                if (!inverses.contains(relationship)) {
-                    relationships.add(relationship);
-                    inverses.add(relationship.getInverse());
-                }
-            }
-        }
-        return relationships;
-    }
+		List<ValueType> allowedValues = new ArrayList<ValueType>();
+		for (AttributeAuthorization authorization : authorizations) {
+			switch (attribute.getValueType()) {
+			case BOOLEAN: {
+				allowedValues.add((ValueType) authorization.getBooleanValue());
+				break;
+			}
+			case INTEGER: {
+				allowedValues.add((ValueType) authorization.getIntegerValue());
+				break;
+			}
+			case NUMERIC: {
+				allowedValues.add((ValueType) authorization.getNumericValue());
+				break;
+			}
+			case TEXT: {
+				allowedValues.add((ValueType) authorization.getTextValue());
+				break;
+			}
+			case TIMESTAMP: {
+				allowedValues
+						.add((ValueType) authorization.getTimestampValue());
+				break;
+			}
+			case BINARY: {
+				allowedValues.add((ValueType) authorization.getBinaryValue());
+				break;
+			}
+			}
+		}
+		return allowedValues;
+	}
 
-    @Override
-    public List<RuleForm> getInGroup(RuleForm parent, Relationship relationship) {
-        /*
-         * select n.child from <networkTable> n where n.parent = :parent and
-         * n.relationship = :relationship and n.child <> :parent
-         */
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<RuleForm> query = cb.createQuery(entity);
-        Root<NetworkRuleform<RuleForm>> networkForm = query.from(network);
-        query.select(networkForm.get("child"));
-        query.where(cb.equal(networkForm.get("relationship"), relationship),
-                    cb.notEqual(networkForm.get("child"), parent));
-        return em.createQuery(query).getResultList();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributeAuthorizations
+	 * (com .hellblazer.CoRE.agency.Agency)
+	 */
+	@Override
+	public List<AttributeAuthorization> getAttributeAuthorizations(
+			Agency groupingAgency) {
+		TypedQuery<AttributeAuthorization> query = em.createNamedQuery(prefix
+				+ FIND_GROUPED_ATTRIBUTE_ATHORIZATIONS_SUFFIX, authorization);
+		query.setParameter("groupingAgency", groupingAgency);
+		return query.getResultList();
+	}
 
-    @Override
-    public List<RuleForm> getNotInGroup(RuleForm parent,
-                                        Relationship relationship) {
-        /*
-         * SELECT e FROM product AS e, ProductNetwork AS n WHERE n.parent <>
-         * :parent AND n.relationship = :relationship AND n.child <> e;
-         */
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<RuleForm> query = cb.createQuery(entity);
-        Root<RuleForm> form = query.from(entity);
-        Root<NetworkRuleform<RuleForm>> networkForm = query.from(network);
-        query.where(cb.equal(networkForm.get("parent"), parent),
-                    cb.equal(networkForm.get("relationship"), relationship),
-                    cb.notEqual(networkForm.get("child"), form));
-        query.select(form);
-        return em.createQuery(query).getResultList();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributeAuthorizations
+	 * (com .hellblazer.CoRE.agency.Agency,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute)
+	 */
+	@Override
+	public List<AttributeAuthorization> getAttributeAuthorizations(
+			Agency groupingAgency, Attribute attribute) {
+		TypedQuery<AttributeAuthorization> query = em.createNamedQuery(prefix
+				+ FIND_GROUPED_ATTRIBUTE_ATHORIZATIONS_FOR_ATTRIBUTE_SUFFIX,
+				authorization);
+		query.setParameter("groupingAgency", groupingAgency);
+		query.setParameter("attribute", attribute);
+		return query.getResultList();
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getChild(com.chiralbehaviors.CoRE.
-     * ExistentialRuleform, com.chiralbehaviors.CoRE.network.Relationship)
-     */
-    @Override
-    public RuleForm getSingleChild(RuleForm parent, Relationship r) {
-        TypedQuery<RuleForm> query = em.createNamedQuery(prefix
-                                                                 + GET_CHILDREN_SUFFIX,
-                                                         entity);
-        query.setParameter("p", parent);
-        query.setParameter("r", r);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            if (log.isTraceEnabled()) {
-                log.trace(String.format("%s has no child for relationship %s",
-                                        parent, r));
-            }
-            return null;
-        }
-    }
+	@Override
+	public List<AttributeAuthorization> getAttributeAuthorizations(
+			Aspect<RuleForm> aspect) {
+		TypedQuery<AttributeAuthorization> query = em.createNamedQuery(prefix
+				+ FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS_SUFFIX,
+				authorization);
+		query.setParameter("classification", aspect.getClassification());
+		query.setParameter("classifier", aspect.getClassifier());
+		return query.getResultList();
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getTransitiveRelationships(com
-     * .hellblazer.CoRE.ExistentialRuleform)
-     */
-    @Override
-    public Collection<Relationship> getTransitiveRelationships(RuleForm parent) {
-        Set<Relationship> relationships = new HashSet<Relationship>();
-        Set<Relationship> inverses = new HashSet<Relationship>();
-        Set<RuleForm> visited = new HashSet<RuleForm>();
-        visited.add(parent);
-        for (Network network : parent.getNetworkByParent()) {
-            addTransitiveRelationships(network, inverses, visited,
-                                       relationships);
-        }
-        return relationships;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributeAuthorizations
+	 * (com .hellblazer.CoRE.meta.Aspect,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute)
+	 */
+	@Override
+	public List<AttributeAuthorization> getAttributeAuthorizations(
+			Aspect<RuleForm> aspect, Attribute attribute) {
+		TypedQuery<AttributeAuthorization> query = em
+				.createNamedQuery(
+						prefix
+								+ FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS_FOR_ATTRIBUTE_SUFFIX,
+						authorization);
+		query.setParameter("classification", aspect.getClassification());
+		query.setParameter("classifier", aspect.getClassifier());
+		query.setParameter("attribute", attribute);
+		return query.getResultList();
+	}
 
-    @Override
-    public List<Relationship> getUsedRelationships() {
-        return em.createNamedQuery(prefix + USED_RELATIONSHIPS_SUFFIX,
-                                   Relationship.class).getResultList();
-    }
+	@Override
+	public List<AttributeType> getAttributesClassifiedBy(RuleForm ruleform,
+			Agency groupingAgency) {
+		TypedQuery<AttributeType> query = em.createNamedQuery(prefix
+				+ FIND_GROUPED_ATTRIBUTE_VALUES_SUFFIX, attribute);
+		query.setParameter("ruleform", ruleform);
+		query.setParameter("agency", groupingAgency);
+		return query.getResultList();
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#isAccessible(com.chiralbehaviors.CoRE.ExistentialRuleform, com.chiralbehaviors.CoRE.network.Relationship, com.chiralbehaviors.CoRE.network.Relationship, com.chiralbehaviors.CoRE.ExistentialRuleform, com.chiralbehaviors.CoRE.network.Relationship)
-     */
-    @Override
-    public boolean isAccessible(RuleForm parent, Relationship relationship,
-                                RuleForm child) {
-        Query query = em.createNamedQuery(String.format("%s%s",
-                                                        networkPrefix,
-                                                        ExistentialRuleform.GET_NETWORKS_SUFFIX));
-        query.setParameter("parent", parent);
-        query.setParameter("relationship", relationship);
-        query.setParameter("child", child);
-        List<?> results = query.getResultList();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributesClassifiedBy
+	 * (com .hellblazer.CoRE.ExistentialRuleform,
+	 * com.chiralbehaviors.CoRE.meta.Aspect)
+	 */
+	@Override
+	public List<AttributeType> getAttributesClassifiedBy(RuleForm ruleform,
+			Aspect<RuleForm> aspect) {
+		TypedQuery<AttributeType> query = em.createNamedQuery(prefix
+				+ FIND_CLASSIFIED_ATTRIBUTE_VALUES_SUFFIX, attribute);
+		query.setParameter("ruleform", ruleform);
+		query.setParameter("classifier", aspect.getClassifier());
+		query.setParameter("classification", aspect.getClassification());
+		return query.getResultList();
+	}
 
-        return results.size() > 0;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getAttributesGroupedBy(com
+	 * .chiralbehaviors .CoRE.ExistentialRuleform,
+	 * com.chiralbehaviors.CoRE.agency.Agency)
+	 */
+	@Override
+	public List<AttributeType> getAttributesGroupedBy(RuleForm ruleform,
+			Agency groupingAgency) {
+		TypedQuery<AttributeType> query = em.createNamedQuery(prefix
+				+ FIND_GROUPED_ATTRIBUTE_VALUES_SUFFIX, attribute);
+		query.setParameter("ruleform", ruleform);
+		query.setParameter("agency", groupingAgency);
+		return query.getResultList();
+	}
 
-    @Override
-    public void link(RuleForm parent, Relationship r, RuleForm child,
-                     Agency updatedBy) {
-        parent.link(r, child, updatedBy, kernel.getInverseSoftware(), em);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getChild(com.chiralbehaviors
+	 * .CoRE.ExistentialRuleform, com.chiralbehaviors.CoRE.network.Relationship)
+	 */
+	@Override
+	public RuleForm getChild(RuleForm parent, Relationship relationship) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<RuleForm> query = cb.createQuery(entity);
+		Root<NetworkRuleform<RuleForm>> networkRoot = query.from(network);
+		Path<RuleForm> path;
+		try {
+			path = networkRoot.get("child");
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+		query.select(path)
+				.where(cb.and(cb.equal(networkRoot.get("parent"), parent),
+						cb.equal(networkRoot.get("relationship"), relationship)));
+		TypedQuery<RuleForm> q = em.createQuery(query);
+		return q.getSingleResult();
+	}
 
-    @Override
-    public void propagate() {
-        createDeductionTemporaryTables();
-        boolean firstPass = true;
-        boolean derived = false;
-        do {
-            if (infer(firstPass) == 0) {
-                break;
-            }
-            firstPass = false;
-            deduce();
-            if (insert() == 0) {
-                break;
-            }
-            derived = true;
-            alterDeductionTablesForNextPass();
-        } while (true);
-        if (derived) {
-            generateInverses();
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getNetwork(com.chiralbehaviors
+	 * .CoRE .network.Networked, com.chiralbehaviors.CoRE.network.Relationship)
+	 */
+	@Override
+	public List<RuleForm> getChildren(RuleForm parent, Relationship relationship) {
+		String prefix = parent.getClass().getSimpleName().toLowerCase()
+				+ "Network";
+		@SuppressWarnings("unchecked")
+		TypedQuery<RuleForm> q = (TypedQuery<RuleForm>) em.createNamedQuery(
+				prefix + ExistentialRuleform.GET_CHILDREN_SUFFIX,
+				parent.getClass());
+		q.setParameter("parent", parent);
+		q.setParameter("relationship", relationship);
+		List<RuleForm> resultList = q.getResultList();
+		return resultList;
+	}
 
-    private void addTransitiveRelationships(Network edge,
-                                            Set<Relationship> inverses,
-                                            Set<RuleForm> visited,
-                                            Set<Relationship> relationships) {
-        Relationship relationship = edge.getRelationship();
-        if (inverses.contains(relationship)) {
-            return;
-        }
-        if (!relationships.add(relationship)) {
-            return;
-        }
-        inverses.add(relationship.getInverse());
-        RuleForm child = edge.getChild();
-        for (Network network : child.getNetworkByParent()) {
-            RuleForm traversing = network.getChild();
-            if (visited.add(traversing)) {
-                addTransitiveRelationships(network, inverses, visited,
-                                           relationships);
-            }
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getFacet(com.chiralbehaviors
+	 * .CoRE. ExistentialRuleform, com.chiralbehaviors.CoRE.meta.Aspect)
+	 */
+	@Override
+	public Facet<RuleForm, AttributeType> getFacet(RuleForm ruleform,
+			Aspect<RuleForm> aspect) {
+		return new Facet<RuleForm, AttributeType>(aspect, ruleform,
+				getAttributesClassifiedBy(ruleform, aspect)) {
+		};
+	}
 
-    private void alterDeductionTablesForNextPass() {
-        em.createNativeQuery("TRUNCATE TABLE last_pass_rules").executeUpdate();
-        em.createNativeQuery("ALTER TABLE current_pass_rules RENAME TO temp_last_pass_rules").executeUpdate();
-        em.createNativeQuery("ALTER TABLE last_pass_rules RENAME TO current_pass_rules").executeUpdate();
-        em.createNativeQuery("ALTER TABLE temp_last_pass_rules RENAME TO last_pass_rules").executeUpdate();
-        em.createNativeQuery("TRUNCATE working_memory").executeUpdate();
-    }
+	@Override
+	public RuleForm getImmediateChild(RuleForm parent, Relationship relationship) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<RuleForm> query = cb.createQuery(entity);
+		Root<NetworkRuleform<RuleForm>> networkRoot = query.from(network);
+		Path<RuleForm> path;
+		try {
+			path = networkRoot.get("child");
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+		query.select(path)
+				.where(cb.and(cb.equal(networkRoot.get("parent"), parent), cb
+						.equal(networkRoot.get("relationship"), relationship),
+						cb.equal(networkRoot.get("inference").get("id"),
+								new UUID(0, 0))));
+		TypedQuery<RuleForm> q = em.createQuery(query);
+		return q.getSingleResult();
+	}
 
-    private void createCurrentPassRules() {
-        em.createNativeQuery("CREATE TEMPORARY TABLE current_pass_rules ("
-                                     + "id uuid NOT NULL,"
-                                     + "parent uuid NOT NULL,"
-                                     + "relationship uuid NOT NULL,"
-                                     + "child uuid NOT NULL,"
-                                     + "premise1 uuid NOT NULL,"
-                                     + "premise2 uuid NOT NULL,"
-                                     + "inference uuid NOT NULL )").executeUpdate();
-    }
+	@Override
+	public List<RuleForm> getImmediateChildren(RuleForm parent,
+			Relationship relationship) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<RuleForm> query = cb.createQuery(entity);
+		Root<NetworkRuleform<RuleForm>> networkRoot = query.from(network);
+		Path<RuleForm> path;
+		try {
+			path = networkRoot.get("child");
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+		query.select(path)
+				.where(cb.and(cb.equal(networkRoot.get("parent"), parent), cb
+						.equal(networkRoot.get("relationship"), relationship),
+						cb.equal(networkRoot.get("inference").get("id"),
+								new UUID(0, 0))));
+		TypedQuery<RuleForm> q = em.createQuery(query);
+		return q.getResultList();
+	}
 
-    private void createDeductionTemporaryTables() {
-        em.createNativeQuery("DROP TABLE IF EXISTS last_pass_rules").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS current_pass_rules").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS working_memory").executeUpdate();
-        createWorkingMemory();
-        createCurrentPassRules();
-        createLastPassRules();
-    }
+	@Override
+	public Collection<Network> getImmediateNetworkEdges(RuleForm parent) {
+		List<Network> edges = new ArrayList<Network>();
+		for (Network edge : parent.getNetworkByParent()) {
+			if (!edge.isInferred()) {
+				edges.add(edge);
+			}
+		}
+		return edges;
+	}
 
-    private void createLastPassRules() {
-        em.createNativeQuery("CREATE TEMPORARY TABLE last_pass_rules ("
-                                     + "id uuid NOT NULL,"
-                                     + "parent uuid NOT NULL,"
-                                     + "relationship uuid NOT NULL,"
-                                     + "child uuid NOT NULL,"
-                                     + "premise1 uuid NOT NULL,"
-                                     + "premise2 uuid NOT NULL,"
-                                     + "inference uuid NOT NULL )").executeUpdate();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getImmediateRelationships
+	 * (com .hellblazer.CoRE.ExistentialRuleform)
+	 */
+	@Override
+	public Collection<Relationship> getImmediateRelationships(RuleForm parent) {
+		Set<Relationship> relationships = new HashSet<Relationship>();
+		Set<Relationship> inverses = new HashSet<Relationship>();
+		for (Network network : parent.getNetworkByParent()) {
+			if (!network.isInferred()) {
+				Relationship relationship = network.getRelationship();
+				if (!inverses.contains(relationship)) {
+					relationships.add(relationship);
+					inverses.add(relationship.getInverse());
+				}
+			}
+		}
+		return relationships;
+	}
 
-    private void createWorkingMemory() {
-        em.createNativeQuery("CREATE TEMPORARY TABLE working_memory("
-                                     + "parent uuid NOT NULL,"
-                                     + "relationship uuid NOT NULL,"
-                                     + "child uuid NOT NULL,"
-                                     + "premise1 uuid NOT NULL,"
-                                     + "premise2 uuid NOT NULL,"
-                                     + "inference uuid NOT NULL )").executeUpdate();
-    }
+	@Override
+	public List<RuleForm> getInGroup(RuleForm parent, Relationship relationship) {
+		/*
+		 * select n.child from <networkTable> n where n.parent = :parent and
+		 * n.relationship = :relationship and n.child <> :parent
+		 */
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<RuleForm> query = cb.createQuery(entity);
+		Root<NetworkRuleform<RuleForm>> networkForm = query.from(network);
+		query.select(networkForm.get("child"));
+		query.where(cb.equal(networkForm.get("relationship"), relationship),
+				cb.notEqual(networkForm.get("child"), parent));
+		return em.createQuery(query).getResultList();
+	}
 
-    // Deduce the new rules
-    private void deduce() {
-        int deductions = em.createNamedQuery(networkPrefix
-                                                     + DEDUCE_NEW_NETWORK_RULES_SUFFIX).executeUpdate();
-        if (log.isTraceEnabled()) {
-            log.trace(String.format("deduced %s rules", deductions));
+	@Override
+	public List<RuleForm> getNotInGroup(RuleForm parent,
+			Relationship relationship) {
+		/*
+		 * SELECT e FROM product AS e, ProductNetwork AS n WHERE n.parent <>
+		 * :parent AND n.relationship = :relationship AND n.child <> e;
+		 */
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<RuleForm> query = cb.createQuery(entity);
+		Root<RuleForm> form = query.from(entity);
+		Root<NetworkRuleform<RuleForm>> networkForm = query.from(network);
+		query.where(cb.equal(networkForm.get("parent"), parent),
+				cb.equal(networkForm.get("relationship"), relationship),
+				cb.notEqual(networkForm.get("child"), form));
+		query.select(form);
+		return em.createQuery(query).getResultList();
+	}
 
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getChild(com.chiralbehaviors
+	 * .CoRE. ExistentialRuleform,
+	 * com.chiralbehaviors.CoRE.network.Relationship)
+	 */
+	@Override
+	public RuleForm getSingleChild(RuleForm parent, Relationship r) {
+		TypedQuery<RuleForm> query = em.createNamedQuery(prefix
+				+ GET_CHILDREN_SUFFIX, entity);
+		query.setParameter("p", parent);
+		query.setParameter("r", r);
+		try {
+			return query.getSingleResult();
+		} catch (NoResultException e) {
+			if (log.isTraceEnabled()) {
+				log.trace(String.format("%s has no child for relationship %s",
+						parent, r));
+			}
+			return null;
+		}
+	}
 
-    @SuppressWarnings("unchecked")
-    private Class<AttributeType> extractedAttribute() {
-        return (Class<AttributeType>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[3];
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getTransitiveRelationships
+	 * (com .hellblazer.CoRE.ExistentialRuleform)
+	 */
+	@Override
+	public Collection<Relationship> getTransitiveRelationships(RuleForm parent) {
+		Set<Relationship> relationships = new HashSet<Relationship>();
+		Set<Relationship> inverses = new HashSet<Relationship>();
+		Set<RuleForm> visited = new HashSet<RuleForm>();
+		visited.add(parent);
+		for (Network network : parent.getNetworkByParent()) {
+			addTransitiveRelationships(network, inverses, visited,
+					relationships);
+		}
+		return relationships;
+	}
 
-    @SuppressWarnings("unchecked")
-    private Class<AttributeAuthorization> extractedAuthorization() {
-        return (Class<AttributeAuthorization>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[2];
-    }
+	@Override
+	public List<Relationship> getUsedRelationships() {
+		return em.createNamedQuery(prefix + USED_RELATIONSHIPS_SUFFIX,
+				Relationship.class).getResultList();
+	}
 
-    @SuppressWarnings("unchecked")
-    private Class<RuleForm> extractedEntity() {
-        return (Class<RuleForm>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
+	// Infer all possible rules
+	private int infer(boolean firstPass) {
+		int newRules;
+		if (firstPass) {
+			newRules = em.createNamedQuery(
+					networkPrefix + INFERENCE_STEP_SUFFIX).executeUpdate();
+			firstPass = false;
+		} else {
+			newRules = em.createNamedQuery(
+					networkPrefix + INFERENCE_STEP_FROM_LAST_PASS_SUFFIX)
+					.executeUpdate();
+		}
+		if (log.isTraceEnabled()) {
+			log.trace(String.format("inferred %s new rules", newRules));
+		}
+		return newRules;
+	}
 
-    @SuppressWarnings("unchecked")
-    private Class<Network> extractedNetwork() {
-        return (Class<Network>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-    }
+	/**
+	 * @return
+	 */
+	private int insert() {// Insert the new rules
+		Query insert = em.createNamedQuery(networkPrefix
+				+ INSERT_NEW_NETWORK_RULES_SUFFIX);
+		int inserted = insert.executeUpdate();
+		if (log.isTraceEnabled()) {
+			log.trace(String.format("inserted %s new rules", inserted));
+		}
+		if (inserted > MAX_DEDUCTIONS) {
+			throw new IllegalStateException(
+					String.format(
+							"Inserted more than %s deductions: %s, possible runaway inference",
+							MAX_DEDUCTIONS, inserted));
+		}
+		return inserted;
+	}
 
-    // Infer all possible rules
-    private int infer(boolean firstPass) {
-        int newRules;
-        if (firstPass) {
-            newRules = em.createNamedQuery(networkPrefix
-                                                   + INFERENCE_STEP_SUFFIX).executeUpdate();
-            firstPass = false;
-        } else {
-            newRules = em.createNamedQuery(networkPrefix
-                                                   + INFERENCE_STEP_FROM_LAST_PASS_SUFFIX).executeUpdate();
-        }
-        if (log.isTraceEnabled()) {
-            log.trace(String.format("inferred %s new rules", newRules));
-        }
-        return newRules;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#isAccessible(com.chiralbehaviors
+	 * .CoRE.ExistentialRuleform, com.chiralbehaviors.CoRE.network.Relationship,
+	 * com.chiralbehaviors.CoRE.network.Relationship,
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform,
+	 * com.chiralbehaviors.CoRE.network.Relationship)
+	 */
+	@Override
+	public boolean isAccessible(RuleForm parent, Relationship relationship,
+			RuleForm child) {
+		Query query = em.createNamedQuery(String.format("%s%s", networkPrefix,
+				ExistentialRuleform.GET_NETWORKS_SUFFIX));
+		query.setParameter("parent", parent);
+		query.setParameter("relationship", relationship);
+		query.setParameter("child", child);
+		List<?> results = query.getResultList();
 
-    /**
-     * @return
-     */
-    private int insert() {// Insert the new rules
-        Query insert = em.createNamedQuery(networkPrefix
-                                           + INSERT_NEW_NETWORK_RULES_SUFFIX);
-        int inserted = insert.executeUpdate();
-        if (log.isTraceEnabled()) {
-            log.trace(String.format("inserted %s new rules", inserted));
-        }
-        if (inserted > MAX_DEDUCTIONS) {
-            throw new IllegalStateException(
-                                            String.format("Inserted more than %s deductions: %s, possible runaway inference",
-                                                          MAX_DEDUCTIONS,
-                                                          inserted));
-        }
-        return inserted;
-    }
+		return results.size() > 0;
+	}
 
-    /**
-     * @param attribute
-     * @param authorizations
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    protected <ValueType> List<ValueType> getAllowedValues(Attribute attribute,
-                                                           List<AttributeAuthorization> authorizations) {
-        switch (attribute.getValueType()) {
-            case BOOLEAN: {
-                return (List<ValueType>) Arrays.asList(Boolean.TRUE,
-                                                       Boolean.FALSE);
-            }
-            case BINARY: {
-                return Collections.EMPTY_LIST;
-            }
-            default:
-        }
+	@Override
+	public void link(RuleForm parent, Relationship r, RuleForm child,
+			Agency updatedBy) {
+		parent.link(r, child, updatedBy, kernel.getInverseSoftware(), em);
+	}
 
-        List<ValueType> allowedValues = new ArrayList<ValueType>();
-        for (AttributeAuthorization authorization : authorizations) {
-            switch (attribute.getValueType()) {
-                case BOOLEAN: {
-                    allowedValues.add((ValueType) authorization.getBooleanValue());
-                    break;
-                }
-                case INTEGER: {
-                    allowedValues.add((ValueType) authorization.getIntegerValue());
-                    break;
-                }
-                case NUMERIC: {
-                    allowedValues.add((ValueType) authorization.getNumericValue());
-                    break;
-                }
-                case TEXT: {
-                    allowedValues.add((ValueType) authorization.getTextValue());
-                    break;
-                }
-                case TIMESTAMP: {
-                    allowedValues.add((ValueType) authorization.getTimestampValue());
-                    break;
-                }
-                case BINARY: {
-                    allowedValues.add((ValueType) authorization.getBinaryValue());
-                    break;
-                }
-            }
-        }
-        return allowedValues;
-    }
+	@Override
+	public void propagate() {
+		createDeductionTemporaryTables();
+		boolean firstPass = true;
+		boolean derived = false;
+		do {
+			if (infer(firstPass) == 0) {
+				break;
+			}
+			firstPass = false;
+			deduce();
+			if (insert() == 0) {
+				break;
+			}
+			derived = true;
+			alterDeductionTablesForNextPass();
+		} while (true);
+		if (derived) {
+			generateInverses();
+		}
+	}
 }

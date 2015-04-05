@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -30,29 +30,29 @@ import com.chiralbehaviors.CoRE.ExistentialRuleform;
  *
  */
 public class Aspect<RuleForm extends ExistentialRuleform<RuleForm, ?>> {
-    private final Relationship classification;
-    private final RuleForm     classifier;
+	private final Relationship classification;
+	private final RuleForm classifier;
 
-    /**
-     * @param classification
-     * @param classifier
-     */
-    public Aspect(Relationship classification, RuleForm classifier) {
-        this.classifier = classifier;
-        this.classification = classification;
-    }
+	/**
+	 * @param classification
+	 * @param classifier
+	 */
+	public Aspect(Relationship classification, RuleForm classifier) {
+		this.classifier = classifier;
+		this.classification = classification;
+	}
 
-    public Relationship getClassification() {
-        return classification;
-    }
+	public Relationship getClassification() {
+		return classification;
+	}
 
-    public RuleForm getClassifier() {
-        return classifier;
-    }
+	public RuleForm getClassifier() {
+		return classifier;
+	}
 
-    @Override
-    public String toString() {
-        return "Aspect [classification=" + classification + ", classifier="
-               + classifier + "]";
-    }
+	@Override
+	public String toString() {
+		return "Aspect [classification=" + classification + ", classifier="
+				+ classifier + "]";
+	}
 }

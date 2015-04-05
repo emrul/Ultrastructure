@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -48,183 +48,184 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-               @NamedQuery(name = GET_PARENT_ACTIONS, query = "SELECT seq FROM ProductParentSequencingAuthorization AS seq"
-                                                              + " WHERE seq.service = :service"
-                                                              + "   AND seq.statusCode = :status"
-                                                              + " ORDER BY seq.parent, seq.sequenceNumber"),
-               @NamedQuery(name = GET_SEQUENCES, query = "SELECT seq FROM ProductParentSequencingAuthorization AS seq"
-                                                         + " WHERE seq.service = :service"
-                                                         + " ORDER BY seq.sequenceNumber") })
+		@NamedQuery(name = GET_PARENT_ACTIONS, query = "SELECT seq FROM ProductParentSequencingAuthorization AS seq"
+				+ " WHERE seq.service = :service"
+				+ "   AND seq.statusCode = :status"
+				+ " ORDER BY seq.parent, seq.sequenceNumber"),
+		@NamedQuery(name = GET_SEQUENCES, query = "SELECT seq FROM ProductParentSequencingAuthorization AS seq"
+				+ " WHERE seq.service = :service"
+				+ " ORDER BY seq.sequenceNumber") })
 @Entity
 @Table(name = "product_parent_sequencing_authorization", schema = "ruleform")
 public class ProductParentSequencingAuthorization extends Ruleform {
-    public static final String GET_PARENT_ACTIONS  = "productParentSequencingAuthorization.getParentActions";
-    public static final String GET_SEQUENCES       = "productParentSequencingAuthorization.getSequences";
+	public static final String GET_PARENT_ACTIONS = "productParentSequencingAuthorization.getParentActions";
+	public static final String GET_SEQUENCES = "productParentSequencingAuthorization.getSequences";
 
-    private static final long  serialVersionUID    = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "parent")
-    private Product            parent;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "parent")
+	private Product parent;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "parent_status_to_set")
-    private StatusCode         parentStatusToSet;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "parent_status_to_set")
+	private StatusCode parentStatusToSet;
 
-    @Column(name = "replace_product")
-    private Integer            replaceProduct      = FALSE;
+	@Column(name = "replace_product")
+	private Integer replaceProduct = FALSE;
 
-    @Column(name = "sequence_number")
-    private Integer            sequenceNumber      = 1;
+	@Column(name = "sequence_number")
+	private Integer sequenceNumber = 1;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "service")
-    private Product            service;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "service")
+	private Product service;
 
-    @Column(name = "set_if_active_siblings")
-    private Integer            setIfActiveSiblings = TRUE;
+	@Column(name = "set_if_active_siblings")
+	private Integer setIfActiveSiblings = TRUE;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "status_code")
-    private StatusCode         statusCode;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "status_code")
+	private StatusCode statusCode;
 
-    public ProductParentSequencingAuthorization() {
-        super();
-    }
+	public ProductParentSequencingAuthorization() {
+		super();
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public ProductParentSequencingAuthorization(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public ProductParentSequencingAuthorization(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    public ProductParentSequencingAuthorization(Product service,
-                                                StatusCode statusCode,
-                                                Product parent,
-                                                StatusCode parentStatusToSet,
-                                                Agency updatedBy) {
-        super(updatedBy);
-        setService(service);
-        setStatusCode(statusCode);
-        setParent(parent);
-        setParentStatusToSet(parentStatusToSet);
-    }
+	public ProductParentSequencingAuthorization(Product service,
+			StatusCode statusCode, Product parent,
+			StatusCode parentStatusToSet, Agency updatedBy) {
+		super(updatedBy);
+		setService(service);
+		setStatusCode(statusCode);
+		setParent(parent);
+		setParentStatusToSet(parentStatusToSet);
+	}
 
-    /**
-     * @param notes
-     */
-    public ProductParentSequencingAuthorization(String notes) {
-        super(notes);
-    }
+	/**
+	 * @param notes
+	 */
+	public ProductParentSequencingAuthorization(String notes) {
+		super(notes);
+	}
 
-    /**
-     * @param notes
-     * @param updatedBy
-     */
-    public ProductParentSequencingAuthorization(String notes, Agency updatedBy) {
-        super(notes, updatedBy);
-    }
+	/**
+	 * @param notes
+	 * @param updatedBy
+	 */
+	public ProductParentSequencingAuthorization(String notes, Agency updatedBy) {
+		super(notes, updatedBy);
+	}
 
-    /**
-     * @param id
-     */
-    public ProductParentSequencingAuthorization(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public ProductParentSequencingAuthorization(UUID id) {
+		super(id);
+	}
 
-    /**
-     * @param id
-     * @param updatedBy
-     */
-    public ProductParentSequencingAuthorization(UUID id, Agency updatedBy) {
-        super(id, updatedBy);
-    }
+	/**
+	 * @param id
+	 * @param updatedBy
+	 */
+	public ProductParentSequencingAuthorization(UUID id, Agency updatedBy) {
+		super(id, updatedBy);
+	}
 
-    public Product getParent() {
-        return parent;
-    }
+	public Product getParent() {
+		return parent;
+	}
 
-    public StatusCode getParentStatusToSet() {
-        return parentStatusToSet;
-    }
+	public StatusCode getParentStatusToSet() {
+		return parentStatusToSet;
+	}
 
-    public Integer getSequenceNumber() {
-        return sequenceNumber;
-    }
+	public Integer getSequenceNumber() {
+		return sequenceNumber;
+	}
 
-    public Product getService() {
-        return service;
-    }
+	public Product getService() {
+		return service;
+	}
 
-    public Boolean getSetIfActiveSiblings() {
-        return toBoolean(setIfActiveSiblings);
-    }
+	public Boolean getSetIfActiveSiblings() {
+		return toBoolean(setIfActiveSiblings);
+	}
 
-    public StatusCode getStatusCode() {
-        return statusCode;
-    }
+	public StatusCode getStatusCode() {
+		return statusCode;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, ProductParentSequencingAuthorization> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.productParentSequencingAuthorization;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, ProductParentSequencingAuthorization> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.productParentSequencingAuthorization;
+	}
 
-    /**
-     * @return the replaceProduct
-     */
-    public boolean isReplaceProduct() {
-        return replaceProduct.equals(TRUE);
-    }
+	/**
+	 * @return the replaceProduct
+	 */
+	public boolean isReplaceProduct() {
+		return replaceProduct.equals(TRUE);
+	}
 
-    @Override
-    public void persist(Triggers triggers) {
-        triggers.persist(this);
-    }
+	@Override
+	public void persist(Triggers triggers) {
+		triggers.persist(this);
+	}
 
-    public void setParent(Product myParent) {
-        parent = myParent;
-    }
+	public void setParent(Product myParent) {
+		parent = myParent;
+	}
 
-    public void setParentStatusToSet(StatusCode parentStatusToSet) {
-        this.parentStatusToSet = parentStatusToSet;
-    }
+	public void setParentStatusToSet(StatusCode parentStatusToSet) {
+		this.parentStatusToSet = parentStatusToSet;
+	}
 
-    /**
-     * @param replaceProduct
-     *            the replaceProduct to set
-     */
-    public void setReplaceProduct(boolean replaceProduct) {
-        this.replaceProduct = replaceProduct ? TRUE : FALSE;
-    }
+	/**
+	 * @param replaceProduct
+	 *            the replaceProduct to set
+	 */
+	public void setReplaceProduct(boolean replaceProduct) {
+		this.replaceProduct = replaceProduct ? TRUE : FALSE;
+	}
 
-    public void setSequenceNumber(Integer sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
+	public void setSequenceNumber(Integer sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
+	}
 
-    public void setService(Product service) {
-        this.service = service;
-    }
+	public void setService(Product service) {
+		this.service = service;
+	}
 
-    public void setSetIfActiveSiblings(Boolean setIfActiveSiblings) {
-        this.setIfActiveSiblings = toInteger(setIfActiveSiblings);
-    }
+	public void setSetIfActiveSiblings(Boolean setIfActiveSiblings) {
+		this.setIfActiveSiblings = toInteger(setIfActiveSiblings);
+	}
 
-    public void setStatusCode(StatusCode statusCode) {
-        this.statusCode = statusCode;
-    }
+	public void setStatusCode(StatusCode statusCode) {
+		this.statusCode = statusCode;
+	}
 
-    @Override
-    public String toString() {
-        return String.format("ProductParentSequencingAuthorization [service=%s, statusCode=%s, parent=%s, parentStatusToSet=%s, setIfActiveSiblings=%s, replaceProduct=%s, sequenceNumber=%s]",
-                             getService().getName(), getStatusCode().getName(),
-                             getParent().getName(),
-                             getParentStatusToSet().getName(),
-                             getSetIfActiveSiblings(), isReplaceProduct(),
-                             getSequenceNumber());
-    }
+	@Override
+	public String toString() {
+		return String
+				.format("ProductParentSequencingAuthorization [service=%s, statusCode=%s, parent=%s, parentStatusToSet=%s, setIfActiveSiblings=%s, replaceProduct=%s, sequenceNumber=%s]",
+						getService().getName(), getStatusCode().getName(),
+						getParent().getName(),
+						getParentStatusToSet().getName(),
+						getSetIfActiveSiblings(), isReplaceProduct(),
+						getSequenceNumber());
+	}
 }

@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -61,401 +61,424 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "status_code", schema = "ruleform")
 @NamedQueries({
-               @NamedQuery(name = ORDERED_ATTRIBUTES, query = "select ca from StatusCodeAttribute as ca where ca.statusCode = :statusCode"),
-               @NamedQuery(name = FIND_BY_NAME, query = "select e from Agency e where e.name = :name"),
-               @NamedQuery(name = FIND_CLASSIFIED_ATTRIBUTE_VALUES, query = "SELECT "
-                                                                            + "  attrValue "
-                                                                            + "FROM "
-                                                                            + "       StatusCodeAttribute attrValue, "
-                                                                            + "       StatusCodeAttributeAuthorization auth, "
-                                                                            + "       StatusCodeNetwork network "
-                                                                            + "WHERE "
-                                                                            + "        auth.authorizedAttribute = attrValue.attribute AND "
-                                                                            + "        network.relationship = auth.classification AND "
-                                                                            + "        network.child = auth.classifier AND"
-                                                                            + "        attrValue.statusCode = :ruleform AND "
-                                                                            + "        auth.classification = :classification AND "
-                                                                            + "        auth.classifier = :classifier "),
-               @NamedQuery(name = FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS, query = "select ra from StatusCodeAttributeAuthorization ra "
-                                                                                    + "WHERE ra.classifier = :classification "
-                                                                                    + "AND ra.classifier = :classifier"),
-               @NamedQuery(name = FIND_GROUPED_ATTRIBUTE_AUTHORIZATIONS, query = "select ra from StatusCodeAttributeAuthorization ra "
-                                                                                 + "WHERE ra.groupingAgency = :groupingAgency"),
-               @NamedQuery(name = GET_CHILD, query = "SELECT n.child "
-                                                     + "FROM StatusCodeNetwork n "
-                                                     + "WHERE n.parent = :p "
-                                                     + "AND n.relationship = :r"),
-               @NamedQuery(name = GET_ALL_PARENT_RELATIONSHIPS, query = "SELECT n "
-                                                                        + "FROM StatusCodeNetwork n "
-                                                                        + "WHERE n.child = :c"),
-               @NamedQuery(name = GET_CHILD_RULES_BY_RELATIONSHIP, query = "SELECT n FROM StatusCodeNetwork n "
-                                                                           + "WHERE n.parent = :statusCode "
-                                                                           + "AND n.relationship IN :relationships "
-                                                                           + "ORDER by n.parent.name, n.relationship.name, n.child.name"),
-               @NamedQuery(name = IS_TERMINAL_STATE, query = "SELECT COUNT(seq) "
-                                                             + "FROM StatusCodeSequencing AS seq"
-                                                             + " WHERE seq.childCode = :statusCode"
-                                                             + "  AND NOT EXISTS ( "
-                                                             + "    SELECT seq2.parentCode FROM StatusCodeSequencing seq2"
-                                                             + "    WHERE seq2.service = seq.service "
-                                                             + "      AND seq2.parentCode = seq.childCode "
-                                                             + "  ) "
-                                                             + "  AND seq.service = :service ") })
+		@NamedQuery(name = ORDERED_ATTRIBUTES, query = "select ca from StatusCodeAttribute as ca where ca.statusCode = :statusCode"),
+		@NamedQuery(name = FIND_BY_NAME, query = "select e from Agency e where e.name = :name"),
+		@NamedQuery(name = FIND_CLASSIFIED_ATTRIBUTE_VALUES, query = "SELECT "
+				+ "  attrValue " + "FROM "
+				+ "       StatusCodeAttribute attrValue, "
+				+ "       StatusCodeAttributeAuthorization auth, "
+				+ "       StatusCodeNetwork network " + "WHERE "
+				+ "        auth.authorizedAttribute = attrValue.attribute AND "
+				+ "        network.relationship = auth.classification AND "
+				+ "        network.child = auth.classifier AND"
+				+ "        attrValue.statusCode = :ruleform AND "
+				+ "        auth.classification = :classification AND "
+				+ "        auth.classifier = :classifier "),
+		@NamedQuery(name = FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS, query = "select ra from StatusCodeAttributeAuthorization ra "
+				+ "WHERE ra.classifier = :classification "
+				+ "AND ra.classifier = :classifier"),
+		@NamedQuery(name = FIND_GROUPED_ATTRIBUTE_AUTHORIZATIONS, query = "select ra from StatusCodeAttributeAuthorization ra "
+				+ "WHERE ra.groupingAgency = :groupingAgency"),
+		@NamedQuery(name = GET_CHILD, query = "SELECT n.child "
+				+ "FROM StatusCodeNetwork n " + "WHERE n.parent = :p "
+				+ "AND n.relationship = :r"),
+		@NamedQuery(name = GET_ALL_PARENT_RELATIONSHIPS, query = "SELECT n "
+				+ "FROM StatusCodeNetwork n " + "WHERE n.child = :c"),
+		@NamedQuery(name = GET_CHILD_RULES_BY_RELATIONSHIP, query = "SELECT n FROM StatusCodeNetwork n "
+				+ "WHERE n.parent = :statusCode "
+				+ "AND n.relationship IN :relationships "
+				+ "ORDER by n.parent.name, n.relationship.name, n.child.name"),
+		@NamedQuery(name = IS_TERMINAL_STATE, query = "SELECT COUNT(seq) "
+				+ "FROM StatusCodeSequencing AS seq"
+				+ " WHERE seq.childCode = :statusCode" + "  AND NOT EXISTS ( "
+				+ "    SELECT seq2.parentCode FROM StatusCodeSequencing seq2"
+				+ "    WHERE seq2.service = seq.service "
+				+ "      AND seq2.parentCode = seq.childCode " + "  ) "
+				+ "  AND seq.service = :service ") })
 public class StatusCode extends
-        ExistentialRuleform<StatusCode, StatusCodeNetwork> {
+		ExistentialRuleform<StatusCode, StatusCodeNetwork> {
 
-    public static final String       AGENCY_ATTRIBUTES_BY_CLASSIFICATION      = "statusCode.AgencyAttributesByClassification";
-    public static final String       AUTHORIZED_AGENCY_ATTRIBUTES             = "statusCode.authorizedAttributes";
+	public static final String AGENCY_ATTRIBUTES_BY_CLASSIFICATION = "statusCode.AgencyAttributesByClassification";
+	public static final String AUTHORIZED_AGENCY_ATTRIBUTES = "statusCode.authorizedAttributes";
 
-    public static final String       FIND_BY_NAME                             = "statusCode"
-                                                                                + FIND_BY_NAME_SUFFIX;
-    public static final String       FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS = "statusCode"
-                                                                                + FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS_SUFFIX;
-    public static final String       FIND_CLASSIFIED_ATTRIBUTE_VALUES         = "statusCode"
-                                                                                + FIND_CLASSIFIED_ATTRIBUTE_VALUES_SUFFIX;
-    public static final String       FIND_GROUPED_ATTRIBUTE_AUTHORIZATIONS    = "statusCode"
-                                                                                + FIND_GROUPED_ATTRIBUTE_VALUES_SUFFIX;
-    public static final String       GET_ALL_PARENT_RELATIONSHIPS             = "statusCode"
-                                                                                + GET_ALL_PARENT_RELATIONSHIPS_SUFFIX;
-    public static final String       GET_CHILD                                = "statusCode"
-                                                                                + GET_CHILDREN_SUFFIX;
-    public static final String       GET_CHILD_RULES_BY_RELATIONSHIP          = "statusCode"
-                                                                                + GET_CHILD_RULES_BY_RELATIONSHIP_SUFFIX;
-    public static final String       IS_TERMINAL_STATE                        = "statusCode.isTerminalState";
-    public static final String       ORDERED_ATTRIBUTES                       = "statusCode.orderedAttributes";
-    public static final String       QUALIFIED_ENTITY_NETWORK_RULES           = "statusCode.qualifiedEntityNetworkRules";
+	public static final String FIND_BY_NAME = "statusCode"
+			+ FIND_BY_NAME_SUFFIX;
+	public static final String FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS = "statusCode"
+			+ FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS_SUFFIX;
+	public static final String FIND_CLASSIFIED_ATTRIBUTE_VALUES = "statusCode"
+			+ FIND_CLASSIFIED_ATTRIBUTE_VALUES_SUFFIX;
+	public static final String FIND_GROUPED_ATTRIBUTE_AUTHORIZATIONS = "statusCode"
+			+ FIND_GROUPED_ATTRIBUTE_VALUES_SUFFIX;
+	public static final String GET_ALL_PARENT_RELATIONSHIPS = "statusCode"
+			+ GET_ALL_PARENT_RELATIONSHIPS_SUFFIX;
+	public static final String GET_CHILD = "statusCode" + GET_CHILDREN_SUFFIX;
+	public static final String GET_CHILD_RULES_BY_RELATIONSHIP = "statusCode"
+			+ GET_CHILD_RULES_BY_RELATIONSHIP_SUFFIX;
+	public static final String IS_TERMINAL_STATE = "statusCode.isTerminalState";
+	public static final String ORDERED_ATTRIBUTES = "statusCode.orderedAttributes";
+	public static final String QUALIFIED_ENTITY_NETWORK_RULES = "statusCode.qualifiedEntityNetworkRules";
 
-    private static final long        serialVersionUID                         = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to AgencyAttribute
-    @OneToMany(mappedBy = "statusCode", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<StatusCodeAttribute> attributes;
+	// bi-directional many-to-one association to AgencyAttribute
+	@OneToMany(mappedBy = "statusCode", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private Set<StatusCodeAttribute> attributes;
 
-    @Column(name = "fail_parent")
-    private Integer                  failParent                               = TRUE;
+	@Column(name = "fail_parent")
+	private Integer failParent = TRUE;
 
-    @OneToMany(mappedBy = "child", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<StatusCodeNetwork>   networkByChild;
+	@OneToMany(mappedBy = "child", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private Set<StatusCodeNetwork> networkByChild;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<StatusCodeNetwork>   networkByParent;
+	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private Set<StatusCodeNetwork> networkByParent;
 
-    @Column(name = "propagate_children")
-    private Integer                  propagateChildren                        = FALSE;
+	@Column(name = "propagate_children")
+	private Integer propagateChildren = FALSE;
 
-    public StatusCode() {
-    }
+	public StatusCode() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public StatusCode(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public StatusCode(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param name
-     */
-    public StatusCode(String name) {
-        super(name);
-    }
+	/**
+	 * @param name
+	 */
+	public StatusCode(String name) {
+		super(name);
+	}
 
-    /**
-     * @param name
-     * @param updatedBy
-     */
-    public StatusCode(String name, Agency updatedBy) {
-        super(name, updatedBy);
-    }
+	/**
+	 * @param name
+	 * @param updatedBy
+	 */
+	public StatusCode(String name, Agency updatedBy) {
+		super(name, updatedBy);
+	}
 
-    /**
-     * @param name
-     * @param description
-     */
-    public StatusCode(String name, String description) {
-        super(name, description);
-    }
+	/**
+	 * @param name
+	 * @param description
+	 */
+	public StatusCode(String name, String description) {
+		super(name, description);
+	}
 
-    /**
-     * @param name
-     * @param description
-     * @param updatedBy
-     */
-    public StatusCode(String name, String description, Agency updatedBy) {
-        super(name, description, updatedBy);
-    }
+	/**
+	 * @param name
+	 * @param description
+	 * @param updatedBy
+	 */
+	public StatusCode(String name, String description, Agency updatedBy) {
+		super(name, description, updatedBy);
+	}
 
-    /**
-     * @param id
-     */
-    public StatusCode(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public StatusCode(UUID id) {
+		super(id);
+	}
 
-    public StatusCode(UUID l, String name) {
-        super(l, name);
-    }
+	public StatusCode(UUID l, String name) {
+		super(l, name);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.Networked#addChildRelationship(com.chiralbehaviors
-     * .CoRE.NetworkRuleform)
-     */
-    @Override
-    public void addChildRelationship(StatusCodeNetwork relationship) {
-        relationship.setChild(this);
-        networkByChild.add(relationship);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.Networked#addChildRelationship(com.chiralbehaviors
+	 * .CoRE.NetworkRuleform)
+	 */
+	@Override
+	public void addChildRelationship(StatusCodeNetwork relationship) {
+		relationship.setChild(this);
+		networkByChild.add(relationship);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.Networked#addParentRelationship(com.chiralbehaviors
-     * .CoRE.NetworkRuleform)
-     */
-    @Override
-    public void addParentRelationship(StatusCodeNetwork relationship) {
-        relationship.setParent(this);
-        networkByParent.add(relationship);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.Networked#addParentRelationship(com.chiralbehaviors
+	 * .CoRE.NetworkRuleform)
+	 */
+	@Override
+	public void addParentRelationship(StatusCodeNetwork relationship) {
+		relationship.setParent(this);
+		networkByParent.add(relationship);
+	}
 
-    @Override
-    public StatusCode clone() {
-        StatusCode clone = (StatusCode) super.clone();
-        clone.networkByChild = null;
-        clone.networkByParent = null;
-        clone.attributes = null;
-        return clone;
-    }
+	@Override
+	public StatusCode clone() {
+		StatusCode clone = (StatusCode) super.clone();
+		clone.networkByChild = null;
+		clone.networkByParent = null;
+		clone.attributes = null;
+		return clone;
+	}
 
-    @Override
-    public void delete(Triggers triggers) {
-        triggers.delete(this);
-    }
+	@Override
+	public void delete(Triggers triggers) {
+		triggers.delete(this);
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getAnyId()
-     */
-    @Override
-    public UUID getAnyId() {
-        return WellKnownStatusCode.ANY.id();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getAnyId()
+	 */
+	@Override
+	public UUID getAnyId() {
+		return WellKnownStatusCode.ANY.id();
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Set<StatusCodeAttribute> getAttributes() {
-        return attributes;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<StatusCodeAttribute> getAttributes() {
+		return attributes;
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Class<StatusCodeAttribute> getAttributeValueClass() {
-        return StatusCodeAttribute.class;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public Class<StatusCodeAttribute> getAttributeValueClass() {
+		return StatusCodeAttribute.class;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getCopyId()
-     */
-    @Override
-    public UUID getCopyId() {
-        return WellKnownStatusCode.COPY.id();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getCopyId()
+	 */
+	@Override
+	public UUID getCopyId() {
+		return WellKnownStatusCode.COPY.id();
+	}
 
-    public Boolean getFailParent() {
-        return toBoolean(failParent);
-    }
+	public Boolean getFailParent() {
+		return toBoolean(failParent);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkByChild()
-     */
-    @Override
-    public Set<StatusCodeNetwork> getNetworkByChild() {
-        if (networkByChild == null) {
-            return Collections.emptySet();
-        }
-        return networkByChild;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkByChild()
+	 */
+	@Override
+	public Set<StatusCodeNetwork> getNetworkByChild() {
+		if (networkByChild == null) {
+			return Collections.emptySet();
+		}
+		return networkByChild;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkByParent()
-     */
-    @Override
-    public Set<StatusCodeNetwork> getNetworkByParent() {
-        if (networkByParent == null) {
-            return Collections.emptySet();
-        }
-        return networkByParent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkByParent()
+	 */
+	@Override
+	public Set<StatusCodeNetwork> getNetworkByParent() {
+		if (networkByParent == null) {
+			return Collections.emptySet();
+		}
+		return networkByParent;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkChildAttribute()
-     */
-    @Override
-    public SingularAttribute<StatusCodeNetwork, StatusCode> getNetworkChildAttribute() {
-        return StatusCodeNetwork_.child;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkChildAttribute()
+	 */
+	@Override
+	public SingularAttribute<StatusCodeNetwork, StatusCode> getNetworkChildAttribute() {
+		return StatusCodeNetwork_.child;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkClass()
-     */
-    @Override
-    public Class<StatusCodeNetwork> getNetworkClass() {
-        return StatusCodeNetwork.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkClass()
+	 */
+	@Override
+	public Class<StatusCodeNetwork> getNetworkClass() {
+		return StatusCodeNetwork.class;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkParentAttribute()
-     */
-    @Override
-    public SingularAttribute<StatusCodeNetwork, StatusCode> getNetworkParentAttribute() {
-        return StatusCodeNetwork_.parent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkParentAttribute()
+	 */
+	@Override
+	public SingularAttribute<StatusCodeNetwork, StatusCode> getNetworkParentAttribute() {
+		return StatusCodeNetwork_.parent;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkWorkspaceAttribute()
-     */
-    @Override
-    public SingularAttribute<WorkspaceAuthorization, StatusCodeNetwork> getNetworkWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.statusCodeNetwork;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkWorkspaceAttribute
+	 * ()
+	 */
+	@Override
+	public SingularAttribute<WorkspaceAuthorization, StatusCodeNetwork> getNetworkWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.statusCodeNetwork;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNotApplicableId()
-     */
-    @Override
-    public UUID getNotApplicableId() {
-        return WellKnownStatusCode.NOT_APPLICABLE.id();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNotApplicableId()
+	 */
+	@Override
+	public UUID getNotApplicableId() {
+		return WellKnownStatusCode.NOT_APPLICABLE.id();
+	}
 
-    public Boolean getPropagateChildren() {
-        return toBoolean(propagateChildren);
-    }
+	public Boolean getPropagateChildren() {
+		return toBoolean(propagateChildren);
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getSameId()
-     */
-    @Override
-    public UUID getSameId() {
-        return WellKnownStatusCode.SAME.id();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getSameId()
+	 */
+	@Override
+	public UUID getSameId() {
+		return WellKnownStatusCode.SAME.id();
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, StatusCode> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.statusCode;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, StatusCode> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.statusCode;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isAny()
-     */
-    @Override
-    public boolean isAny() {
-        return WellKnownStatusCode.ANY.id().equals(getId());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isAny()
+	 */
+	@Override
+	public boolean isAny() {
+		return WellKnownStatusCode.ANY.id().equals(getId());
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isAnyOrSame()
-     */
-    @Override
-    public boolean isAnyOrSame() {
-        return WellKnownStatusCode.ANY.id().equals(getId())
-               || WellKnownStatusCode.SAME.id().equals(getId());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isAnyOrSame()
+	 */
+	@Override
+	public boolean isAnyOrSame() {
+		return WellKnownStatusCode.ANY.id().equals(getId())
+				|| WellKnownStatusCode.SAME.id().equals(getId());
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isCopy()
-     */
-    @Override
-    public boolean isCopy() {
-        return WellKnownStatusCode.COPY.id().equals(getId());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isCopy()
+	 */
+	@Override
+	public boolean isCopy() {
+		return WellKnownStatusCode.COPY.id().equals(getId());
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isNotApplicable()
-     */
-    @Override
-    public boolean isNotApplicable() {
-        return WellKnownStatusCode.NOT_APPLICABLE.id().equals(getId());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isNotApplicable()
+	 */
+	@Override
+	public boolean isNotApplicable() {
+		return WellKnownStatusCode.NOT_APPLICABLE.id().equals(getId());
+	}
 
-    @Override
-    public boolean isSame() {
-        return WellKnownStatusCode.SAME.id().equals(getId());
-    }
+	@Override
+	public boolean isSame() {
+		return WellKnownStatusCode.SAME.id().equals(getId());
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.Networked#link(com.chiralbehaviors.CoRE
-     * .network.Relationship, com.chiralbehaviors.CoRE.network.Networked,
-     * com.chiralbehaviors.CoRE.agency.Agency, javax.persistence.EntityManager)
-     */
-    @Override
-    public void link(Relationship r, StatusCode child, Agency updatedBy,
-                     Agency inverseSoftware, EntityManager em) {
-        assert r != null : "Relationship cannot be null";
-        assert child != null;
-        assert updatedBy != null;
-        assert em != null;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.Networked#link(com.chiralbehaviors.CoRE
+	 * .network.Relationship, com.chiralbehaviors.CoRE.network.Networked,
+	 * com.chiralbehaviors.CoRE.agency.Agency, javax.persistence.EntityManager)
+	 */
+	@Override
+	public void link(Relationship r, StatusCode child, Agency updatedBy,
+			Agency inverseSoftware, EntityManager em) {
+		assert r != null : "Relationship cannot be null";
+		assert child != null;
+		assert updatedBy != null;
+		assert em != null;
 
-        StatusCodeNetwork link = new StatusCodeNetwork(this, r, child,
-                                                       updatedBy);
-        em.persist(link);
-        StatusCodeNetwork inverse = new StatusCodeNetwork(child,
-                                                          r.getInverse(), this,
-                                                          inverseSoftware);
-        em.persist(inverse);
-    }
+		StatusCodeNetwork link = new StatusCodeNetwork(this, r, child,
+				updatedBy);
+		em.persist(link);
+		StatusCodeNetwork inverse = new StatusCodeNetwork(child,
+				r.getInverse(), this, inverseSoftware);
+		em.persist(inverse);
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <A extends AttributeValue<StatusCode>> void setAttributes(Set<A> attributes) {
-        this.attributes = (Set<StatusCodeAttribute>) attributes;
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public <A extends AttributeValue<StatusCode>> void setAttributes(
+			Set<A> attributes) {
+		this.attributes = (Set<StatusCodeAttribute>) attributes;
+	}
 
-    public void setFailParent(Boolean failParent) {
-        this.failParent = toInteger(failParent);
-    }
+	public void setFailParent(Boolean failParent) {
+		this.failParent = toInteger(failParent);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.ExistentialRuleform#setNetworkByChild(java.util
-     * .Set)
-     */
-    @Override
-    public void setNetworkByChild(Set<StatusCodeNetwork> theNetworkByChild) {
-        networkByChild = theNetworkByChild;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform#setNetworkByChild(java.util
+	 * .Set)
+	 */
+	@Override
+	public void setNetworkByChild(Set<StatusCodeNetwork> theNetworkByChild) {
+		networkByChild = theNetworkByChild;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.ExistentialRuleform#setNetworkByParent(java.
-     * util.Set)
-     */
-    @Override
-    public void setNetworkByParent(Set<StatusCodeNetwork> theNetworkByParent) {
-        networkByParent = theNetworkByParent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform#setNetworkByParent(java.
+	 * util.Set)
+	 */
+	@Override
+	public void setNetworkByParent(Set<StatusCodeNetwork> theNetworkByParent) {
+		networkByParent = theNetworkByParent;
+	}
 
-    public void setPropagateChildren(Boolean propagateChildren) {
-        this.propagateChildren = toInteger(propagateChildren);
-    }
+	public void setPropagateChildren(Boolean propagateChildren) {
+		this.propagateChildren = toInteger(propagateChildren);
+	}
 }

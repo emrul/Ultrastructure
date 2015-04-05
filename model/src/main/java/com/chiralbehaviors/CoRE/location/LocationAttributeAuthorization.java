@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -47,91 +47,92 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "location_attribute_authorization", schema = "ruleform")
 public class LocationAttributeAuthorization extends
-        ClassifiedAttributeAuthorization<Location> {
+		ClassifiedAttributeAuthorization<Location> {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Product
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "classifier")
-    private Location          classifier;
+	// bi-directional many-to-one association to Product
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "classifier")
+	private Location classifier;
 
-    /**
-     *
-     */
-    public LocationAttributeAuthorization() {
-        super();
-    }
+	/**
+	 *
+	 */
+	public LocationAttributeAuthorization() {
+		super();
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public LocationAttributeAuthorization(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public LocationAttributeAuthorization(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param classification
-     * @param updatedBy
-     */
-    public LocationAttributeAuthorization(Relationship classification,
-                                          Agency updatedBy) {
-        super(classification, updatedBy);
-    }
+	/**
+	 * @param classification
+	 * @param updatedBy
+	 */
+	public LocationAttributeAuthorization(Relationship classification,
+			Agency updatedBy) {
+		super(classification, updatedBy);
+	}
 
-    /**
-     * @param classification
-     * @param authorized
-     * @param updatedBy
-     */
-    public LocationAttributeAuthorization(Relationship classification,
-                                          Attribute authorized, Agency updatedBy) {
-        super(classification, authorized, updatedBy);
-    }
+	/**
+	 * @param classification
+	 * @param authorized
+	 * @param updatedBy
+	 */
+	public LocationAttributeAuthorization(Relationship classification,
+			Attribute authorized, Agency updatedBy) {
+		super(classification, authorized, updatedBy);
+	}
 
-    public LocationAttributeAuthorization(Relationship classification,
-                                          Location classifier,
-                                          Attribute authorized, Agency updatedBy) {
-        this(classification, authorized, updatedBy);
-        this.classifier = classifier;
-    }
+	public LocationAttributeAuthorization(Relationship classification,
+			Location classifier, Attribute authorized, Agency updatedBy) {
+		this(classification, authorized, updatedBy);
+		this.classifier = classifier;
+	}
 
-    /**
-     * @param id
-     */
-    public LocationAttributeAuthorization(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public LocationAttributeAuthorization(UUID id) {
+		super(id);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-     * getClassifier()
-     */
-    @Override
-    @JsonGetter
-    public Location getClassifier() {
-        return classifier;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+	 * getClassifier()
+	 */
+	@Override
+	@JsonGetter
+	public Location getClassifier() {
+		return classifier;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, LocationAttributeAuthorization> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.locationAttributeAuthorization;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, LocationAttributeAuthorization> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.locationAttributeAuthorization;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-     * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
-     */
-    @Override
-    public void setClassifier(Location classifier) {
-        this.classifier = classifier;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+	 * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
+	 */
+	@Override
+	public void setClassifier(Location classifier) {
+		this.classifier = classifier;
+	}
 }

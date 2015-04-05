@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -40,64 +40,64 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  *
  */
 public class ModelTest extends AbstractModelTest {
-    @Test
-    public void testCreateFromAspects() {
-        em.getTransaction().begin();
+	@Test
+	public void testCreateFromAspects() {
+		em.getTransaction().begin();
 
-        Agency classifier = new Agency("aspect classifer", kernel.getCore());
-        em.persist(classifier);
-        Relationship classification = new Relationship("aspect classification",
-                                                       kernel.getCore());
-        classification.setInverse(classification);
-        em.persist(classification);
+		Agency classifier = new Agency("aspect classifer", kernel.getCore());
+		em.persist(classifier);
+		Relationship classification = new Relationship("aspect classification",
+				kernel.getCore());
+		classification.setInverse(classification);
+		em.persist(classification);
 
-        Attribute attribute = new Attribute("aspect attribute",
-                                            kernel.getCore());
-        attribute.setValueType(ValueType.TEXT);
-        em.persist(attribute);
+		Attribute attribute = new Attribute("aspect attribute",
+				kernel.getCore());
+		attribute.setValueType(ValueType.TEXT);
+		em.persist(attribute);
 
-        Aspect<Agency> aspect = new Aspect<Agency>(classification, classifier);
+		Aspect<Agency> aspect = new Aspect<Agency>(classification, classifier);
 
-        model.getAgencyModel().authorize(aspect, attribute);
-        em.flush();
+		model.getAgencyModel().authorize(aspect, attribute);
+		em.flush();
 
-        Agency agency = model.getAgencyModel().create("aspect test", "testy",
-                                                      aspect).asRuleform();
-        em.flush();
+		Agency agency = model.getAgencyModel()
+				.create("aspect test", "testy", aspect).asRuleform();
+		em.flush();
 
-        assertNotNull(agency);
+		assertNotNull(agency);
 
-        Facet<Agency, AgencyAttribute> facet = model.getAgencyModel().getFacet(agency,
-                                                                               aspect);
+		Facet<Agency, AgencyAttribute> facet = model.getAgencyModel().getFacet(
+				agency, aspect);
 
-        assertEquals(1, facet.getAttributes().size());
+		assertEquals(1, facet.getAttributes().size());
 
-        for (Attribute value : facet.getAttributes().keySet()) {
-            assertEquals(attribute, value);
-        }
-    }
+		for (Attribute value : facet.getAttributes().keySet()) {
+			assertEquals(attribute, value);
+		}
+	}
 
-    @Test
-    public void testFindAgencyViaAttribute() {
-        em.getTransaction().begin();
+	@Test
+	public void testFindAgencyViaAttribute() {
+		em.getTransaction().begin();
 
-        Agency agency = new Agency("Test Agency", kernel.getCore());
-        em.persist(agency);
-        Attribute attribute = new Attribute("Test Attribute", kernel.getCore());
-        attribute.setValueType(ValueType.TEXT);
-        em.persist(attribute);
-        AgencyAttribute agencyAttribute = new AgencyAttribute(kernel.getCore());
-        agencyAttribute.setAgency(agency);
-        agencyAttribute.setAttribute(attribute);
-        agencyAttribute.setTextValue("Hello World");
-        em.persist(agencyAttribute);
-        em.flush();
+		Agency agency = new Agency("Test Agency", kernel.getCore());
+		em.persist(agency);
+		Attribute attribute = new Attribute("Test Attribute", kernel.getCore());
+		attribute.setValueType(ValueType.TEXT);
+		em.persist(attribute);
+		AgencyAttribute agencyAttribute = new AgencyAttribute(kernel.getCore());
+		agencyAttribute.setAgency(agency);
+		agencyAttribute.setAttribute(attribute);
+		agencyAttribute.setTextValue("Hello World");
+		em.persist(agencyAttribute);
+		em.flush();
 
-        AgencyAttribute queryAttribute = new AgencyAttribute(attribute);
-        queryAttribute.setTextValue("Hello World");
-        List<Agency> foundAgencies = model.find(queryAttribute);
-        assertNotNull(foundAgencies);
-        assertEquals(1, foundAgencies.size());
-        assertEquals(agency, foundAgencies.get(0));
-    }
+		AgencyAttribute queryAttribute = new AgencyAttribute(attribute);
+		queryAttribute.setTextValue("Hello World");
+		List<Agency> foundAgencies = model.find(queryAttribute);
+		assertNotNull(foundAgencies);
+		assertEquals(1, foundAgencies.size());
+		assertEquals(agency, foundAgencies.get(0));
+	}
 }

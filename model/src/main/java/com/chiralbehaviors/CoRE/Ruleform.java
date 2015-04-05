@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -57,193 +57,196 @@ import com.fasterxml.uuid.NoArgGenerator;
 @JsonIdentityInfo(generator = RuleformIdGenerator.class, property = "@id")
 @JsonAutoDetect(fieldVisibility = Visibility.PUBLIC_ONLY)
 abstract public class Ruleform implements Serializable, Cloneable {
-    public static final Integer        FALSE                 = Integer.valueOf((byte) 0);
-    public static final String         FIND_ALL_SUFFIX       = ".findAll";
-    public static final String         FIND_BY_ID_SUFFIX     = ".findById";
-    public static final String         FIND_BY_NAME_SUFFIX   = ".findByName";
-    public static final String         FIND_FLAGGED_SUFFIX   = ".findFlagged";
-    public static final String         GET_UPDATED_BY_SUFFIX = ".getUpdatedBy";
-    public static final Integer        TRUE                  = Integer.valueOf((byte) 1);
-    public static final UUID           ZERO                  = new UUID(0, 0);
-    public static final NoArgGenerator GENERATOR             = Generators.timeBasedGenerator();
-    private static final long          serialVersionUID      = 1L;
+	public static Boolean toBoolean(Integer value) {
+		if (value == null) {
+			return null;
+		}
+		return value.equals(Integer.valueOf(0)) ? Boolean.FALSE : Boolean.TRUE;
+	}
 
-    public static Boolean toBoolean(Integer value) {
-        if (value == null) {
-            return null;
-        }
-        return value.equals(Integer.valueOf(0)) ? Boolean.FALSE : Boolean.TRUE;
-    }
+	public static Integer toInteger(Boolean value) {
+		if (value == null) {
+			return null;
+		}
+		return value ? TRUE : FALSE;
+	}
 
-    public static Integer toInteger(Boolean value) {
-        if (value == null) {
-            return null;
-        }
-        return value ? TRUE : FALSE;
-    }
+	public static final Integer FALSE = Integer.valueOf((byte) 0);
+	public static final String FIND_ALL_SUFFIX = ".findAll";
+	public static final String FIND_BY_ID_SUFFIX = ".findById";
+	public static final String FIND_BY_NAME_SUFFIX = ".findByName";
+	public static final String FIND_FLAGGED_SUFFIX = ".findFlagged";
+	public static final String GET_UPDATED_BY_SUFFIX = ".getUpdatedBy";
+	public static final Integer TRUE = Integer.valueOf((byte) 1);
+	public static final UUID ZERO = new UUID(0, 0);
 
-    @Id
-    @Type(type = "pg-uuid")
-    private UUID     id      = GENERATOR.generate();
+	public static final NoArgGenerator GENERATOR = Generators
+			.timeBasedGenerator();
 
-    private String   notes;
+	private static final long serialVersionUID = 1L;
 
-    @Version
-    @Column(name = "version")
-    private int      version = 0;
+	@Id
+	@Type(type = "pg-uuid")
+	private UUID id = GENERATOR.generate();
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "updated_by")
-    protected Agency updatedBy;
+	private String notes;
 
-    public Ruleform() {
-    }
+	@Version
+	@Column(name = "version")
+	private int version = 0;
 
-    public Ruleform(Agency updatedBy) {
-        this.updatedBy = updatedBy;
-    }
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "updated_by")
+	protected Agency updatedBy;
 
-    public Ruleform(String notes) {
-        this.notes = notes;
-    }
+	public Ruleform() {
+	}
 
-    public Ruleform(String notes, Agency updatedBy) {
-        this.notes = notes;
-        this.updatedBy = updatedBy;
-    }
+	public Ruleform(Agency updatedBy) {
+		this.updatedBy = updatedBy;
+	}
 
-    public Ruleform(UUID id) {
-        this();
-        setId(id);
-    }
+	public Ruleform(String notes) {
+		this.notes = notes;
+	}
 
-    public Ruleform(UUID id, Agency updatedBy) {
-        this(id);
-        this.updatedBy = updatedBy;
-    }
+	public Ruleform(String notes, Agency updatedBy) {
+		this.notes = notes;
+		this.updatedBy = updatedBy;
+	}
 
-    @Override
-    public Ruleform clone() {
-        Ruleform clone;
-        try {
-            clone = (Ruleform) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new IllegalStateException("Unable to clone");
-        }
-        return clone;
-    }
+	public Ruleform(UUID id) {
+		this();
+		setId(id);
+	}
 
-    public void delete(Triggers triggers) {
-        // default is to do nothing;
-    }
+	public Ruleform(UUID id, Agency updatedBy) {
+		this(id);
+		this.updatedBy = updatedBy;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Ruleform other = (Ruleform) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public Ruleform clone() {
+		Ruleform clone;
+		try {
+			clone = (Ruleform) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException("Unable to clone");
+		}
+		return clone;
+	}
 
-    @JsonGetter
-    public final UUID getId() {
-        return id;
-    }
+	public void delete(Triggers triggers) {
+		// default is to do nothing;
+	}
 
-    /**
-     * @return the notes
-     */
-    @JsonGetter
-    public String getNotes() {
-        return notes;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Ruleform other = (Ruleform) obj;
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		return true;
+	}
 
-    /**
-     * @return the updatedBy
-     */
-    @JsonGetter
-    public Agency getUpdatedBy() {
-        return updatedBy;
-    }
+	@JsonGetter
+	public final UUID getId() {
+		return id;
+	}
 
-    /**
-     * @return the version
-     */
-    @JsonProperty
-    public int getVersion() {
-        return version;
-    }
+	/**
+	 * @return the notes
+	 */
+	@JsonGetter
+	public String getNotes() {
+		return notes;
+	}
 
-    @JsonIgnore
-    abstract public SingularAttribute<WorkspaceAuthorization, ? extends Ruleform> getWorkspaceAuthAttribute();
+	/**
+	 * @return the updatedBy
+	 */
+	@JsonGetter
+	public Agency getUpdatedBy() {
+		return updatedBy;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        if (id == null) {
-            return 31;
-        }
-        return id.hashCode();
-    }
+	/**
+	 * @return the version
+	 */
+	@JsonProperty
+	public int getVersion() {
+		return version;
+	}
 
-    public void persist(Triggers triggers) {
-        // default is to do nothing
-    }
+	@JsonIgnore
+	abstract public SingularAttribute<WorkspaceAuthorization, ? extends Ruleform> getWorkspaceAuthAttribute();
 
-    @JsonProperty
-    public void setId(UUID id) {
-        this.id = id;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if (id == null) {
+			return 31;
+		}
+		return id.hashCode();
+	}
 
-    /**
-     * @param notes
-     *            the notes to set
-     */
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
+	public void persist(Triggers triggers) {
+		// default is to do nothing
+	}
 
-    /**
-     * @param updatedBy
-     *            the updatedBy to set
-     */
-    public void setUpdatedBy(Agency updatedBy) {
-        this.updatedBy = updatedBy;
-    }
+	@JsonProperty
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
-    public void setVersion(int version) {
-        this.version = version;
-    }
+	/**
+	 * @param notes
+	 *            the notes to set
+	 */
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
 
-    @Override
-    public String toString() {
-        return String.format("%s[%s]", getClass(), getId());
-    }
+	/**
+	 * @param updatedBy
+	 *            the updatedBy to set
+	 */
+	public void setUpdatedBy(Agency updatedBy) {
+		this.updatedBy = updatedBy;
+	}
 
-    public void update(Triggers triggers) {
-        // default is to do nothing;
-    }
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s[%s]", getClass(), getId());
+	}
+
+	public void update(Triggers triggers) {
+		// default is to do nothing;
+	}
 }

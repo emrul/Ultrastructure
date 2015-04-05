@@ -27,7 +27,7 @@ import com.chiralbehaviors.CoRE.time.IntervalNetwork;
 /**
  * (C) Copyright 2015 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -49,67 +49,67 @@ import com.chiralbehaviors.CoRE.time.IntervalNetwork;
  *
  */
 public interface Triggers {
-    void delete(Agency a);
+	void delete(Agency a);
 
-    void delete(AgencyNetwork a);
+	void delete(AgencyNetwork a);
 
-    void delete(Attribute a);
+	void delete(Attribute a);
 
-    void delete(AttributeNetwork a);
+	void delete(AttributeNetwork a);
 
-    void delete(Interval i);
+	void delete(Interval i);
 
-    void delete(IntervalNetwork i);
+	void delete(IntervalNetwork i);
 
-    void delete(Location l);
+	void delete(Location l);
 
-    void delete(LocationNetwork l);
+	void delete(LocationNetwork l);
 
-    void delete(NetworkInference inference);
+	void delete(NetworkInference inference);
 
-    void delete(Product p);
+	void delete(Product p);
 
-    void delete(ProductNetwork p);
+	void delete(ProductNetwork p);
 
-    void delete(Relationship r);
+	void delete(Relationship r);
 
-    void delete(RelationshipNetwork r);
+	void delete(RelationshipNetwork r);
 
-    void delete(StatusCode s);
+	void delete(StatusCode s);
 
-    void delete(StatusCodeNetwork s);
+	void delete(StatusCodeNetwork s);
 
-    void delete(Unit u);
+	void delete(Unit u);
 
-    void delete(UnitNetwork u);
+	void delete(UnitNetwork u);
 
-    void persist(AgencyNetwork a);
+	void persist(AgencyNetwork a);
 
-    void persist(AttributeNetwork a);
+	void persist(AttributeNetwork a);
 
-    void persist(IntervalNetwork i);
+	void persist(IntervalNetwork i);
 
-    void persist(Job j);
+	void persist(Job j);
 
-    void persist(LocationNetwork l);
+	void persist(LocationNetwork l);
 
-    void persist(ProductChildSequencingAuthorization pcsa);
+	void persist(ProductChildSequencingAuthorization pcsa);
 
-    void persist(ProductNetwork p);
+	void persist(ProductNetwork p);
 
-    void persist(ProductParentSequencingAuthorization ppsa);
+	void persist(ProductParentSequencingAuthorization ppsa);
 
-    void persist(ProductSelfSequencingAuthorization pssa);
+	void persist(ProductSelfSequencingAuthorization pssa);
 
-    void persist(ProductSiblingSequencingAuthorization pssa);
+	void persist(ProductSiblingSequencingAuthorization pssa);
 
-    void persist(RelationshipNetwork r);
+	void persist(RelationshipNetwork r);
 
-    void persist(StatusCodeNetwork sc);
+	void persist(StatusCodeNetwork sc);
 
-    void persist(StatusCodeSequencing scs);
+	void persist(StatusCodeSequencing scs);
 
-    void persist(UnitNetwork u);
+	void persist(UnitNetwork u);
 
-    void update(Job j);
+	void update(Job j);
 }

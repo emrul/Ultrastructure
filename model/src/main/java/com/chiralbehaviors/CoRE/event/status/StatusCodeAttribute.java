@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -50,108 +50,110 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "status_code_attribute", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = GET_ATTRIBUTE, query = "select ra from StatusCodeAttribute ra where ra.statusCode = :inteval and ra.attribute = :attribute") })
 public class StatusCodeAttribute extends AttributeValue<StatusCode> {
-    public static final String GET_ATTRIBUTE    = "statusCodeAttribute.getAttribute";
-    private static final long  serialVersionUID = 1L;
+	public static final String GET_ATTRIBUTE = "statusCodeAttribute.getAttribute";
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Attribute
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "attribute")
-    private Attribute          attribute;
+	// bi-directional many-to-one association to Attribute
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "attribute")
+	private Attribute attribute;
 
-    // bi-directional many-to-one association to StatusCode
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "status_code")
-    private StatusCode         statusCode;
+	// bi-directional many-to-one association to StatusCode
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "status_code")
+	private StatusCode statusCode;
 
-    public StatusCodeAttribute() {
-        super();
-    }
+	public StatusCodeAttribute() {
+		super();
+	}
 
-    public StatusCodeAttribute(Agency updatedBy) {
-        super(updatedBy);
-    }
+	public StatusCodeAttribute(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    public StatusCodeAttribute(Attribute attribute) {
-        super(attribute);
-    }
+	public StatusCodeAttribute(Attribute attribute) {
+		super(attribute);
+	}
 
-    public StatusCodeAttribute(Attribute attribute, Agency updatedBy) {
-        super(attribute, updatedBy);
-    }
+	public StatusCodeAttribute(Attribute attribute, Agency updatedBy) {
+		super(attribute, updatedBy);
+	}
 
-    public StatusCodeAttribute(Attribute attribute, BigDecimal value,
-                               Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	public StatusCodeAttribute(Attribute attribute, BigDecimal value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    public StatusCodeAttribute(Attribute attribute, boolean value,
-                               Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	public StatusCodeAttribute(Attribute attribute, boolean value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    public StatusCodeAttribute(Attribute attribute, int value, Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	public StatusCodeAttribute(Attribute attribute, int value, Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    public StatusCodeAttribute(Attribute attribute, String value,
-                               Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	public StatusCodeAttribute(Attribute attribute, String value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    public StatusCodeAttribute(Attribute attribute, Unit unit) {
-        super(attribute, unit);
-    }
+	public StatusCodeAttribute(Attribute attribute, Unit unit) {
+		super(attribute, unit);
+	}
 
-    public StatusCodeAttribute(UUID id) {
-        super(id);
-    }
+	public StatusCodeAttribute(UUID id) {
+		super(id);
+	}
 
-    @Override
-    public Attribute getAttribute() {
-        return attribute;
-    }
+	@Override
+	public Attribute getAttribute() {
+		return attribute;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-     */
-    @Override
-    public SingularAttribute<? extends AttributeValue<StatusCode>, StatusCode> getRuleformAttribute() {
-        return StatusCodeAttribute_.statusCode;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+	 */
+	@Override
+	public SingularAttribute<? extends AttributeValue<StatusCode>, StatusCode> getRuleformAttribute() {
+		return StatusCodeAttribute_.statusCode;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-     */
-    @Override
-    public Class<StatusCode> getRuleformClass() {
-        return StatusCode.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+	 */
+	@Override
+	public Class<StatusCode> getRuleformClass() {
+		return StatusCode.class;
+	}
 
-    @JsonGetter
-    public StatusCode getStatusCode() {
-        return statusCode;
-    }
+	@JsonGetter
+	public StatusCode getStatusCode() {
+		return statusCode;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, StatusCodeAttribute> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.statusCodeAttribute;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, StatusCodeAttribute> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.statusCodeAttribute;
+	}
 
-    @Override
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
-    }
+	@Override
+	public void setAttribute(Attribute attribute) {
+		this.attribute = attribute;
+	}
 
-    public void setStatusCode(StatusCode interval) {
-        statusCode = interval;
-    }
+	public void setStatusCode(StatusCode interval) {
+		statusCode = interval;
+	}
 }

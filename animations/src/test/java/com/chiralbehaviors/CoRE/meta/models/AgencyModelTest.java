@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -41,38 +41,40 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  */
 public class AgencyModelTest extends AbstractModelTest {
 
-    @Test
-    public void testSimpleNetworkPropagation() throws SQLException {
+	@Test
+	public void testSimpleNetworkPropagation() throws SQLException {
 
-        em.getTransaction().begin();
-        Agency core = model.getKernel().getCore();
-        Relationship equals = model.getKernel().getEquals();
+		em.getTransaction().begin();
+		Agency core = model.getKernel().getCore();
+		Relationship equals = model.getKernel().getEquals();
 
-        Relationship equals2 = new Relationship("equals 2",
-                                                "an alias for equals", core);
-        equals2.setInverse(equals2);
-        em.persist(equals2);
-        NetworkInference aEqualsA = new NetworkInference(equals, equals2,
-                                                         equals, core);
-        em.persist(aEqualsA);
-        Agency a = new Agency("A", "A", core);
-        em.persist(a);
-        Agency b = new Agency("B", "B", core);
-        em.persist(b);
-        Agency c = new Agency("C", "C", core);
-        em.persist(c);
-        AgencyNetwork edgeA = new AgencyNetwork(a, equals, b, core);
-        em.persist(edgeA);
-        AgencyNetwork edgeB = new AgencyNetwork(b, equals2, c, core);
-        em.persist(edgeB);
+		Relationship equals2 = new Relationship("equals 2",
+				"an alias for equals", core);
+		equals2.setInverse(equals2);
+		em.persist(equals2);
+		NetworkInference aEqualsA = new NetworkInference(equals, equals2,
+				equals, core);
+		em.persist(aEqualsA);
+		Agency a = new Agency("A", "A", core);
+		em.persist(a);
+		Agency b = new Agency("B", "B", core);
+		em.persist(b);
+		Agency c = new Agency("C", "C", core);
+		em.persist(c);
+		AgencyNetwork edgeA = new AgencyNetwork(a, equals, b, core);
+		em.persist(edgeA);
+		AgencyNetwork edgeB = new AgencyNetwork(b, equals2, c, core);
+		em.persist(edgeB);
 
-        em.flush();
+		em.flush();
 
-        TypedQuery<AgencyNetwork> query = em.createQuery("SELECT edge FROM AgencyNetwork edge WHERE edge.inference.id <> :id",
-                                                         AgencyNetwork.class);
-        query.setParameter("id", new UUID(0, 0));
-        List<AgencyNetwork> edges = query.getResultList();
-        assertEquals(2, edges.size());
-    }
+		TypedQuery<AgencyNetwork> query = em
+				.createQuery(
+						"SELECT edge FROM AgencyNetwork edge WHERE edge.inference.id <> :id",
+						AgencyNetwork.class);
+		query.setParameter("id", new UUID(0, 0));
+		List<AgencyNetwork> edges = query.getResultList();
+		assertEquals(2, edges.size());
+	}
 
 }

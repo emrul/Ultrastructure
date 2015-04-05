@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2015 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -26,10 +26,10 @@ package com.chiralbehaviors.CoRE.meta;
  */
 public class TriggerException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public TriggerException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public TriggerException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

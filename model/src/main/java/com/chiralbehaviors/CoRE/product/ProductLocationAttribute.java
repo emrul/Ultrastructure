@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -47,158 +47,160 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "product_location_attribute", schema = "ruleform")
 public class ProductLocationAttribute extends AttributeValue<ProductLocation> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to Agency
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "agency")
-    private Agency            agency;
+	// bi-directional many-to-one association to Agency
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "agency")
+	private Agency agency;
 
-    // bi-directional many-to-one association to Attribute
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "attribute")
-    private Attribute         attribute;
+	// bi-directional many-to-one association to Attribute
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "attribute")
+	private Attribute attribute;
 
-    // bi-directional many-to-one association to ProductLocation
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "product_location")
-    private ProductLocation   productLocation;
+	// bi-directional many-to-one association to ProductLocation
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "product_location")
+	private ProductLocation productLocation;
 
-    public ProductLocationAttribute() {
-    }
+	public ProductLocationAttribute() {
+	}
 
-    /**
-     * @param updatedBy
-     */
-    public ProductLocationAttribute(Agency updatedBy) {
-        super(updatedBy);
-    }
+	/**
+	 * @param updatedBy
+	 */
+	public ProductLocationAttribute(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    /**
-     * @param attribute
-     */
-    public ProductLocationAttribute(Attribute attribute) {
-        super(attribute);
-    }
+	/**
+	 * @param attribute
+	 */
+	public ProductLocationAttribute(Attribute attribute) {
+		super(attribute);
+	}
 
-    /**
-     * @param attribute
-     * @param updatedBy
-     */
-    public ProductLocationAttribute(Attribute attribute, Agency updatedBy) {
-        super(attribute, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param updatedBy
+	 */
+	public ProductLocationAttribute(Attribute attribute, Agency updatedBy) {
+		super(attribute, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public ProductLocationAttribute(Attribute attribute, BigDecimal value,
-                                    Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public ProductLocationAttribute(Attribute attribute, BigDecimal value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public ProductLocationAttribute(Attribute attribute, boolean value,
-                                    Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public ProductLocationAttribute(Attribute attribute, boolean value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public ProductLocationAttribute(Attribute attribute, int value,
-                                    Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public ProductLocationAttribute(Attribute attribute, int value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param value
-     * @param updatedBy
-     */
-    public ProductLocationAttribute(Attribute attribute, String value,
-                                    Agency updatedBy) {
-        super(attribute, value, updatedBy);
-    }
+	/**
+	 * @param attribute
+	 * @param value
+	 * @param updatedBy
+	 */
+	public ProductLocationAttribute(Attribute attribute, String value,
+			Agency updatedBy) {
+		super(attribute, value, updatedBy);
+	}
 
-    /**
-     * @param attribute
-     * @param unit
-     */
-    public ProductLocationAttribute(Attribute attribute, Unit unit) {
-        super(attribute, unit);
-    }
+	/**
+	 * @param attribute
+	 * @param unit
+	 */
+	public ProductLocationAttribute(Attribute attribute, Unit unit) {
+		super(attribute, unit);
+	}
 
-    /**
-     * @param id
-     */
-    public ProductLocationAttribute(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public ProductLocationAttribute(UUID id) {
+		super(id);
+	}
 
-    @JsonGetter
-    public Agency getAgency() {
-        return agency;
-    }
+	@JsonGetter
+	public Agency getAgency() {
+		return agency;
+	}
 
-    @Override
-    public Attribute getAttribute() {
-        return attribute;
-    }
+	@Override
+	public Attribute getAttribute() {
+		return attribute;
+	}
 
-    @JsonGetter
-    public ProductLocation getEntityLocation() {
-        return productLocation;
-    }
+	@JsonGetter
+	public ProductLocation getEntityLocation() {
+		return productLocation;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-     */
-    @Override
-    public SingularAttribute<ProductLocationAttribute, ProductLocation> getRuleformAttribute() {
-        return ProductLocationAttribute_.productLocation;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+	 */
+	@Override
+	public SingularAttribute<ProductLocationAttribute, ProductLocation> getRuleformAttribute() {
+		return ProductLocationAttribute_.productLocation;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-     */
-    @Override
-    public Class<ProductLocation> getRuleformClass() {
-        return ProductLocation.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+	 */
+	@Override
+	public Class<ProductLocation> getRuleformClass() {
+		return ProductLocation.class;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, ProductLocationAttribute> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.productLocationAttribute;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, ProductLocationAttribute> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.productLocationAttribute;
+	}
 
-    public void setAgency(Agency agency2) {
-        agency = agency2;
-    }
+	public void setAgency(Agency agency2) {
+		agency = agency2;
+	}
 
-    @Override
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
-    }
+	@Override
+	public void setAttribute(Attribute attribute) {
+		this.attribute = attribute;
+	}
 
-    public void setEntityLocation(ProductLocation productLocation) {
-        this.productLocation = productLocation;
-    }
+	public void setEntityLocation(ProductLocation productLocation) {
+		this.productLocation = productLocation;
+	}
 }

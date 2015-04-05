@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -52,248 +52,250 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-               @NamedQuery(name = GET, query = "SELECT p FROM Protocol p "
-                                               + "WHERE p.service = :service "
-                                               + "    AND p.product =:product"
-                                               + "    AND p.requester = :requester"
-                                               + "    AND p.deliverFrom = :deliverFrom"
-                                               + "    AND p.deliverTo = :deliverTo"
-                                               + "    AND p.assignTo = :assignTo"
-                                               + "    AND p.productAttribute = :productAttribute"
-                                               + "    AND p.assignToAttribute = :assignToAttribute"
-                                               + "    AND p.requesterAttribute = :requesterAttribute"
-                                               + "    AND p.deliverToAttribute = :deliverToAttribute"
-                                               + "    AND p.deliverFromAttribute = :deliverFromAttribute"
-                                               + " ORDER BY p.sequenceNumber"),
-               @NamedQuery(name = GET_FOR_SERVICE, query = "SELECT p FROM Protocol p "
-                                                           + "WHERE p.service = :service "
-                                                           + " ORDER BY p.sequenceNumber") })
+		@NamedQuery(name = GET, query = "SELECT p FROM Protocol p "
+				+ "WHERE p.service = :service " + "    AND p.product =:product"
+				+ "    AND p.requester = :requester"
+				+ "    AND p.deliverFrom = :deliverFrom"
+				+ "    AND p.deliverTo = :deliverTo"
+				+ "    AND p.assignTo = :assignTo"
+				+ "    AND p.productAttribute = :productAttribute"
+				+ "    AND p.assignToAttribute = :assignToAttribute"
+				+ "    AND p.requesterAttribute = :requesterAttribute"
+				+ "    AND p.deliverToAttribute = :deliverToAttribute"
+				+ "    AND p.deliverFromAttribute = :deliverFromAttribute"
+				+ " ORDER BY p.sequenceNumber"),
+		@NamedQuery(name = GET_FOR_SERVICE, query = "SELECT p FROM Protocol p "
+				+ "WHERE p.service = :service " + " ORDER BY p.sequenceNumber") })
 @Entity
 @Table(name = "protocol", schema = "ruleform")
 public class Protocol extends AbstractProtocol {
-    public static final String GET              = "protocol.get";
-    public static final String GET_FOR_SERVICE  = "protocol.getForService";
+	public static final String GET = "protocol.get";
+	public static final String GET_FOR_SERVICE = "protocol.getForService";
 
-    private static final long  serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_assign_to")
-    private Agency             childAssignTo;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_assign_to")
+	private Agency childAssignTo;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_assign_to_attribute")
-    private Attribute          childAssignToAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_assign_to_attribute")
+	private Attribute childAssignToAttribute;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_deliver_from")
-    private Location           childDeliverFrom;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_deliver_from")
+	private Location childDeliverFrom;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_deliver_from_attribute")
-    private Attribute          childDeliverFromAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_deliver_from_attribute")
+	private Attribute childDeliverFromAttribute;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_deliver_to")
-    private Location           childDeliverTo;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_deliver_to")
+	private Location childDeliverTo;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_deliver_to_attribute")
-    private Attribute          childDeliverToAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_deliver_to_attribute")
+	private Attribute childDeliverToAttribute;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_product")
-    private Product            childProduct;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_product")
+	private Product childProduct;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_product_attribute")
-    private Attribute          childProductAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_product_attribute")
+	private Attribute childProductAttribute;
 
-    @Column(name = "child_quantity")
-    private BigDecimal         childQuantity    = BigDecimal.ZERO;
+	@Column(name = "child_quantity")
+	private BigDecimal childQuantity = BigDecimal.ZERO;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_quantity_unit")
-    private Unit               childQuantityUnit;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_quantity_unit")
+	private Unit childQuantityUnit;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "children_relationship")
-    private Relationship       childrenRelationship;
-    /**
-     * The service of the child job
-     */
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_service")
-    private Product            childService;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "children_relationship")
+	private Relationship childrenRelationship;
+	/**
+	 * The service of the child job
+	 */
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_service")
+	private Product childService;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "child_service_attribute")
-    private Attribute          childServiceAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "child_service_attribute")
+	private Attribute childServiceAttribute;
 
-    @Column(name = "name")
-    private String             name;
+	@Column(name = "name")
+	private String name;
 
-    @Column(name = "sequence_number")
-    private int                sequenceNumber   = 1;
+	@Column(name = "sequence_number")
+	private int sequenceNumber = 1;
 
-    public Protocol() {
-    }
+	public Protocol() {
+	}
 
-    public Agency getChildAssignTo() {
-        return childAssignTo;
-    }
+	public Agency getChildAssignTo() {
+		return childAssignTo;
+	}
 
-    public Attribute getChildAssignToAttribute() {
-        return childAssignToAttribute;
-    }
+	public Attribute getChildAssignToAttribute() {
+		return childAssignToAttribute;
+	}
 
-    public Location getChildDeliverFrom() {
-        return childDeliverFrom;
-    }
+	public Location getChildDeliverFrom() {
+		return childDeliverFrom;
+	}
 
-    public Attribute getChildDeliverFromAttribute() {
-        return childDeliverFromAttribute;
-    }
+	public Attribute getChildDeliverFromAttribute() {
+		return childDeliverFromAttribute;
+	}
 
-    public Location getChildDeliverTo() {
-        return childDeliverTo;
-    }
+	public Location getChildDeliverTo() {
+		return childDeliverTo;
+	}
 
-    public Attribute getChildDeliverToAttribute() {
-        return childDeliverToAttribute;
-    }
+	public Attribute getChildDeliverToAttribute() {
+		return childDeliverToAttribute;
+	}
 
-    public Product getChildProduct() {
-        return childProduct;
-    }
+	public Product getChildProduct() {
+		return childProduct;
+	}
 
-    public Attribute getChildProductAttribute() {
-        return childProductAttribute;
-    }
+	public Attribute getChildProductAttribute() {
+		return childProductAttribute;
+	}
 
-    public BigDecimal getChildQuantity() {
-        return childQuantity;
-    }
+	public BigDecimal getChildQuantity() {
+		return childQuantity;
+	}
 
-    public Unit getChildQuantityUnit() {
-        return childQuantityUnit;
-    }
+	public Unit getChildQuantityUnit() {
+		return childQuantityUnit;
+	}
 
-    public Relationship getChildrenRelationship() {
-        return childrenRelationship;
-    }
+	public Relationship getChildrenRelationship() {
+		return childrenRelationship;
+	}
 
-    public Product getChildService() {
-        return childService;
-    }
+	public Product getChildService() {
+		return childService;
+	}
 
-    public Attribute getChildServiceAttribute() {
-        return childServiceAttribute;
-    }
+	public Attribute getChildServiceAttribute() {
+		return childServiceAttribute;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * @return the sequenceNumber
-     */
-    public Integer getSequenceNumber() {
-        return sequenceNumber;
-    }
+	/**
+	 * @return the sequenceNumber
+	 */
+	public Integer getSequenceNumber() {
+		return sequenceNumber;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, Protocol> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.protocol;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, Protocol> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.protocol;
+	}
 
-    public void setChildAssignTo(Agency childAssignTo) {
-        this.childAssignTo = childAssignTo;
-    }
+	public void setChildAssignTo(Agency childAssignTo) {
+		this.childAssignTo = childAssignTo;
+	}
 
-    public void setChildAssignToAttribute(Attribute childAssignToAttribute) {
-        this.childAssignToAttribute = childAssignToAttribute;
-    }
+	public void setChildAssignToAttribute(Attribute childAssignToAttribute) {
+		this.childAssignToAttribute = childAssignToAttribute;
+	}
 
-    public void setChildDeliverFrom(Location childDeliverFrom) {
-        this.childDeliverFrom = childDeliverFrom;
-    }
+	public void setChildDeliverFrom(Location childDeliverFrom) {
+		this.childDeliverFrom = childDeliverFrom;
+	}
 
-    public void setChildDeliverFromAttribute(Attribute childDeliverFromAttribute) {
-        this.childDeliverFromAttribute = childDeliverFromAttribute;
-    }
+	public void setChildDeliverFromAttribute(Attribute childDeliverFromAttribute) {
+		this.childDeliverFromAttribute = childDeliverFromAttribute;
+	}
 
-    public void setChildDeliverTo(Location childDeliverTo) {
-        this.childDeliverTo = childDeliverTo;
-    }
+	public void setChildDeliverTo(Location childDeliverTo) {
+		this.childDeliverTo = childDeliverTo;
+	}
 
-    public void setChildDeliverToAttribute(Attribute childDeliverToAttribute) {
-        this.childDeliverToAttribute = childDeliverToAttribute;
-    }
+	public void setChildDeliverToAttribute(Attribute childDeliverToAttribute) {
+		this.childDeliverToAttribute = childDeliverToAttribute;
+	}
 
-    public void setChildProduct(Product childProduct) {
-        this.childProduct = childProduct;
-    }
+	public void setChildProduct(Product childProduct) {
+		this.childProduct = childProduct;
+	}
 
-    public void setChildProductAttribute(Attribute childProductAttribute) {
-        this.childProductAttribute = childProductAttribute;
-    }
+	public void setChildProductAttribute(Attribute childProductAttribute) {
+		this.childProductAttribute = childProductAttribute;
+	}
 
-    public void setChildQuantity(BigDecimal childQuantity) {
-        this.childQuantity = childQuantity;
-    }
+	public void setChildQuantity(BigDecimal childQuantity) {
+		this.childQuantity = childQuantity;
+	}
 
-    public void setChildQuantityUnit(Unit childQuantityUnit) {
-        this.childQuantityUnit = childQuantityUnit;
-    }
+	public void setChildQuantityUnit(Unit childQuantityUnit) {
+		this.childQuantityUnit = childQuantityUnit;
+	}
 
-    public void setChildrenRelationship(Relationship childrenRelationship) {
-        this.childrenRelationship = childrenRelationship;
-    }
+	public void setChildrenRelationship(Relationship childrenRelationship) {
+		this.childrenRelationship = childrenRelationship;
+	}
 
-    public void setChildService(Product childService) {
-        this.childService = childService;
-    }
+	public void setChildService(Product childService) {
+		this.childService = childService;
+	}
 
-    public void setChildServiceAttribute(Attribute childServiceAttribute) {
-        this.childServiceAttribute = childServiceAttribute;
-    }
+	public void setChildServiceAttribute(Attribute childServiceAttribute) {
+		this.childServiceAttribute = childServiceAttribute;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * @param sequenceNumber
-     *            the sequenceNumber to set
-     */
-    public void setSequenceNumber(int sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
+	/**
+	 * @param sequenceNumber
+	 *            the sequenceNumber to set
+	 */
+	public void setSequenceNumber(int sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
+	}
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return String.format("Protocol [%s, sequenceNumber=%s, requestedProduct=%s, requestedService=%s]",
-                             getToString(), sequenceNumber,
-                             getChildProduct().getName(),
-                             getChildService().getName());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String
+				.format("Protocol [%s, sequenceNumber=%s, requestedProduct=%s, requestedService=%s]",
+						getToString(), sequenceNumber, getChildProduct()
+								.getName(), getChildService().getName());
+	}
 }

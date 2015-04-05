@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -63,434 +63,459 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-               @NamedQuery(name = ORDERED_ATTRIBUTES, query = "select ca from IntervalAttribute as ca where ca.interval = :interval"),
-               @NamedQuery(name = FIND_BY_NAME, query = "select e from Agency e where e.name = :name"),
-               @NamedQuery(name = FIND_CLASSIFIED_ATTRIBUTE_VALUES, query = "SELECT "
-                                                                            + "  attrValue "
-                                                                            + "FROM "
-                                                                            + "       IntervalAttribute attrValue, "
-                                                                            + "       IntervalAttributeAuthorization auth, "
-                                                                            + "       IntervalNetwork network "
-                                                                            + "WHERE "
-                                                                            + "        auth.authorizedAttribute = attrValue.attribute AND "
-                                                                            + "        network.relationship = auth.classification AND "
-                                                                            + "        network.child = auth.classifier AND"
-                                                                            + "        attrValue.interval = :ruleform AND "
-                                                                            + "        auth.classification = :classification AND "
-                                                                            + "        auth.classifier = :classifier "),
-               @NamedQuery(name = FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS, query = "select ra from IntervalAttributeAuthorization ra "
-                                                                                    + "WHERE ra.classification = :classification "
-                                                                                    + "AND ra.classifier = :classifier"),
-               @NamedQuery(name = FIND_GROUPED_ATTRIBUTE_AUTHORIZATIONS, query = "select ra from IntervalAttributeAuthorization ra "
-                                                                                 + "WHERE ra.groupingAgency = :groupingAgency"),
-               @NamedQuery(name = GET_CHILD, query = "SELECT n.child "
-                                                     + "FROM IntervalNetwork n "
-                                                     + "WHERE n.parent = :p "
-                                                     + "AND n.relationship = :r"),
-               @NamedQuery(name = GET_ALL_PARENT_RELATIONSHIPS, query = "SELECT n "
-                                                                        + "FROM IntervalNetwork n "
-                                                                        + "WHERE n.child = :c"),
-               @NamedQuery(name = GET_CHILD_RULES_BY_RELATIONSHIP, query = "SELECT n FROM IntervalNetwork n "
-                                                                           + "WHERE n.parent = :interval "
-                                                                           + "AND n.relationship IN :relationships "
-                                                                           + "ORDER by n.parent.name, n.relationship.name, n.child.name") })
+		@NamedQuery(name = ORDERED_ATTRIBUTES, query = "select ca from IntervalAttribute as ca where ca.interval = :interval"),
+		@NamedQuery(name = FIND_BY_NAME, query = "select e from Agency e where e.name = :name"),
+		@NamedQuery(name = FIND_CLASSIFIED_ATTRIBUTE_VALUES, query = "SELECT "
+				+ "  attrValue " + "FROM "
+				+ "       IntervalAttribute attrValue, "
+				+ "       IntervalAttributeAuthorization auth, "
+				+ "       IntervalNetwork network " + "WHERE "
+				+ "        auth.authorizedAttribute = attrValue.attribute AND "
+				+ "        network.relationship = auth.classification AND "
+				+ "        network.child = auth.classifier AND"
+				+ "        attrValue.interval = :ruleform AND "
+				+ "        auth.classification = :classification AND "
+				+ "        auth.classifier = :classifier "),
+		@NamedQuery(name = FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS, query = "select ra from IntervalAttributeAuthorization ra "
+				+ "WHERE ra.classification = :classification "
+				+ "AND ra.classifier = :classifier"),
+		@NamedQuery(name = FIND_GROUPED_ATTRIBUTE_AUTHORIZATIONS, query = "select ra from IntervalAttributeAuthorization ra "
+				+ "WHERE ra.groupingAgency = :groupingAgency"),
+		@NamedQuery(name = GET_CHILD, query = "SELECT n.child "
+				+ "FROM IntervalNetwork n " + "WHERE n.parent = :p "
+				+ "AND n.relationship = :r"),
+		@NamedQuery(name = GET_ALL_PARENT_RELATIONSHIPS, query = "SELECT n "
+				+ "FROM IntervalNetwork n " + "WHERE n.child = :c"),
+		@NamedQuery(name = GET_CHILD_RULES_BY_RELATIONSHIP, query = "SELECT n FROM IntervalNetwork n "
+				+ "WHERE n.parent = :interval "
+				+ "AND n.relationship IN :relationships "
+				+ "ORDER by n.parent.name, n.relationship.name, n.child.name") })
 @Entity
 @Table(name = "interval", schema = "ruleform")
 public class Interval extends ExistentialRuleform<Interval, IntervalNetwork> {
 
-    public static final String     AGENCY_ATTRIBUTES_BY_CLASSIFICATION      = "interval.IntervalAttributesByClassification";
+	public static final String AGENCY_ATTRIBUTES_BY_CLASSIFICATION = "interval.IntervalAttributesByClassification";
 
-    public static final String     AUTHORIZED_AGENCY_ATTRIBUTES             = "interval.authorizedAttributes";
-    public static final String     FIND_BY_NAME                             = "interval"
-                                                                              + FIND_BY_NAME_SUFFIX;
-    public static final String     FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS = "interval"
-                                                                              + FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS_SUFFIX;
-    public static final String     FIND_CLASSIFIED_ATTRIBUTE_VALUES         = "interval"
-                                                                              + FIND_CLASSIFIED_ATTRIBUTE_VALUES_SUFFIX;
-    public static final String     FIND_GROUPED_ATTRIBUTE_AUTHORIZATIONS    = "interval"
-                                                                              + FIND_GROUPED_ATTRIBUTE_VALUES_SUFFIX;
-    public static final String     GET_ALL_PARENT_RELATIONSHIPS             = "interval"
-                                                                              + GET_ALL_PARENT_RELATIONSHIPS_SUFFIX;
-    public static final String     GET_CHILD                                = "interval"
-                                                                              + GET_CHILDREN_SUFFIX;
-    public static final String     GET_CHILD_RULES_BY_RELATIONSHIP          = "interval"
-                                                                              + GET_CHILD_RULES_BY_RELATIONSHIP_SUFFIX;
-    public static final String     ORDERED_ATTRIBUTES                       = "interval.orderedAttributes";
-    public static final String     QUALIFIED_ENTITY_NETWORK_RULES           = "interval.qualifiedEntityNetworkRules";
-    private static final long      serialVersionUID                         = 1L;
+	public static final String AUTHORIZED_AGENCY_ATTRIBUTES = "interval.authorizedAttributes";
+	public static final String FIND_BY_NAME = "interval" + FIND_BY_NAME_SUFFIX;
+	public static final String FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS = "interval"
+			+ FIND_CLASSIFIED_ATTRIBUTE_AUTHORIZATIONS_SUFFIX;
+	public static final String FIND_CLASSIFIED_ATTRIBUTE_VALUES = "interval"
+			+ FIND_CLASSIFIED_ATTRIBUTE_VALUES_SUFFIX;
+	public static final String FIND_GROUPED_ATTRIBUTE_AUTHORIZATIONS = "interval"
+			+ FIND_GROUPED_ATTRIBUTE_VALUES_SUFFIX;
+	public static final String GET_ALL_PARENT_RELATIONSHIPS = "interval"
+			+ GET_ALL_PARENT_RELATIONSHIPS_SUFFIX;
+	public static final String GET_CHILD = "interval" + GET_CHILDREN_SUFFIX;
+	public static final String GET_CHILD_RULES_BY_RELATIONSHIP = "interval"
+			+ GET_CHILD_RULES_BY_RELATIONSHIP_SUFFIX;
+	public static final String ORDERED_ATTRIBUTES = "interval.orderedAttributes";
+	public static final String QUALIFIED_ENTITY_NETWORK_RULES = "interval.qualifiedEntityNetworkRules";
+	private static final long serialVersionUID = 1L;
 
-    // bi-directional many-to-one association to IntervalAttribute
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "interval")
-    @JsonIgnore
-    private Set<IntervalAttribute> attributes;
+	// bi-directional many-to-one association to IntervalAttribute
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "interval")
+	@JsonIgnore
+	private Set<IntervalAttribute> attributes;
 
-    private BigDecimal             duration;
+	private BigDecimal duration;
 
-    // bi-directional many-to-one association to Unit
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "duration_unit")
-    private Unit                   durationUnit;
+	// bi-directional many-to-one association to Unit
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "duration_unit")
+	private Unit durationUnit;
 
-    // bi-directional many-to-one association to IntervalNetwork
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "child")
-    @JsonIgnore
-    private Set<IntervalNetwork>   networkByChild;
+	// bi-directional many-to-one association to IntervalNetwork
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "child")
+	@JsonIgnore
+	private Set<IntervalNetwork> networkByChild;
 
-    // bi-directional many-to-one association to IntervalNetwork
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-    @JsonIgnore
-    private Set<IntervalNetwork>   networkByParent;
+	// bi-directional many-to-one association to IntervalNetwork
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
+	@JsonIgnore
+	private Set<IntervalNetwork> networkByParent;
 
-    private BigDecimal             start;
+	private BigDecimal start;
 
-    // bi-directional many-to-one association to Unit
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "start_unit")
-    private Unit                   startUnit;
+	// bi-directional many-to-one association to Unit
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "start_unit")
+	private Unit startUnit;
 
-    public Interval() {
-        super();
-    }
+	public Interval() {
+		super();
+	}
 
-    public Interval(Agency updatedBy) {
-        super(updatedBy);
-    }
+	public Interval(Agency updatedBy) {
+		super(updatedBy);
+	}
 
-    public Interval(BigDecimal start, BigDecimal duration, Unit startUnit,
-                    Unit durationUnit, String name, Agency updatedBy) {
-        this(name, start, startUnit, duration, durationUnit, null, updatedBy);
-    }
+	public Interval(BigDecimal start, BigDecimal duration, Unit startUnit,
+			Unit durationUnit, String name, Agency updatedBy) {
+		this(name, start, startUnit, duration, durationUnit, null, updatedBy);
+	}
 
-    public Interval(String name) {
-        super(name);
-    }
+	public Interval(String name) {
+		super(name);
+	}
 
-    public Interval(String name, Agency updatedBy) {
-        super(name, updatedBy);
-    }
+	public Interval(String name, Agency updatedBy) {
+		super(name, updatedBy);
+	}
 
-    public Interval(String name, BigDecimal start, Unit startUnit,
-                    BigDecimal duration, Unit durationUnit, String description,
-                    Agency updatedBy) {
-        super(name, description, updatedBy);
-        setStart(start);
-        setStartUnit(startUnit);
-        setDuration(duration);
-        setDurationUnit(durationUnit);
-    }
+	public Interval(String name, BigDecimal start, Unit startUnit,
+			BigDecimal duration, Unit durationUnit, String description,
+			Agency updatedBy) {
+		super(name, description, updatedBy);
+		setStart(start);
+		setStartUnit(startUnit);
+		setDuration(duration);
+		setDurationUnit(durationUnit);
+	}
 
-    public Interval(UUID id) {
-        super(id);
-    }
+	public Interval(UUID id) {
+		super(id);
+	}
 
-    public Interval(UUID id, Agency updatedBy) {
-        super(id, updatedBy);
-    }
+	public Interval(UUID id, Agency updatedBy) {
+		super(id, updatedBy);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.network.Networked#addChildRelationship(com.
-     * chiralbehaviors .CoRE.network.NetworkRuleform)
-     */
-    @Override
-    public void addChildRelationship(IntervalNetwork relationship) {
-        relationship.setChild(this);
-        networkByChild.add(relationship);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.network.Networked#addChildRelationship(com.
+	 * chiralbehaviors .CoRE.network.NetworkRuleform)
+	 */
+	@Override
+	public void addChildRelationship(IntervalNetwork relationship) {
+		relationship.setChild(this);
+		networkByChild.add(relationship);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.Networked#addParentRelationship(com.
-     * chiralbehaviors .CoRE.network.NetworkRuleform)
-     */
-    @Override
-    public void addParentRelationship(IntervalNetwork relationship) {
-        relationship.setParent(this);
-        networkByParent.add(relationship);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.Networked#addParentRelationship(com.
+	 * chiralbehaviors .CoRE.network.NetworkRuleform)
+	 */
+	@Override
+	public void addParentRelationship(IntervalNetwork relationship) {
+		relationship.setParent(this);
+		networkByParent.add(relationship);
+	}
 
-    @Override
-    public Interval clone() {
-        Interval clone = (Interval) super.clone();
-        clone.networkByChild = null;
-        clone.networkByParent = null;
-        clone.attributes = null;
-        return clone;
-    }
+	@Override
+	public Interval clone() {
+		Interval clone = (Interval) super.clone();
+		clone.networkByChild = null;
+		clone.networkByParent = null;
+		clone.attributes = null;
+		return clone;
+	}
 
-    @Override
-    public void delete(Triggers triggers) {
-        triggers.delete(this);
-    }
+	@Override
+	public void delete(Triggers triggers) {
+		triggers.delete(this);
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getAnyId()
-     */
-    @Override
-    public UUID getAnyId() {
-        return WellKnownInterval.ANY.id();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getAnyId()
+	 */
+	@Override
+	public UUID getAnyId() {
+		return WellKnownInterval.ANY.id();
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.attribute.Attributable#getAttributes()
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public Set<IntervalAttribute> getAttributes() {
-        return attributes;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.attribute.Attributable#getAttributes()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<IntervalAttribute> getAttributes() {
+		return attributes;
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Class<IntervalAttribute> getAttributeValueClass() {
-        return IntervalAttribute.class;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public Class<IntervalAttribute> getAttributeValueClass() {
+		return IntervalAttribute.class;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getCopyId()
-     */
-    @Override
-    public UUID getCopyId() {
-        return WellKnownInterval.COPY.id();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getCopyId()
+	 */
+	@Override
+	public UUID getCopyId() {
+		return WellKnownInterval.COPY.id();
+	}
 
-    /**
-     * @return the duration
-     */
-    public BigDecimal getDuration() {
-        return duration;
-    }
+	/**
+	 * @return the duration
+	 */
+	public BigDecimal getDuration() {
+		return duration;
+	}
 
-    /**
-     * @return the unit
-     */
-    public Unit getDurationUnit() {
-        return durationUnit;
-    }
+	/**
+	 * @return the unit
+	 */
+	public Unit getDurationUnit() {
+		return durationUnit;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.network.Networked#getNetworkByChild()
-     */
-    @Override
-    public Set<IntervalNetwork> getNetworkByChild() {
-        if (networkByChild == null) {
-            return Collections.emptySet();
-        }
-        return networkByChild;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.network.Networked#getNetworkByChild()
+	 */
+	@Override
+	public Set<IntervalNetwork> getNetworkByChild() {
+		if (networkByChild == null) {
+			return Collections.emptySet();
+		}
+		return networkByChild;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.chiralbehaviors.CoRE.network.Networked#getNetworkByParent()
-     */
-    @Override
-    public Set<IntervalNetwork> getNetworkByParent() {
-        if (networkByParent == null) {
-            return Collections.emptySet();
-        }
-        return networkByParent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.network.Networked#getNetworkByParent()
+	 */
+	@Override
+	public Set<IntervalNetwork> getNetworkByParent() {
+		if (networkByParent == null) {
+			return Collections.emptySet();
+		}
+		return networkByParent;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkChildAttribute()
-     */
-    @Override
-    public SingularAttribute<IntervalNetwork, Interval> getNetworkChildAttribute() {
-        return IntervalNetwork_.child;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkChildAttribute()
+	 */
+	@Override
+	public SingularAttribute<IntervalNetwork, Interval> getNetworkChildAttribute() {
+		return IntervalNetwork_.child;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkClass()
-     */
-    @Override
-    public Class<IntervalNetwork> getNetworkClass() {
-        return IntervalNetwork.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkClass()
+	 */
+	@Override
+	public Class<IntervalNetwork> getNetworkClass() {
+		return IntervalNetwork.class;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkParentAttribute()
-     */
-    @Override
-    public SingularAttribute<IntervalNetwork, Interval> getNetworkParentAttribute() {
-        return IntervalNetwork_.parent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkParentAttribute()
+	 */
+	@Override
+	public SingularAttribute<IntervalNetwork, Interval> getNetworkParentAttribute() {
+		return IntervalNetwork_.parent;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkWorkspaceAttribute()
-     */
-    @Override
-    public SingularAttribute<WorkspaceAuthorization, IntervalNetwork> getNetworkWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.intervalNetwork;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.ExistentialRuleform#getNetworkWorkspaceAttribute
+	 * ()
+	 */
+	@Override
+	public SingularAttribute<WorkspaceAuthorization, IntervalNetwork> getNetworkWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.intervalNetwork;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNotApplicableId()
-     */
-    @Override
-    public UUID getNotApplicableId() {
-        return WellKnownInterval.NOT_APPLICABLE.id();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getNotApplicableId()
+	 */
+	@Override
+	public UUID getNotApplicableId() {
+		return WellKnownInterval.NOT_APPLICABLE.id();
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getSameId()
-     */
-    @Override
-    public UUID getSameId() {
-        return WellKnownInterval.SAME.id();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#getSameId()
+	 */
+	@Override
+	public UUID getSameId() {
+		return WellKnownInterval.SAME.id();
+	}
 
-    /**
-     * @return the start
-     */
-    public BigDecimal getStart() {
-        return start;
-    }
+	/**
+	 * @return the start
+	 */
+	public BigDecimal getStart() {
+		return start;
+	}
 
-    /**
-     * @return the unit
-     */
-    public Unit getStartUnit() {
-        return startUnit;
-    }
+	/**
+	 * @return the unit
+	 */
+	public Unit getStartUnit() {
+		return startUnit;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, Interval> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.interval;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, Interval> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.interval;
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isAny()
-     */
-    @Override
-    public boolean isAny() {
-        return WellKnownInterval.ANY.id().equals(getId());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isAny()
+	 */
+	@Override
+	public boolean isAny() {
+		return WellKnownInterval.ANY.id().equals(getId());
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isAnyOrSame()
-     */
-    @Override
-    public boolean isAnyOrSame() {
-        return WellKnownInterval.ANY.id().equals(getId())
-               || WellKnownInterval.SAME.id().equals(getId());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isAnyOrSame()
+	 */
+	@Override
+	public boolean isAnyOrSame() {
+		return WellKnownInterval.ANY.id().equals(getId())
+				|| WellKnownInterval.SAME.id().equals(getId());
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isCopy()
-     */
-    @Override
-    public boolean isCopy() {
-        return WellKnownInterval.COPY.id().equals(getId());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isCopy()
+	 */
+	@Override
+	public boolean isCopy() {
+		return WellKnownInterval.COPY.id().equals(getId());
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isNotApplicable()
-     */
-    @Override
-    public boolean isNotApplicable() {
-        return WellKnownInterval.NOT_APPLICABLE.id().equals(getId());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.ExistentialRuleform#isNotApplicable()
+	 */
+	@Override
+	public boolean isNotApplicable() {
+		return WellKnownInterval.NOT_APPLICABLE.id().equals(getId());
+	}
 
-    @Override
-    public boolean isSame() {
-        return WellKnownInterval.SAME.id().equals(getId());
-    }
+	@Override
+	public boolean isSame() {
+		return WellKnownInterval.SAME.id().equals(getId());
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.Networked#link(com.chiralbehaviors.CoRE
-     * .network .Relationship, com.chiralbehaviors.CoRE.network.Networked,
-     * com.chiralbehaviors.CoRE.agency.Agency,
-     * com.chiralbehaviors.CoRE.agency.Agency, javax.persistence.EntityManager)
-     */
-    @Override
-    public void link(Relationship r, Interval child, Agency updatedBy,
-                     Agency inverseSoftware, EntityManager em) {
-        assert r != null : "Relationship cannot be null";
-        assert child != null;
-        assert updatedBy != null;
-        assert em != null;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.Networked#link(com.chiralbehaviors.CoRE
+	 * .network .Relationship, com.chiralbehaviors.CoRE.network.Networked,
+	 * com.chiralbehaviors.CoRE.agency.Agency,
+	 * com.chiralbehaviors.CoRE.agency.Agency, javax.persistence.EntityManager)
+	 */
+	@Override
+	public void link(Relationship r, Interval child, Agency updatedBy,
+			Agency inverseSoftware, EntityManager em) {
+		assert r != null : "Relationship cannot be null";
+		assert child != null;
+		assert updatedBy != null;
+		assert em != null;
 
-        IntervalNetwork link = new IntervalNetwork(this, r, child, updatedBy);
-        em.persist(link);
-        IntervalNetwork inverse = new IntervalNetwork(child, r.getInverse(),
-                                                      this, inverseSoftware);
-        em.persist(inverse);
-    }
+		IntervalNetwork link = new IntervalNetwork(this, r, child, updatedBy);
+		em.persist(link);
+		IntervalNetwork inverse = new IntervalNetwork(child, r.getInverse(),
+				this, inverseSoftware);
+		em.persist(inverse);
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <A extends AttributeValue<Interval>> void setAttributes(Set<A> attributes) {
-        this.attributes = (Set<IntervalAttribute>) attributes;
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public <A extends AttributeValue<Interval>> void setAttributes(
+			Set<A> attributes) {
+		this.attributes = (Set<IntervalAttribute>) attributes;
+	}
 
-    /**
-     * @param duration
-     *            the duration to set
-     */
-    public void setDuration(BigDecimal duration) {
-        this.duration = duration;
-    }
+	/**
+	 * @param duration
+	 *            the duration to set
+	 */
+	public void setDuration(BigDecimal duration) {
+		this.duration = duration;
+	}
 
-    /**
-     * @param unit
-     *            the unit to set
-     */
-    public void setDurationUnit(Unit unit) {
-        durationUnit = unit;
-    }
+	/**
+	 * @param unit
+	 *            the unit to set
+	 */
+	public void setDurationUnit(Unit unit) {
+		durationUnit = unit;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.Networked#setNetworkByChild(java.util
-     * .Set)
-     */
-    @Override
-    public void setNetworkByChild(Set<IntervalNetwork> networkByChild) {
-        this.networkByChild = networkByChild;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.Networked#setNetworkByChild(java.util
+	 * .Set)
+	 */
+	@Override
+	public void setNetworkByChild(Set<IntervalNetwork> networkByChild) {
+		this.networkByChild = networkByChild;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.chiralbehaviors.CoRE.network.Networked#setNetworkByParent(java.util
-     * .Set)
-     */
-    @Override
-    public void setNetworkByParent(Set<IntervalNetwork> networkByParent) {
-        this.networkByParent = networkByParent;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.chiralbehaviors.CoRE.network.Networked#setNetworkByParent(java.util
+	 * .Set)
+	 */
+	@Override
+	public void setNetworkByParent(Set<IntervalNetwork> networkByParent) {
+		this.networkByParent = networkByParent;
+	}
 
-    /**
-     * @param start
-     *            the start to set
-     */
-    public void setStart(BigDecimal start) {
-        this.start = start;
-    }
+	/**
+	 * @param start
+	 *            the start to set
+	 */
+	public void setStart(BigDecimal start) {
+		this.start = start;
+	}
 
-    /**
-     * @param unit
-     *            the unit to set
-     */
-    public void setStartUnit(Unit unit) {
-        startUnit = unit;
-    }
+	/**
+	 * @param unit
+	 *            the unit to set
+	 */
+	public void setStartUnit(Unit unit) {
+		startUnit = unit;
+	}
 }

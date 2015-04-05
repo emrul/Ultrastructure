@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -30,42 +30,42 @@ import java.sql.Timestamp;
  *
  */
 public enum ValueType {
-    BINARY {
-        @Override
-        public Class<?> valueClass() {
-            return byte[].class;
-        }
-    },
-    BOOLEAN {
-        @Override
-        public Class<?> valueClass() {
-            return Boolean.class;
-        }
-    },
-    INTEGER {
-        @Override
-        public Class<?> valueClass() {
-            return Integer.class;
-        }
-    },
-    NUMERIC {
-        @Override
-        public Class<?> valueClass() {
-            return BigDecimal.class;
-        }
-    },
-    TEXT {
-        @Override
-        public Class<?> valueClass() {
-            return String.class;
-        }
-    },
-    TIMESTAMP {
-        @Override
-        public Class<?> valueClass() {
-            return Timestamp.class;
-        }
-    };
+	BINARY {
+		@Override
+		public Class<?> valueClass() {
+			return byte[].class;
+		}
+	},
+	BOOLEAN {
+		@Override
+		public Class<?> valueClass() {
+			return Boolean.class;
+		}
+	},
+	INTEGER {
+		@Override
+		public Class<?> valueClass() {
+			return Integer.class;
+		}
+	},
+	NUMERIC {
+		@Override
+		public Class<?> valueClass() {
+			return BigDecimal.class;
+		}
+	},
+	TEXT {
+		@Override
+		public Class<?> valueClass() {
+			return String.class;
+		}
+	},
+	TIMESTAMP {
+		@Override
+		public Class<?> valueClass() {
+			return Timestamp.class;
+		}
+	};
 
-    abstract public Class<?> valueClass();
+	abstract public Class<?> valueClass();
 }

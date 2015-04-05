@@ -1,7 +1,7 @@
 /**
  * (C) Copyright 2012 Chiral Behaviors, LLC. All Rights Reserved
  *
- 
+
  * This file is part of Ultrastructure.
  *
  *  Ultrastructure is free software: you can redistribute it and/or modify
@@ -49,382 +49,385 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "meta_protocol", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = FOR_JOB, query = "SELECT mp from MetaProtocol mp "
-                                                    + "WHERE mp.service = :service "
-                                                    + "ORDER BY mp.sequenceNumber") })
+		+ "WHERE mp.service = :service " + "ORDER BY mp.sequenceNumber") })
 public class MetaProtocol extends Ruleform {
 
-    public static final String FOR_JOB          = "metaprotocol.getForJob";
+	public static final String FOR_JOB = "metaprotocol.getForJob";
 
-    private static final long  serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "assign_to")
-    private Relationship       assignTo;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "assign_to")
+	private Relationship assignTo;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "assign_to_attribute")
-    private Relationship       assignToAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "assign_to_attribute")
+	private Relationship assignToAttribute;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "deliver_from")
-    private Relationship       deliverFrom;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "deliver_from")
+	private Relationship deliverFrom;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "deliver_from_attribute")
-    private Relationship       deliverFromAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "deliver_from_attribute")
+	private Relationship deliverFromAttribute;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "deliver_to")
-    private Relationship       deliverTo;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "deliver_to")
+	private Relationship deliverTo;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "deliver_to_attribute")
-    private Relationship       deliverToAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "deliver_to_attribute")
+	private Relationship deliverToAttribute;
 
-    /**
-     * The relationship that transforms the product
-     */
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "product")
-    private Relationship       product;
+	/**
+	 * The relationship that transforms the product
+	 */
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "product")
+	private Relationship product;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "product_attribute")
-    private Relationship       productAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "product_attribute")
+	private Relationship productAttribute;
 
-    /**
-     * the relationship that transforms the quantity unit type
-     */
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "quantity_unit")
-    private Relationship       quantityUnit;
+	/**
+	 * the relationship that transforms the quantity unit type
+	 */
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "quantity_unit")
+	private Relationship quantityUnit;
 
-    /**
-     * the relationship that transforms the requesting agency
-     */
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "requester")
-    private Relationship       requester;
+	/**
+	 * the relationship that transforms the requesting agency
+	 */
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "requester")
+	private Relationship requester;
 
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "requester_attribute")
-    private Relationship       requesterAttribute;
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "requester_attribute")
+	private Relationship requesterAttribute;
 
-    @Column(name = "sequence_number")
-    private Integer            sequenceNumber   = 1;
+	@Column(name = "sequence_number")
+	private Integer sequenceNumber = 1;
 
-    /**
-     * The service factor for this rule
-     */
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "service")
-    private Product            service;
+	/**
+	 * The service factor for this rule
+	 */
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "service")
+	private Product service;
 
-    /**
-     * the relationship that transforms the service type
-     */
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "service_attribute")
-    private Relationship       serviceAttribute;
+	/**
+	 * the relationship that transforms the service type
+	 */
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "service_attribute")
+	private Relationship serviceAttribute;
 
-    /**
-     * the relationship that transforms the service
-     */
-    @NotNull
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-    @JoinColumn(name = "service_type")
-    private Relationship       serviceType;
+	/**
+	 * the relationship that transforms the service
+	 */
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@JoinColumn(name = "service_type")
+	private Relationship serviceType;
 
-    /**
-     * Indicates no further transformations should be applied
-     */
-    @Column(name = "stop_on_match")
-    private Integer            stopOnMatch      = FALSE;
+	/**
+	 * Indicates no further transformations should be applied
+	 */
+	@Column(name = "stop_on_match")
+	private Integer stopOnMatch = FALSE;
 
-    public MetaProtocol() {
-    }
+	public MetaProtocol() {
+	}
 
-    /**
-     * @param notes
-     * @param updatedBy
-     */
-    public MetaProtocol(String notes, Agency updatedBy) {
-        super(notes, updatedBy);
-    }
+	/**
+	 * @param notes
+	 * @param updatedBy
+	 */
+	public MetaProtocol(String notes, Agency updatedBy) {
+		super(notes, updatedBy);
+	}
 
-    /**
-     * @param id
-     */
-    public MetaProtocol(UUID id) {
-        super(id);
-    }
+	/**
+	 * @param id
+	 */
+	public MetaProtocol(UUID id) {
+		super(id);
+	}
 
-    /**
-     * @param id
-     * @param updatedBy
-     */
-    public MetaProtocol(UUID id, Agency updatedBy) {
-        super(id, updatedBy);
-    }
+	/**
+	 * @param id
+	 * @param updatedBy
+	 */
+	public MetaProtocol(UUID id, Agency updatedBy) {
+		super(id, updatedBy);
+	}
 
-    /**
-     * @return the assignTo
-     */
-    public Relationship getAssignTo() {
-        return assignTo;
-    }
+	/**
+	 * @return the assignTo
+	 */
+	public Relationship getAssignTo() {
+		return assignTo;
+	}
 
-    /**
-     * @return the assignToAttribute
-     */
-    public Relationship getAssignToAttribute() {
-        return assignToAttribute;
-    }
+	/**
+	 * @return the assignToAttribute
+	 */
+	public Relationship getAssignToAttribute() {
+		return assignToAttribute;
+	}
 
-    /**
-     * @return the deliverFrom
-     */
-    public Relationship getDeliverFrom() {
-        return deliverFrom;
-    }
+	/**
+	 * @return the deliverFrom
+	 */
+	public Relationship getDeliverFrom() {
+		return deliverFrom;
+	}
 
-    /**
-     * @return the deliverFromAttribute
-     */
-    public Relationship getDeliverFromAttribute() {
-        return deliverFromAttribute;
-    }
+	/**
+	 * @return the deliverFromAttribute
+	 */
+	public Relationship getDeliverFromAttribute() {
+		return deliverFromAttribute;
+	}
 
-    /**
-     * @return the deliverTo
-     */
-    public Relationship getDeliverTo() {
-        return deliverTo;
-    }
+	/**
+	 * @return the deliverTo
+	 */
+	public Relationship getDeliverTo() {
+		return deliverTo;
+	}
 
-    /**
-     * @return the deliverToAttribute
-     */
-    public Relationship getDeliverToAttribute() {
-        return deliverToAttribute;
-    }
+	/**
+	 * @return the deliverToAttribute
+	 */
+	public Relationship getDeliverToAttribute() {
+		return deliverToAttribute;
+	}
 
-    /**
-     * @return the productOrdered
-     */
-    public Relationship getProduct() {
-        return product;
-    }
+	/**
+	 * @return the productOrdered
+	 */
+	public Relationship getProduct() {
+		return product;
+	}
 
-    /**
-     * @return the productOrderedAttribute
-     */
-    public Relationship getProductAttribute() {
-        return productAttribute;
-    }
+	/**
+	 * @return the productOrderedAttribute
+	 */
+	public Relationship getProductAttribute() {
+		return productAttribute;
+	}
 
-    public Relationship getQuantityUnit() {
-        return quantityUnit;
-    }
+	public Relationship getQuantityUnit() {
+		return quantityUnit;
+	}
 
-    /**
-     * @return the requestingAgency
-     */
-    public Relationship getRequester() {
-        return requester;
-    }
+	/**
+	 * @return the requestingAgency
+	 */
+	public Relationship getRequester() {
+		return requester;
+	}
 
-    /**
-     * @return the requestingAgencyAttribute
-     */
-    public Relationship getRequesterAttribute() {
-        return requesterAttribute;
-    }
+	/**
+	 * @return the requestingAgencyAttribute
+	 */
+	public Relationship getRequesterAttribute() {
+		return requesterAttribute;
+	}
 
-    public Integer getSequenceNumber() {
-        return sequenceNumber;
-    }
+	public Integer getSequenceNumber() {
+		return sequenceNumber;
+	}
 
-    /**
-     * @return the service
-     */
-    public Product getService() {
-        return service;
-    }
+	/**
+	 * @return the service
+	 */
+	public Product getService() {
+		return service;
+	}
 
-    /**
-     * @return the serviceAttribute
-     */
-    public Relationship getServiceAttribute() {
-        return serviceAttribute;
-    }
+	/**
+	 * @return the serviceAttribute
+	 */
+	public Relationship getServiceAttribute() {
+		return serviceAttribute;
+	}
 
-    /**
-     * @return the serviceType
-     */
-    public Relationship getServiceType() {
-        return serviceType;
-    }
+	/**
+	 * @return the serviceType
+	 */
+	public Relationship getServiceType() {
+		return serviceType;
+	}
 
-    /**
-     * @return the stopOnMatch
-     */
-    public Boolean getStopOnMatch() {
-        return toBoolean(stopOnMatch);
-    }
+	/**
+	 * @return the stopOnMatch
+	 */
+	public Boolean getStopOnMatch() {
+		return toBoolean(stopOnMatch);
+	}
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-     */
-    @Override
-    @JsonIgnore
-    public SingularAttribute<WorkspaceAuthorization, MetaProtocol> getWorkspaceAuthAttribute() {
-        return WorkspaceAuthorization_.metaProtocol;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+	 */
+	@Override
+	@JsonIgnore
+	public SingularAttribute<WorkspaceAuthorization, MetaProtocol> getWorkspaceAuthAttribute() {
+		return WorkspaceAuthorization_.metaProtocol;
+	}
 
-    /**
-     * @param assignTo
-     *            the assignTo to set
-     */
-    public void setAssignTo(Relationship assignTo) {
-        this.assignTo = assignTo;
-    }
+	/**
+	 * @param assignTo
+	 *            the assignTo to set
+	 */
+	public void setAssignTo(Relationship assignTo) {
+		this.assignTo = assignTo;
+	}
 
-    /**
-     * @param assignToAttribute
-     *            the assignToAttribute to set
-     */
-    public void setAssignToAttribute(Relationship assignToAttribute) {
-        this.assignToAttribute = assignToAttribute;
-    }
+	/**
+	 * @param assignToAttribute
+	 *            the assignToAttribute to set
+	 */
+	public void setAssignToAttribute(Relationship assignToAttribute) {
+		this.assignToAttribute = assignToAttribute;
+	}
 
-    /**
-     * @param deliverFrom
-     *            the deliverFrom to set
-     */
-    public void setDeliverFrom(Relationship deliverFrom) {
-        this.deliverFrom = deliverFrom;
-    }
+	/**
+	 * @param deliverFrom
+	 *            the deliverFrom to set
+	 */
+	public void setDeliverFrom(Relationship deliverFrom) {
+		this.deliverFrom = deliverFrom;
+	}
 
-    /**
-     * @param deliverFromAttribute
-     *            the deliverFromAttribute to set
-     */
-    public void setDeliverFromAttribute(Relationship deliverFromAttribute) {
-        this.deliverFromAttribute = deliverFromAttribute;
-    }
+	/**
+	 * @param deliverFromAttribute
+	 *            the deliverFromAttribute to set
+	 */
+	public void setDeliverFromAttribute(Relationship deliverFromAttribute) {
+		this.deliverFromAttribute = deliverFromAttribute;
+	}
 
-    /**
-     * @param deliverTo
-     *            the deliverTo to set
-     */
-    public void setDeliverTo(Relationship deliverTo) {
-        this.deliverTo = deliverTo;
-    }
+	/**
+	 * @param deliverTo
+	 *            the deliverTo to set
+	 */
+	public void setDeliverTo(Relationship deliverTo) {
+		this.deliverTo = deliverTo;
+	}
 
-    /**
-     * @param deliverToAttribute
-     *            the deliverToAttribute to set
-     */
-    public void setDeliverToAttribute(Relationship deliverToAttribute) {
-        this.deliverToAttribute = deliverToAttribute;
-    }
+	/**
+	 * @param deliverToAttribute
+	 *            the deliverToAttribute to set
+	 */
+	public void setDeliverToAttribute(Relationship deliverToAttribute) {
+		this.deliverToAttribute = deliverToAttribute;
+	}
 
-    /**
-     * @param productOrdered
-     *            the productOrdered to set
-     */
-    public void setProduct(Relationship productOrdered) {
-        product = productOrdered;
-    }
+	/**
+	 * @param productOrdered
+	 *            the productOrdered to set
+	 */
+	public void setProduct(Relationship productOrdered) {
+		product = productOrdered;
+	}
 
-    /**
-     * @param productOrderedAttribute
-     *            the productOrderedAttribute to set
-     */
-    public void setProductAttribute(Relationship productOrderedAttribute) {
-        productAttribute = productOrderedAttribute;
-    }
+	/**
+	 * @param productOrderedAttribute
+	 *            the productOrderedAttribute to set
+	 */
+	public void setProductAttribute(Relationship productOrderedAttribute) {
+		productAttribute = productOrderedAttribute;
+	}
 
-    public void setQuantityUnit(Relationship quantityUnit) {
-        this.quantityUnit = quantityUnit;
-    }
+	public void setQuantityUnit(Relationship quantityUnit) {
+		this.quantityUnit = quantityUnit;
+	}
 
-    /**
-     * @param requestingAgency
-     *            the requesting agency to set
-     */
-    public void setRequester(Relationship requestingAgency) {
-        requester = requestingAgency;
-    }
+	/**
+	 * @param requestingAgency
+	 *            the requesting agency to set
+	 */
+	public void setRequester(Relationship requestingAgency) {
+		requester = requestingAgency;
+	}
 
-    /**
-     * @param requestingAgencyAttribute
-     *            the requestingAgencyAttribute to set
-     */
-    public void setRequesterAttribute(Relationship requestingAgencyAttribute) {
-        requesterAttribute = requestingAgencyAttribute;
-    }
+	/**
+	 * @param requestingAgencyAttribute
+	 *            the requestingAgencyAttribute to set
+	 */
+	public void setRequesterAttribute(Relationship requestingAgencyAttribute) {
+		requesterAttribute = requestingAgencyAttribute;
+	}
 
-    public void setSequenceNumber(Integer sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
+	public void setSequenceNumber(Integer sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
+	}
 
-    /**
-     * @param service
-     *            the service to set
-     */
-    public void setService(Product service) {
-        this.service = service;
-    }
+	/**
+	 * @param service
+	 *            the service to set
+	 */
+	public void setService(Product service) {
+		this.service = service;
+	}
 
-    /**
-     * @param serviceAttribute
-     *            the serviceAttribute to set
-     */
-    public void setServiceAttribute(Relationship serviceAttribute) {
-        this.serviceAttribute = serviceAttribute;
-    }
+	/**
+	 * @param serviceAttribute
+	 *            the serviceAttribute to set
+	 */
+	public void setServiceAttribute(Relationship serviceAttribute) {
+		this.serviceAttribute = serviceAttribute;
+	}
 
-    /**
-     * @param serviceType
-     *            the serviceType to set
-     */
-    public void setServiceType(Relationship serviceType) {
-        this.serviceType = serviceType;
-    }
+	/**
+	 * @param serviceType
+	 *            the serviceType to set
+	 */
+	public void setServiceType(Relationship serviceType) {
+		this.serviceType = serviceType;
+	}
 
-    /**
-     * @param stopOnMatch
-     *            the stopOnMatch to set
-     */
-    public void setStopOnMatch(Boolean stopOnMatch) {
-        this.stopOnMatch = toInteger(stopOnMatch);
-    }
+	/**
+	 * @param stopOnMatch
+	 *            the stopOnMatch to set
+	 */
+	public void setStopOnMatch(Boolean stopOnMatch) {
+		this.stopOnMatch = toInteger(stopOnMatch);
+	}
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "MetaProtocol [requestingAgency=" + requester.getName()
-               + ", service=" + service.getName() + ", serviceType="
-               + serviceType.getName() + ", productOrdered="
-               + product.getName() + ", deliverFrom=" + deliverFrom.getName()
-               + ", deliverTo=" + deliverTo.getName() + ", stopOnMatch="
-               + stopOnMatch + ", sequenceNumber=" + sequenceNumber + "]";
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MetaProtocol [requestingAgency=" + requester.getName()
+				+ ", service=" + service.getName() + ", serviceType="
+				+ serviceType.getName() + ", productOrdered="
+				+ product.getName() + ", deliverFrom=" + deliverFrom.getName()
+				+ ", deliverTo=" + deliverTo.getName() + ", stopOnMatch="
+				+ stopOnMatch + ", sequenceNumber=" + sequenceNumber + "]";
+	}
 }
