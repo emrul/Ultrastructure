@@ -42,9 +42,9 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  *
  */
 public class AttributeModelImpl
-extends
-AbstractNetworkedModel<Attribute, AttributeNetwork, AttributeMetaAttributeAuthorization, AttributeMetaAttribute>
-implements AttributeModel {
+		extends
+		AbstractNetworkedModel<Attribute, AttributeNetwork, AttributeMetaAttributeAuthorization, AttributeMetaAttribute>
+		implements AttributeModel {
 
 	/**
 	 * @param em
@@ -55,7 +55,7 @@ implements AttributeModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
 	 * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -72,7 +72,7 @@ implements AttributeModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
 	 * chiralbehaviors.CoRE.network.Aspect,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -91,7 +91,7 @@ implements AttributeModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
 	 * .CoRE.network .Networked)
@@ -119,7 +119,7 @@ implements AttributeModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
 	 * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -223,7 +223,7 @@ implements AttributeModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
 	 * chiralbehaviors.CoRE.ExistentialRuleform,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)

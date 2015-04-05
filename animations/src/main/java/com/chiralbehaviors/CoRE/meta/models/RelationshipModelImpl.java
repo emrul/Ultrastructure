@@ -73,7 +73,7 @@ public class RelationshipModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
 	 * chiralbehaviors.CoRE.network.Aspect,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -201,37 +201,37 @@ public class RelationshipModelImpl
 		return query.getResultList();
 	}
 
-	 /**
-	  * @param attributeValue
-	  * @return
-	  */
-	 private RelationshipAttributeAuthorization getValidatingAuthorization(
-			 RelationshipAttribute attributeValue) {
-		 String sql = "SELECT  p FROM RelationshipAttributeAuthorization p "
-				 + "WHERE p.validatingAttribute IS NOT NULL "
-				 + "AND p.authorizedAttribute = :attribute ";
-		 TypedQuery<RelationshipAttributeAuthorization> query = em.createQuery(
+	/**
+	 * @param attributeValue
+	 * @return
+	 */
+	private RelationshipAttributeAuthorization getValidatingAuthorization(
+			RelationshipAttribute attributeValue) {
+		String sql = "SELECT  p FROM RelationshipAttributeAuthorization p "
+				+ "WHERE p.validatingAttribute IS NOT NULL "
+				+ "AND p.authorizedAttribute = :attribute ";
+		TypedQuery<RelationshipAttributeAuthorization> query = em.createQuery(
 				sql, RelationshipAttributeAuthorization.class);
-		 query.setParameter("attribute", attributeValue.getAttribute());
-		 List<RelationshipAttributeAuthorization> auths = query.getResultList();
-		 TypedQuery<RelationshipNetwork> networkQuery = em.createNamedQuery(
-				 RelationshipNetwork.GET_NETWORKS, RelationshipNetwork.class);
-		 networkQuery.setParameter("parent", attributeValue.getRelationship());
-		 for (RelationshipAttributeAuthorization auth : auths) {
-			 networkQuery.setParameter("relationship", auth.getClassification());
-			 networkQuery.setParameter("child", auth.getClassifier());
-			 try {
-				 if (networkQuery.getSingleResult() != null) {
-					 return auth;
-				 }
-			 } catch (NoResultException e) {
-				 // keep going
-			 }
-		 }
-		 return null;
-	 }
+		query.setParameter("attribute", attributeValue.getAttribute());
+		List<RelationshipAttributeAuthorization> auths = query.getResultList();
+		TypedQuery<RelationshipNetwork> networkQuery = em.createNamedQuery(
+				RelationshipNetwork.GET_NETWORKS, RelationshipNetwork.class);
+		networkQuery.setParameter("parent", attributeValue.getRelationship());
+		for (RelationshipAttributeAuthorization auth : auths) {
+			networkQuery.setParameter("relationship", auth.getClassification());
+			networkQuery.setParameter("child", auth.getClassifier());
+			try {
+				if (networkQuery.getSingleResult() != null) {
+					return auth;
+				}
+			} catch (NoResultException e) {
+				// keep going
+			}
+		}
+		return null;
+	}
 
-	 /**
+	/**
 	 * @param agency
 	 * @param aspect
 	 */
@@ -252,47 +252,47 @@ public class RelationshipModelImpl
 		return attributes;
 	}
 
-	 /*
-	  * (non-Javadoc)
-	  *
-	  * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
-	  * chiralbehaviors.CoRE.ExistentialRuleform,
-	  * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
-	  */
-	 @Override
-	 public void setAttributeValue(RelationshipAttribute attributeValue) {
-		 RelationshipAttributeAuthorization auth = getValidatingAuthorization(attributeValue);
-		 if (auth != null) {
-			 Attribute validatingAttribute = auth.getValidatingAttribute();
-			 if (validatingAttribute.getValueType().equals(
-					 attributeValue.getAttribute().getValueType())) {
-				 TypedQuery<AttributeMetaAttribute> valueQuery = em
-						 .createNamedQuery(AttributeMetaAttribute.GET_ATTRIBUTE,
-								 AttributeMetaAttribute.class);
-				 valueQuery.setParameter("meta", attributeValue.getAttribute());
-				 valueQuery.setParameter("attr", validatingAttribute);
-				 List<AttributeMetaAttribute> values = valueQuery
-						 .getResultList();
-				 boolean valid = false;
-				 for (AttributeMetaAttribute value : values) {
-					 if (attributeValue.getTextValue().equals(
-							 value.getTextValue())) {
-						 valid = true;
-						 break;
-					 }
-				 }
-				 if (!valid) {
-					 throw new IllegalArgumentException(
-							 String.format(
-									 "%s is not a valid picklist value for attribute %s",
-									 attributeValue.getTextValue(),
-									 attributeValue.getAttribute().getName()));
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
+	 * chiralbehaviors.CoRE.ExistentialRuleform,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
+	 */
+	@Override
+	public void setAttributeValue(RelationshipAttribute attributeValue) {
+		RelationshipAttributeAuthorization auth = getValidatingAuthorization(attributeValue);
+		if (auth != null) {
+			Attribute validatingAttribute = auth.getValidatingAttribute();
+			if (validatingAttribute.getValueType().equals(
+					attributeValue.getAttribute().getValueType())) {
+				TypedQuery<AttributeMetaAttribute> valueQuery = em
+						.createNamedQuery(AttributeMetaAttribute.GET_ATTRIBUTE,
+								AttributeMetaAttribute.class);
+				valueQuery.setParameter("meta", attributeValue.getAttribute());
+				valueQuery.setParameter("attr", validatingAttribute);
+				List<AttributeMetaAttribute> values = valueQuery
+						.getResultList();
+				boolean valid = false;
+				for (AttributeMetaAttribute value : values) {
+					if (attributeValue.getTextValue().equals(
+							value.getTextValue())) {
+						valid = true;
+						break;
+					}
+				}
+				if (!valid) {
+					throw new IllegalArgumentException(
+							String.format(
+									"%s is not a valid picklist value for attribute %s",
+									attributeValue.getTextValue(),
+									attributeValue.getAttribute().getName()));
 
-				 }
-			 }
-		 }
+				}
+			}
+		}
 
-		 em.persist(attributeValue);
+		em.persist(attributeValue);
 
-	 }
+	}
 }

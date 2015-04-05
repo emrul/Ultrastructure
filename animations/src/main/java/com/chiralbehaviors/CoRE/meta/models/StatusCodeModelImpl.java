@@ -78,7 +78,7 @@ public class StatusCodeModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
 	 * chiralbehaviors.CoRE.network.Aspect,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -346,7 +346,7 @@ public class StatusCodeModelImpl
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
 	 * chiralbehaviors.CoRE.ExistentialRuleform,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)

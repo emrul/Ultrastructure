@@ -44,9 +44,9 @@ import com.chiralbehaviors.CoRE.product.ProductNetwork;
  *
  */
 public class ProductModelImpl
-extends
-AbstractNetworkedModel<Product, ProductNetwork, ProductAttributeAuthorization, ProductAttribute>
-implements ProductModel {
+		extends
+		AbstractNetworkedModel<Product, ProductNetwork, ProductAttributeAuthorization, ProductAttribute>
+		implements ProductModel {
 
 	/**
 	 * @param em
@@ -57,7 +57,7 @@ implements ProductModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
 	 * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -74,7 +74,7 @@ implements ProductModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
 	 * chiralbehaviors.CoRE.network.Aspect,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -93,7 +93,7 @@ implements ProductModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
 	 * .CoRE.network .Networked)
@@ -120,7 +120,7 @@ implements ProductModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
 	 * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -137,7 +137,7 @@ implements ProductModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
 	 * .CoRE.meta .Aspect<RuleForm>[])
@@ -227,7 +227,7 @@ implements ProductModel {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
 	 * chiralbehaviors.CoRE.ExistentialRuleform,
 	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
