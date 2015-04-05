@@ -46,286 +46,296 @@ import com.chiralbehaviors.CoRE.time.IntervalNetwork;
  *
  */
 public class IntervalModelImpl
-		extends
-		AbstractNetworkedModel<Interval, IntervalNetwork, IntervalAttributeAuthorization, IntervalAttribute>
-		implements IntervalModel {
+        extends
+        AbstractNetworkedModel<Interval, IntervalNetwork, IntervalAttributeAuthorization, IntervalAttribute>
+        implements IntervalModel {
 
-	/**
-	 * @param em
-	 */
-	public IntervalModelImpl(Model model) {
-		super(model);
-	}
+    /**
+     * @param em
+     */
+    public IntervalModelImpl(Model model) {
+        super(model);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
-	 * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
-	 */
-	@Override
-	public void authorize(Aspect<Interval> aspect, Attribute... attributes) {
-		for (Attribute attribute : attributes) {
-			IntervalAttributeAuthorization authorization = new IntervalAttributeAuthorization(
-					aspect.getClassification(), aspect.getClassifier(),
-					attribute, kernel.getCoreModel());
-			em.persist(authorization);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
+     * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
+     */
+    @Override
+    public void authorize(Aspect<Interval> aspect, Attribute... attributes) {
+        for (Attribute attribute : attributes) {
+            IntervalAttributeAuthorization authorization = new IntervalAttributeAuthorization(
+                                                                                              aspect.getClassification(),
+                                                                                              aspect.getClassifier(),
+                                                                                              attribute,
+                                                                                              kernel.getCoreModel());
+            em.persist(authorization);
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
-	 * chiralbehaviors.CoRE.network.Aspect,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute)
-	 */
-	@Override
-	public void authorizeEnum(Aspect<Interval> aspect, Attribute attribute,
-			Attribute enumAttribute) {
-		IntervalAttributeAuthorization auth = new IntervalAttributeAuthorization(
-				aspect.getClassification(), aspect.getClassifier(), attribute,
-				kernel.getCoreAnimationSoftware());
-		auth.setValidatingAttribute(enumAttribute);
-		em.persist(auth);
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
+     * chiralbehaviors.CoRE.network.Aspect,
+     * com.chiralbehaviors.CoRE.attribute.Attribute,
+     * com.chiralbehaviors.CoRE.attribute.Attribute)
+     */
+    @Override
+    public void authorizeEnum(Aspect<Interval> aspect, Attribute attribute,
+                              Attribute enumAttribute) {
+        IntervalAttributeAuthorization auth = new IntervalAttributeAuthorization(
+                                                                                 aspect.getClassification(),
+                                                                                 aspect.getClassifier(),
+                                                                                 attribute,
+                                                                                 kernel.getCoreAnimationSoftware());
+        auth.setValidatingAttribute(enumAttribute);
+        em.persist(auth);
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
-	 * .CoRE.network .Networked)
-	 */
-	@Override
-	public Interval create(Interval prototype) {
-		Interval copy = prototype.clone();
-		em.detach(copy);
-		em.persist(copy);
-		copy.setUpdatedBy(kernel.getCoreModel());
-		for (IntervalNetwork network : prototype.getNetworkByParent()) {
-			network.getParent().link(network.getRelationship(), copy,
-					kernel.getCoreModel(), kernel.getInverseSoftware(), em);
-		}
-		for (IntervalAttribute attribute : prototype.getAttributes()) {
-			IntervalAttribute clone = (IntervalAttribute) attribute.clone();
-			em.detach(clone);
-			em.persist(clone);
-			clone.setInterval(copy);
-			clone.setUpdatedBy(kernel.getCoreModel());
-		}
-		return copy;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
+     * .CoRE.network .Networked)
+     */
+    @Override
+    public Interval create(Interval prototype) {
+        Interval copy = prototype.clone();
+        em.detach(copy);
+        em.persist(copy);
+        copy.setUpdatedBy(kernel.getCoreModel());
+        for (IntervalNetwork network : prototype.getNetworkByParent()) {
+            network.getParent().link(network.getRelationship(), copy,
+                                     kernel.getCoreModel(),
+                                     kernel.getInverseSoftware(), em);
+        }
+        for (IntervalAttribute attribute : prototype.getAttributes()) {
+            IntervalAttribute clone = (IntervalAttribute) attribute.clone();
+            em.detach(clone);
+            em.persist(clone);
+            clone.setInterval(copy);
+            clone.setUpdatedBy(kernel.getCoreModel());
+        }
+        return copy;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
-	 * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public Facet<Interval, IntervalAttribute> create(String name,
-			String description, Aspect<Interval> aspect) {
-		return create(name, description, null, kernel.getNotApplicableUnit(),
-				aspect);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
+     * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public Facet<Interval, IntervalAttribute> create(String name,
+                                                     String description,
+                                                     Aspect<Interval> aspect) {
+        return create(name, description, null, kernel.getNotApplicableUnit(),
+                      aspect);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
-	 * .CoRE.meta .Aspect<RuleForm>[])
-	 */
-	@SafeVarargs
-	@Override
-	public final Interval create(String name, String description,
-			Aspect<Interval> aspect, Aspect<Interval>... aspects) {
-		Interval agency = new Interval(name, BigDecimal.valueOf(0),
-				kernel.getNotApplicableUnit(), BigDecimal.valueOf(0),
-				kernel.getNotApplicableUnit(), description,
-				kernel.getCoreModel());
-		em.persist(agency);
-		initialize(agency, aspect);
-		if (aspects != null) {
-			for (Aspect<Interval> a : aspects) {
-				initialize(agency, a);
-			}
-		}
-		return agency;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
+     * .CoRE.meta .Aspect<RuleForm>[])
+     */
+    @SafeVarargs
+    @Override
+    public final Interval create(String name, String description,
+                                 Aspect<Interval> aspect,
+                                 Aspect<Interval>... aspects) {
+        Interval agency = new Interval(name, BigDecimal.valueOf(0),
+                                       kernel.getNotApplicableUnit(),
+                                       BigDecimal.valueOf(0),
+                                       kernel.getNotApplicableUnit(),
+                                       description, kernel.getCoreModel());
+        em.persist(agency);
+        initialize(agency, aspect);
+        if (aspects != null) {
+            for (Aspect<Interval> a : aspects) {
+                initialize(agency, a);
+            }
+        }
+        return agency;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
-	 * java.lang.String, java.math.BigDecimal,
-	 * com.chiralbehaviors.CoRE.attribute.unit.Unit,
-	 * com.chiralbehaviors.CoRE.network.Aspect,
-	 * com.chiralbehaviors.CoRE.network.Aspect[])
-	 */
-	@Override
-	public Facet<Interval, IntervalAttribute> create(String name,
-			String description, BigDecimal start, Unit startUnit,
-			Aspect<Interval> aspect,
-			@SuppressWarnings("unchecked") Aspect<Interval>... aspects) {
-		return create(name, description, start, startUnit, null,
-				kernel.getNotApplicableUnit(), aspect, aspects);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
+     * java.lang.String, java.math.BigDecimal,
+     * com.chiralbehaviors.CoRE.attribute.unit.Unit,
+     * com.chiralbehaviors.CoRE.network.Aspect,
+     * com.chiralbehaviors.CoRE.network.Aspect[])
+     */
+    @Override
+    public Facet<Interval, IntervalAttribute> create(String name,
+                                                     String description,
+                                                     BigDecimal start,
+                                                     Unit startUnit,
+                                                     Aspect<Interval> aspect,
+                                                     @SuppressWarnings("unchecked") Aspect<Interval>... aspects) {
+        return create(name, description, start, startUnit, null,
+                      kernel.getNotApplicableUnit(), aspect, aspects);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
-	 * java.lang.String, java.math.BigDecimal,
-	 * com.chiralbehaviors.CoRE.attribute.unit.Unit, java.math.BigDecimal,
-	 * com.chiralbehaviors.CoRE.attribute.unit.Unit,
-	 * com.chiralbehaviors.CoRE.network.Aspect,
-	 * com.chiralbehaviors.CoRE.network.Aspect[])
-	 */
-	@Override
-	public Facet<Interval, IntervalAttribute> create(String name,
-			String description, BigDecimal start, Unit startUnit,
-			BigDecimal duration, Unit durationUnit, Aspect<Interval> aspect,
-			@SuppressWarnings("unchecked") Aspect<Interval>... aspects) {
-		Interval interval = new Interval(name, start, startUnit, duration,
-				durationUnit, description, kernel.getCoreModel());
-		em.persist(interval);
-		return new Facet<Interval, IntervalAttribute>(aspect, interval,
-				initialize(interval, aspect)) {
-		};
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
+     * java.lang.String, java.math.BigDecimal,
+     * com.chiralbehaviors.CoRE.attribute.unit.Unit, java.math.BigDecimal,
+     * com.chiralbehaviors.CoRE.attribute.unit.Unit,
+     * com.chiralbehaviors.CoRE.network.Aspect,
+     * com.chiralbehaviors.CoRE.network.Aspect[])
+     */
+    @Override
+    public Facet<Interval, IntervalAttribute> create(String name,
+                                                     String description,
+                                                     BigDecimal start,
+                                                     Unit startUnit,
+                                                     BigDecimal duration,
+                                                     Unit durationUnit,
+                                                     Aspect<Interval> aspect,
+                                                     @SuppressWarnings("unchecked") Aspect<Interval>... aspects) {
+        Interval interval = new Interval(name, start, startUnit, duration,
+                                         durationUnit, description,
+                                         kernel.getCoreModel());
+        em.persist(interval);
+        return new Facet<Interval, IntervalAttribute>(aspect, interval,
+                                                      initialize(interval,
+                                                                 aspect)) {
+        };
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getInterconnections(java
-	 * .util.List, java.util.List, java.util.List)
-	 */
-	@Override
-	public List<IntervalNetwork> getInterconnections(
-			Collection<Interval> parents,
-			Collection<Relationship> relationships,
-			Collection<Interval> children) {
-		throw new UnsupportedOperationException();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getInterconnections(java
+     * .util.List, java.util.List, java.util.List)
+     */
+    @Override
+    public List<IntervalNetwork> getInterconnections(Collection<Interval> parents,
+                                                     Collection<Relationship> relationships,
+                                                     Collection<Interval> children) {
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * @param attributeValue
-	 * @return
-	 */
-	private IntervalAttributeAuthorization getValidatingAuthorization(
-			IntervalAttribute attributeValue) {
-		String sql = "SELECT  p FROM IntervalAttributeAuthorization p "
-				+ "WHERE p.validatingAttribute IS NOT NULL "
-				+ "AND p.authorizedAttribute = :attribute ";
-		TypedQuery<IntervalAttributeAuthorization> query = em.createQuery(sql,
-				IntervalAttributeAuthorization.class);
-		query.setParameter("attribute", attributeValue.getAttribute());
-		List<IntervalAttributeAuthorization> auths = query.getResultList();
-		TypedQuery<IntervalNetwork> networkQuery = em.createNamedQuery(
-				IntervalNetwork.GET_NETWORKS, IntervalNetwork.class);
-		networkQuery.setParameter("parent", attributeValue.getInterval());
-		for (IntervalAttributeAuthorization auth : auths) {
-			networkQuery.setParameter("relationship", auth.getClassification());
-			networkQuery.setParameter("child", auth.getClassifier());
-			try {
-				if (networkQuery.getSingleResult() != null) {
-					return auth;
-				}
-			} catch (NoResultException e) {
-				// keep going
-			}
-		}
-		return null;
-	}
+    /**
+     * @param attributeValue
+     * @return
+     */
+    private IntervalAttributeAuthorization getValidatingAuthorization(IntervalAttribute attributeValue) {
+        String sql = "SELECT  p FROM IntervalAttributeAuthorization p "
+                     + "WHERE p.validatingAttribute IS NOT NULL "
+                     + "AND p.authorizedAttribute = :attribute ";
+        TypedQuery<IntervalAttributeAuthorization> query = em.createQuery(sql,
+                                                                          IntervalAttributeAuthorization.class);
+        query.setParameter("attribute", attributeValue.getAttribute());
+        List<IntervalAttributeAuthorization> auths = query.getResultList();
+        TypedQuery<IntervalNetwork> networkQuery = em.createNamedQuery(IntervalNetwork.GET_NETWORKS,
+                                                                       IntervalNetwork.class);
+        networkQuery.setParameter("parent", attributeValue.getInterval());
+        for (IntervalAttributeAuthorization auth : auths) {
+            networkQuery.setParameter("relationship", auth.getClassification());
+            networkQuery.setParameter("child", auth.getClassifier());
+            try {
+                if (networkQuery.getSingleResult() != null) {
+                    return auth;
+                }
+            } catch (NoResultException e) {
+                // keep going
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * @param agency
-	 * @param aspect
-	 */
-	protected List<IntervalAttribute> initialize(Interval agency,
-			Aspect<Interval> aspect) {
-		agency.link(aspect.getClassification(), aspect.getClassifier(),
-				kernel.getCoreModel(), kernel.getInverseSoftware(), em);
-		List<IntervalAttribute> attributes = new ArrayList<>();
-		for (IntervalAttributeAuthorization authorization : getAttributeAuthorizations(aspect)) {
-			IntervalAttribute attribute = new IntervalAttribute(
-					authorization.getAuthorizedAttribute(),
-					kernel.getCoreModel());
-			attributes.add(attribute);
-			attribute.setInterval(agency);
-			defaultValue(attribute);
-			em.persist(attribute);
-		}
-		return attributes;
-	}
+    /**
+     * @param agency
+     * @param aspect
+     */
+    protected List<IntervalAttribute> initialize(Interval agency,
+                                                 Aspect<Interval> aspect) {
+        agency.link(aspect.getClassification(), aspect.getClassifier(),
+                    kernel.getCoreModel(), kernel.getInverseSoftware(), em);
+        List<IntervalAttribute> attributes = new ArrayList<>();
+        for (IntervalAttributeAuthorization authorization : getAttributeAuthorizations(aspect)) {
+            IntervalAttribute attribute = new IntervalAttribute(
+                                                                authorization.getAuthorizedAttribute(),
+                                                                kernel.getCoreModel());
+            attributes.add(attribute);
+            attribute.setInterval(agency);
+            defaultValue(attribute);
+            em.persist(attribute);
+        }
+        return attributes;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
-	 * java.lang.String, java.math.BigDecimal,
-	 * com.chiralbehaviors.CoRE.attribute.unit.Unit, java.math.BigDecimal,
-	 * com.chiralbehaviors.CoRE.attribute.unit.Unit)
-	 */
-	@Override
-	public Interval newDefaultInterval(String name, String description) {
-		Interval interval = new Interval(name, BigDecimal.valueOf(0),
-				kernel.getNotApplicableUnit(), BigDecimal.valueOf(0),
-				kernel.getNotApplicableUnit(), description,
-				kernel.getCoreModel());
-		em.persist(interval);
-		return interval;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
+     * java.lang.String, java.math.BigDecimal,
+     * com.chiralbehaviors.CoRE.attribute.unit.Unit, java.math.BigDecimal,
+     * com.chiralbehaviors.CoRE.attribute.unit.Unit)
+     */
+    @Override
+    public Interval newDefaultInterval(String name, String description) {
+        Interval interval = new Interval(name, BigDecimal.valueOf(0),
+                                         kernel.getNotApplicableUnit(),
+                                         BigDecimal.valueOf(0),
+                                         kernel.getNotApplicableUnit(),
+                                         description, kernel.getCoreModel());
+        em.persist(interval);
+        return interval;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
-	 * chiralbehaviors.CoRE.ExistentialRuleform,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
-	 */
-	@Override
-	public void setAttributeValue(IntervalAttribute attributeValue) {
-		IntervalAttributeAuthorization auth = getValidatingAuthorization(attributeValue);
-		if (auth != null) {
-			Attribute validatingAttribute = auth.getValidatingAttribute();
-			if (validatingAttribute.getValueType().equals(
-					attributeValue.getAttribute().getValueType())) {
-				TypedQuery<AttributeMetaAttribute> valueQuery = em
-						.createNamedQuery(AttributeMetaAttribute.GET_ATTRIBUTE,
-								AttributeMetaAttribute.class);
-				valueQuery.setParameter("meta", attributeValue.getAttribute());
-				valueQuery.setParameter("attr", validatingAttribute);
-				List<AttributeMetaAttribute> values = valueQuery
-						.getResultList();
-				boolean valid = false;
-				for (AttributeMetaAttribute value : values) {
-					if (attributeValue.getTextValue().equals(
-							value.getTextValue())) {
-						valid = true;
-						break;
-					}
-				}
-				if (!valid) {
-					throw new IllegalArgumentException(
-							String.format(
-									"%s is not a valid picklist value for attribute %s",
-									attributeValue.getTextValue(),
-									attributeValue.getAttribute().getName()));
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
+     * chiralbehaviors.CoRE.ExistentialRuleform,
+     * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
+     */
+    @Override
+    public void setAttributeValue(IntervalAttribute attributeValue) {
+        IntervalAttributeAuthorization auth = getValidatingAuthorization(attributeValue);
+        if (auth != null) {
+            Attribute validatingAttribute = auth.getValidatingAttribute();
+            if (validatingAttribute.getValueType().equals(attributeValue.getAttribute().getValueType())) {
+                TypedQuery<AttributeMetaAttribute> valueQuery = em.createNamedQuery(AttributeMetaAttribute.GET_ATTRIBUTE,
+                                                                                    AttributeMetaAttribute.class);
+                valueQuery.setParameter("meta", attributeValue.getAttribute());
+                valueQuery.setParameter("attr", validatingAttribute);
+                List<AttributeMetaAttribute> values = valueQuery.getResultList();
+                boolean valid = false;
+                for (AttributeMetaAttribute value : values) {
+                    if (attributeValue.getTextValue().equals(value.getTextValue())) {
+                        valid = true;
+                        break;
+                    }
+                }
+                if (!valid) {
+                    throw new IllegalArgumentException(
+                                                       String.format("%s is not a valid picklist value for attribute %s",
+                                                                     attributeValue.getTextValue(),
+                                                                     attributeValue.getAttribute().getName()));
 
-				}
-			}
-		}
+                }
+            }
+        }
 
-		em.persist(attributeValue);
+        em.persist(attributeValue);
 
-	}
+    }
 }

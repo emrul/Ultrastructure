@@ -43,256 +43,259 @@ import com.chiralbehaviors.CoRE.network.RelationshipNetwork;
  *
  */
 public class RelationshipModelImpl
-		extends
-		AbstractNetworkedModel<Relationship, RelationshipNetwork, RelationshipAttributeAuthorization, RelationshipAttribute>
-		implements RelationshipModel {
+        extends
+        AbstractNetworkedModel<Relationship, RelationshipNetwork, RelationshipAttributeAuthorization, RelationshipAttribute>
+        implements RelationshipModel {
 
-	/**
-	 * @param em
-	 */
-	public RelationshipModelImpl(Model model) {
-		super(model);
-	}
+    /**
+     * @param em
+     */
+    public RelationshipModelImpl(Model model) {
+        super(model);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
-	 * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
-	 */
-	@Override
-	public void authorize(Aspect<Relationship> aspect, Attribute... attributes) {
-		for (Attribute attribute : attributes) {
-			RelationshipAttributeAuthorization authorization = new RelationshipAttributeAuthorization(
-					aspect.getClassification(), aspect.getClassifier(),
-					attribute, kernel.getCoreModel());
-			em.persist(authorization);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
+     * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
+     */
+    @Override
+    public void authorize(Aspect<Relationship> aspect, Attribute... attributes) {
+        for (Attribute attribute : attributes) {
+            RelationshipAttributeAuthorization authorization = new RelationshipAttributeAuthorization(
+                                                                                                      aspect.getClassification(),
+                                                                                                      aspect.getClassifier(),
+                                                                                                      attribute,
+                                                                                                      kernel.getCoreModel());
+            em.persist(authorization);
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
-	 * chiralbehaviors.CoRE.network.Aspect,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute)
-	 */
-	@Override
-	public void authorizeEnum(Aspect<Relationship> aspect, Attribute attribute,
-			Attribute enumAttribute) {
-		RelationshipAttributeAuthorization auth = new RelationshipAttributeAuthorization(
-				aspect.getClassification(), aspect.getClassifier(), attribute,
-				kernel.getCoreAnimationSoftware());
-		auth.setValidatingAttribute(enumAttribute);
-		em.persist(auth);
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
+     * chiralbehaviors.CoRE.network.Aspect,
+     * com.chiralbehaviors.CoRE.attribute.Attribute,
+     * com.chiralbehaviors.CoRE.attribute.Attribute)
+     */
+    @Override
+    public void authorizeEnum(Aspect<Relationship> aspect, Attribute attribute,
+                              Attribute enumAttribute) {
+        RelationshipAttributeAuthorization auth = new RelationshipAttributeAuthorization(
+                                                                                         aspect.getClassification(),
+                                                                                         aspect.getClassifier(),
+                                                                                         attribute,
+                                                                                         kernel.getCoreAnimationSoftware());
+        auth.setValidatingAttribute(enumAttribute);
+        em.persist(auth);
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
-	 * .CoRE.network .Networked)
-	 */
-	@Override
-	public Relationship create(Relationship prototype) {
-		Relationship copy = prototype.clone();
-		em.detach(copy);
-		em.persist(copy);
-		copy.setUpdatedBy(kernel.getCoreModel());
-		for (RelationshipNetwork network : prototype.getNetworkByParent()) {
-			network.getParent().link(network.getRelationship(), copy,
-					kernel.getCoreModel(), kernel.getInverseSoftware(), em);
-		}
-		for (RelationshipAttribute attribute : prototype.getAttributes()) {
-			RelationshipAttribute clone = (RelationshipAttribute) attribute
-					.clone();
-			em.detach(clone);
-			em.persist(clone);
-			clone.setRelationship(copy);
-			clone.setUpdatedBy(kernel.getCoreModel());
-		}
-		return copy;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
+     * .CoRE.network .Networked)
+     */
+    @Override
+    public Relationship create(Relationship prototype) {
+        Relationship copy = prototype.clone();
+        em.detach(copy);
+        em.persist(copy);
+        copy.setUpdatedBy(kernel.getCoreModel());
+        for (RelationshipNetwork network : prototype.getNetworkByParent()) {
+            network.getParent().link(network.getRelationship(), copy,
+                                     kernel.getCoreModel(),
+                                     kernel.getInverseSoftware(), em);
+        }
+        for (RelationshipAttribute attribute : prototype.getAttributes()) {
+            RelationshipAttribute clone = (RelationshipAttribute) attribute.clone();
+            em.detach(clone);
+            em.persist(clone);
+            clone.setRelationship(copy);
+            clone.setUpdatedBy(kernel.getCoreModel());
+        }
+        return copy;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
-	 * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
-	 */
-	@Override
-	public Facet<Relationship, RelationshipAttribute> create(String name,
-			String description, Aspect<Relationship> aspect) {
-		Relationship relationship = new Relationship(name, description,
-				kernel.getCoreModel());
-		em.persist(relationship);
-		return new Facet<Relationship, RelationshipAttribute>(aspect,
-				relationship, initialize(relationship, aspect)) {
-		};
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
+     * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
+     */
+    @Override
+    public Facet<Relationship, RelationshipAttribute> create(String name,
+                                                             String description,
+                                                             Aspect<Relationship> aspect) {
+        Relationship relationship = new Relationship(name, description,
+                                                     kernel.getCoreModel());
+        em.persist(relationship);
+        return new Facet<Relationship, RelationshipAttribute>(
+                                                              aspect,
+                                                              relationship,
+                                                              initialize(relationship,
+                                                                         aspect)) {
+        };
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
-	 * .CoRE.meta .Aspect<RuleForm>[])
-	 */
-	@SafeVarargs
-	@Override
-	public final Relationship create(String name, String description,
-			Aspect<Relationship> aspect, Aspect<Relationship>... aspects) {
-		Relationship relationship = new Relationship(name, description,
-				kernel.getCoreModel());
-		em.persist(relationship);
-		initialize(relationship, aspect);
-		if (aspects != null) {
-			for (Aspect<Relationship> a : aspects) {
-				initialize(relationship, a);
-			}
-		}
-		return relationship;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
+     * .CoRE.meta .Aspect<RuleForm>[])
+     */
+    @SafeVarargs
+    @Override
+    public final Relationship create(String name, String description,
+                                     Aspect<Relationship> aspect,
+                                     Aspect<Relationship>... aspects) {
+        Relationship relationship = new Relationship(name, description,
+                                                     kernel.getCoreModel());
+        em.persist(relationship);
+        initialize(relationship, aspect);
+        if (aspects != null) {
+            for (Aspect<Relationship> a : aspects) {
+                initialize(relationship, a);
+            }
+        }
+        return relationship;
+    }
 
-	@Override
-	public final Relationship create(String rel1Name, String rel1Description,
-			String rel2Name, String rel2Description) {
-		Relationship relationship = new Relationship(rel1Name, rel1Description,
-				kernel.getCoreModel());
+    @Override
+    public final Relationship create(String rel1Name, String rel1Description,
+                                     String rel2Name, String rel2Description) {
+        Relationship relationship = new Relationship(rel1Name, rel1Description,
+                                                     kernel.getCoreModel());
 
-		Relationship relationship2 = new Relationship(rel2Name,
-				rel2Description, kernel.getCoreModel());
+        Relationship relationship2 = new Relationship(rel2Name,
+                                                      rel2Description,
+                                                      kernel.getCoreModel());
 
-		relationship.setInverse(relationship2);
-		relationship2.setInverse(relationship);
-		em.persist(relationship);
-		em.persist(relationship2);
+        relationship.setInverse(relationship2);
+        relationship2.setInverse(relationship);
+        em.persist(relationship);
+        em.persist(relationship2);
 
-		return relationship;
-	}
+        return relationship;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.meta.NetworkedModel#getInterconnections(java
-	 * .util.List, java.util.List, java.util.List)
-	 */
-	@Override
-	public List<RelationshipNetwork> getInterconnections(
-			Collection<Relationship> parents,
-			Collection<Relationship> relationships,
-			Collection<Relationship> children) {
-		if (parents == null || parents.size() == 0 || relationships == null
-				|| relationships.size() == 0 || children == null
-				|| children.size() == 0) {
-			return null;
-		}
-		TypedQuery<RelationshipNetwork> query = em.createNamedQuery(
-				RelationshipNetwork.GET_NETWORKS, RelationshipNetwork.class);
-		query.setParameter("parents", parents);
-		query.setParameter("relationships", relationships);
-		query.setParameter("children", children);
-		return query.getResultList();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.meta.NetworkedModel#getInterconnections(java
+     * .util.List, java.util.List, java.util.List)
+     */
+    @Override
+    public List<RelationshipNetwork> getInterconnections(Collection<Relationship> parents,
+                                                         Collection<Relationship> relationships,
+                                                         Collection<Relationship> children) {
+        if (parents == null || parents.size() == 0 || relationships == null
+            || relationships.size() == 0 || children == null
+            || children.size() == 0) {
+            return null;
+        }
+        TypedQuery<RelationshipNetwork> query = em.createNamedQuery(RelationshipNetwork.GET_NETWORKS,
+                                                                    RelationshipNetwork.class);
+        query.setParameter("parents", parents);
+        query.setParameter("relationships", relationships);
+        query.setParameter("children", children);
+        return query.getResultList();
+    }
 
-	/**
-	 * @param attributeValue
-	 * @return
-	 */
-	private RelationshipAttributeAuthorization getValidatingAuthorization(
-			RelationshipAttribute attributeValue) {
-		String sql = "SELECT  p FROM RelationshipAttributeAuthorization p "
-				+ "WHERE p.validatingAttribute IS NOT NULL "
-				+ "AND p.authorizedAttribute = :attribute ";
-		TypedQuery<RelationshipAttributeAuthorization> query = em.createQuery(
-				sql, RelationshipAttributeAuthorization.class);
-		query.setParameter("attribute", attributeValue.getAttribute());
-		List<RelationshipAttributeAuthorization> auths = query.getResultList();
-		TypedQuery<RelationshipNetwork> networkQuery = em.createNamedQuery(
-				RelationshipNetwork.GET_NETWORKS, RelationshipNetwork.class);
-		networkQuery.setParameter("parent", attributeValue.getRelationship());
-		for (RelationshipAttributeAuthorization auth : auths) {
-			networkQuery.setParameter("relationship", auth.getClassification());
-			networkQuery.setParameter("child", auth.getClassifier());
-			try {
-				if (networkQuery.getSingleResult() != null) {
-					return auth;
-				}
-			} catch (NoResultException e) {
-				// keep going
-			}
-		}
-		return null;
-	}
+    /**
+     * @param attributeValue
+     * @return
+     */
+    private RelationshipAttributeAuthorization getValidatingAuthorization(RelationshipAttribute attributeValue) {
+        String sql = "SELECT  p FROM RelationshipAttributeAuthorization p "
+                     + "WHERE p.validatingAttribute IS NOT NULL "
+                     + "AND p.authorizedAttribute = :attribute ";
+        TypedQuery<RelationshipAttributeAuthorization> query = em.createQuery(sql,
+                                                                              RelationshipAttributeAuthorization.class);
+        query.setParameter("attribute", attributeValue.getAttribute());
+        List<RelationshipAttributeAuthorization> auths = query.getResultList();
+        TypedQuery<RelationshipNetwork> networkQuery = em.createNamedQuery(RelationshipNetwork.GET_NETWORKS,
+                                                                           RelationshipNetwork.class);
+        networkQuery.setParameter("parent", attributeValue.getRelationship());
+        for (RelationshipAttributeAuthorization auth : auths) {
+            networkQuery.setParameter("relationship", auth.getClassification());
+            networkQuery.setParameter("child", auth.getClassifier());
+            try {
+                if (networkQuery.getSingleResult() != null) {
+                    return auth;
+                }
+            } catch (NoResultException e) {
+                // keep going
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * @param agency
-	 * @param aspect
-	 */
-	protected List<RelationshipAttribute> initialize(Relationship agency,
-			Aspect<Relationship> aspect) {
-		agency.link(aspect.getClassification(), aspect.getClassifier(),
-				kernel.getCoreModel(), kernel.getInverseSoftware(), em);
-		List<RelationshipAttribute> attributes = new ArrayList<>();
-		for (RelationshipAttributeAuthorization authorization : getAttributeAuthorizations(aspect)) {
-			RelationshipAttribute attribute = new RelationshipAttribute(
-					authorization.getAuthorizedAttribute(),
-					kernel.getCoreModel());
-			attributes.add(attribute);
-			attribute.setRelationship(agency);
-			defaultValue(attribute);
-			em.persist(attribute);
-		}
-		return attributes;
-	}
+    /**
+     * @param agency
+     * @param aspect
+     */
+    protected List<RelationshipAttribute> initialize(Relationship agency,
+                                                     Aspect<Relationship> aspect) {
+        agency.link(aspect.getClassification(), aspect.getClassifier(),
+                    kernel.getCoreModel(), kernel.getInverseSoftware(), em);
+        List<RelationshipAttribute> attributes = new ArrayList<>();
+        for (RelationshipAttributeAuthorization authorization : getAttributeAuthorizations(aspect)) {
+            RelationshipAttribute attribute = new RelationshipAttribute(
+                                                                        authorization.getAuthorizedAttribute(),
+                                                                        kernel.getCoreModel());
+            attributes.add(attribute);
+            attribute.setRelationship(agency);
+            defaultValue(attribute);
+            em.persist(attribute);
+        }
+        return attributes;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
-	 * chiralbehaviors.CoRE.ExistentialRuleform,
-	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
-	 */
-	@Override
-	public void setAttributeValue(RelationshipAttribute attributeValue) {
-		RelationshipAttributeAuthorization auth = getValidatingAuthorization(attributeValue);
-		if (auth != null) {
-			Attribute validatingAttribute = auth.getValidatingAttribute();
-			if (validatingAttribute.getValueType().equals(
-					attributeValue.getAttribute().getValueType())) {
-				TypedQuery<AttributeMetaAttribute> valueQuery = em
-						.createNamedQuery(AttributeMetaAttribute.GET_ATTRIBUTE,
-								AttributeMetaAttribute.class);
-				valueQuery.setParameter("meta", attributeValue.getAttribute());
-				valueQuery.setParameter("attr", validatingAttribute);
-				List<AttributeMetaAttribute> values = valueQuery
-						.getResultList();
-				boolean valid = false;
-				for (AttributeMetaAttribute value : values) {
-					if (attributeValue.getTextValue().equals(
-							value.getTextValue())) {
-						valid = true;
-						break;
-					}
-				}
-				if (!valid) {
-					throw new IllegalArgumentException(
-							String.format(
-									"%s is not a valid picklist value for attribute %s",
-									attributeValue.getTextValue(),
-									attributeValue.getAttribute().getName()));
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
+     * chiralbehaviors.CoRE.ExistentialRuleform,
+     * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
+     */
+    @Override
+    public void setAttributeValue(RelationshipAttribute attributeValue) {
+        RelationshipAttributeAuthorization auth = getValidatingAuthorization(attributeValue);
+        if (auth != null) {
+            Attribute validatingAttribute = auth.getValidatingAttribute();
+            if (validatingAttribute.getValueType().equals(attributeValue.getAttribute().getValueType())) {
+                TypedQuery<AttributeMetaAttribute> valueQuery = em.createNamedQuery(AttributeMetaAttribute.GET_ATTRIBUTE,
+                                                                                    AttributeMetaAttribute.class);
+                valueQuery.setParameter("meta", attributeValue.getAttribute());
+                valueQuery.setParameter("attr", validatingAttribute);
+                List<AttributeMetaAttribute> values = valueQuery.getResultList();
+                boolean valid = false;
+                for (AttributeMetaAttribute value : values) {
+                    if (attributeValue.getTextValue().equals(value.getTextValue())) {
+                        valid = true;
+                        break;
+                    }
+                }
+                if (!valid) {
+                    throw new IllegalArgumentException(
+                                                       String.format("%s is not a valid picklist value for attribute %s",
+                                                                     attributeValue.getTextValue(),
+                                                                     attributeValue.getAttribute().getName()));
 
-				}
-			}
-		}
+                }
+            }
+        }
 
-		em.persist(attributeValue);
+        em.persist(attributeValue);
 
-	}
+    }
 }
