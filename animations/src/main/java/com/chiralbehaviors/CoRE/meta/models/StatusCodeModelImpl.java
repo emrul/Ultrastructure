@@ -48,9 +48,9 @@ import com.chiralbehaviors.CoRE.product.Product;
  *
  */
 public class StatusCodeModelImpl
-        extends
-        AbstractNetworkedModel<StatusCode, StatusCodeNetwork, StatusCodeAttributeAuthorization, StatusCodeAttribute>
-        implements StatusCodeModel {
+extends
+AbstractNetworkedModel<StatusCode, StatusCodeNetwork, StatusCodeAttributeAuthorization, StatusCodeAttribute>
+implements StatusCodeModel {
 
     /**
      * @param em
@@ -61,7 +61,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
      * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -80,7 +80,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
      * chiralbehaviors.CoRE.network.Aspect,
      * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -101,7 +101,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.network .Networked)
@@ -129,7 +129,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
      * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -142,16 +142,16 @@ public class StatusCodeModelImpl
                                                kernel.getCoreModel());
         em.persist(statusCode);
         return new Facet<StatusCode, StatusCodeAttribute>(
-                                                          aspect,
-                                                          statusCode,
-                                                          initialize(statusCode,
-                                                                     aspect)) {
+                aspect,
+                statusCode,
+                initialize(statusCode,
+                           aspect)) {
         };
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.meta .Aspect<RuleForm>[])
@@ -175,7 +175,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#getInterconnections(java
      * .util.List, java.util.List, java.util.List)
@@ -194,7 +194,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.StatusCodeModel#getStatusCodes(com.
      * chiralbehaviors.CoRE.product.Product)
      */
@@ -214,7 +214,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.StatusCodeModel#getStatusCodeSequencing
      * (com.chiralbehaviors.CoRE.product.Product)
@@ -229,7 +229,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.StatusCodeModel#getStatusCodeSequencingChild
      * (com.chiralbehaviors.CoRE.product.Product,
@@ -247,7 +247,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.StatusCodeModel#getStatusCodeSequencingChild
      * (com.chiralbehaviors.CoRE.event.status.StatusCode)
@@ -262,7 +262,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.StatusCodeModel#getStatusCodeSequencingParent
      * (com.chiralbehaviors.CoRE.product.Product,
@@ -280,7 +280,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.StatusCodeModel#getStatusCodeSequencingParent
      * (com.chiralbehaviors.CoRE.event.status.StatusCode)
@@ -299,8 +299,8 @@ public class StatusCodeModelImpl
      */
     private StatusCodeAttributeAuthorization getValidatingAuthorization(StatusCodeAttribute attributeValue) {
         String sql = "SELECT  p FROM StatusCodeAttributeAuthorization p "
-                     + "WHERE p.validatingAttribute IS NOT NULL "
-                     + "AND p.authorizedAttribute = :attribute ";
+                + "WHERE p.validatingAttribute IS NOT NULL "
+                + "AND p.authorizedAttribute = :attribute ";
         TypedQuery<StatusCodeAttributeAuthorization> query = em.createQuery(sql,
                                                                             StatusCodeAttributeAuthorization.class);
         query.setParameter("attribute", attributeValue.getAttribute());
@@ -345,7 +345,7 @@ public class StatusCodeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
      * chiralbehaviors.CoRE.ExistentialRuleform,
      * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)

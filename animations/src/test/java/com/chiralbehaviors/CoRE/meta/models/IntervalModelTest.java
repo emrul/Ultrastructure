@@ -41,52 +41,53 @@ import com.chiralbehaviors.CoRE.time.IntervalNetwork;
  */
 public class IntervalModelTest extends AbstractModelTest {
 
-	@Test
-	public void testDefaulting() {
-		em.getTransaction().begin();
-		model.getIntervalModel().newDefaultInterval("int", "erval");
-		em.getTransaction().commit();
-	}
+    @Test
+    public void testDefaulting() {
+        em.getTransaction().begin();
+        model.getIntervalModel().newDefaultInterval("int", "erval");
+        em.getTransaction().commit();
+    }
 
-	@Test
-	public void testSimpleNetworkPropagation() {
-		Agency core = model.getKernel().getCore();
-		Relationship equals = model.getKernel().getEquals();
+    @Test
+    public void testSimpleNetworkPropagation() {
+        Agency core = model.getKernel().getCore();
+        Relationship equals = model.getKernel().getEquals();
 
-		em.getTransaction().begin();
+        em.getTransaction().begin();
 
-		Relationship equals2 = new Relationship("equals 2",
-				"an alias for equals", core);
-		equals2.setInverse(equals2);
-		em.persist(equals2);
-		NetworkInference aEqualsA = new NetworkInference(equals, equals2,
-				equals, core);
-		em.persist(aEqualsA);
-		Interval a = new Interval(BigDecimal.valueOf(0),
-				BigDecimal.valueOf(100), kernel.getUnsetUnit(),
-				kernel.getUnsetUnit(), "A", core);
-		em.persist(a);
-		Interval b = new Interval(BigDecimal.valueOf(0),
-				BigDecimal.valueOf(100), kernel.getUnsetUnit(),
-				kernel.getUnsetUnit(), "B", core);
-		em.persist(b);
-		Interval c = new Interval(BigDecimal.valueOf(0),
-				BigDecimal.valueOf(100), kernel.getUnsetUnit(),
-				kernel.getUnsetUnit(), "C", core);
-		em.persist(c);
-		IntervalNetwork edgeA = new IntervalNetwork(a, equals, b, core);
-		em.persist(edgeA);
-		IntervalNetwork edgeB = new IntervalNetwork(b, equals2, c, core);
-		em.persist(edgeB);
+        Relationship equals2 = new Relationship("equals 2",
+                                                "an alias for equals", core);
+        equals2.setInverse(equals2);
+        em.persist(equals2);
+        NetworkInference aEqualsA = new NetworkInference(equals, equals2,
+                                                         equals, core);
+        em.persist(aEqualsA);
+        Interval a = new Interval(BigDecimal.valueOf(0),
+                                  BigDecimal.valueOf(100),
+                                  kernel.getUnsetUnit(), kernel.getUnsetUnit(),
+                                  "A", core);
+        em.persist(a);
+        Interval b = new Interval(BigDecimal.valueOf(0),
+                                  BigDecimal.valueOf(100),
+                                  kernel.getUnsetUnit(), kernel.getUnsetUnit(),
+                                  "B", core);
+        em.persist(b);
+        Interval c = new Interval(BigDecimal.valueOf(0),
+                                  BigDecimal.valueOf(100),
+                                  kernel.getUnsetUnit(), kernel.getUnsetUnit(),
+                                  "C", core);
+        em.persist(c);
+        IntervalNetwork edgeA = new IntervalNetwork(a, equals, b, core);
+        em.persist(edgeA);
+        IntervalNetwork edgeB = new IntervalNetwork(b, equals2, c, core);
+        em.persist(edgeB);
 
-		em.flush();
+        em.flush();
 
-		TypedQuery<IntervalNetwork> query = em
-				.createQuery(
-						"SELECT edge FROM IntervalNetwork edge WHERE edge.inference.id <> :id",
-						IntervalNetwork.class);
-		query.setParameter("id", new UUID(0, 0));
-		List<IntervalNetwork> edges = query.getResultList();
-		assertEquals(2, edges.size());
-	}
+        TypedQuery<IntervalNetwork> query = em.createQuery("SELECT edge FROM IntervalNetwork edge WHERE edge.inference.id <> :id",
+                                                           IntervalNetwork.class);
+        query.setParameter("id", new UUID(0, 0));
+        List<IntervalNetwork> edges = query.getResultList();
+        assertEquals(2, edges.size());
+    }
 }

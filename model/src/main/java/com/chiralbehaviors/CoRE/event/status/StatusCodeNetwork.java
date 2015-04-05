@@ -50,166 +50,166 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-		@NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM StatusCodeNetwork n "
-				+ "WHERE n.parent = :parent "
-				+ "AND n.relationship = :relationship"),
-		@NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM StatusCodeNetwork n "
-				+ "WHERE n.parent = :parent "
-				+ "AND n.relationship = :relationship "
-				+ "AND n.child = :child") })
+               @NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM StatusCodeNetwork n "
+                                                        + "WHERE n.parent = :parent "
+                                                        + "AND n.relationship = :relationship"),
+               @NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM StatusCodeNetwork n "
+                                                        + "WHERE n.parent = :parent "
+                                                        + "AND n.relationship = :relationship "
+                                                        + "AND n.child = :child") })
 @Entity
 @Table(name = "status_code_network", schema = "ruleform")
 public class StatusCodeNetwork extends NetworkRuleform<StatusCode> {
 
-	public static final String GET_CHILDREN = "statusCodeNetwork"
-			+ GET_CHILDREN_SUFFIX;
-	public static final String GET_NETWORKS = "statusCodeNetwork"
-			+ GET_NETWORKS_SUFFIX;
-	public static final String GET_USED_RELATIONSHIPS = "statusCodeNetwork"
-			+ USED_RELATIONSHIPS_SUFFIX;
+    public static final String GET_CHILDREN           = "statusCodeNetwork"
+                                                        + GET_CHILDREN_SUFFIX;
+    public static final String GET_NETWORKS           = "statusCodeNetwork"
+                                                        + GET_NETWORKS_SUFFIX;
+    public static final String GET_USED_RELATIONSHIPS = "statusCodeNetwork"
+                                                        + USED_RELATIONSHIPS_SUFFIX;
 
-	private static final long serialVersionUID = 1L;
-	// many-to-one
-	// association to Agency
+    private static final long  serialVersionUID       = 1L;
+    // many-to-one
+    // association to Agency
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "child")
-	private StatusCode child;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "child")
+    private StatusCode         child;
 
-	// bi-directional many-to-one association to Agency
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "parent")
-	private StatusCode parent;
+    // bi-directional many-to-one association to Agency
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "parent")
+    private StatusCode         parent;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(insertable = false, name = "premise1")
-	private StatusCodeNetwork premise1;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(insertable = false, name = "premise1")
+    private StatusCodeNetwork  premise1;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(insertable = false, name = "premise2")
-	private StatusCodeNetwork premise2;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(insertable = false, name = "premise2")
+    private StatusCodeNetwork  premise2;
 
-	/**
-	 *
-	 */
-	public StatusCodeNetwork() {
-		super();
-	}
+    /**
+     *
+     */
+    public StatusCodeNetwork() {
+        super();
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public StatusCodeNetwork(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public StatusCodeNetwork(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param relationship
-	 * @param updatedBy
-	 */
-	public StatusCodeNetwork(Relationship relationship, Agency updatedBy) {
-		super(relationship, updatedBy);
-	}
+    /**
+     * @param relationship
+     * @param updatedBy
+     */
+    public StatusCodeNetwork(Relationship relationship, Agency updatedBy) {
+        super(relationship, updatedBy);
+    }
 
-	/**
-	 * @param relationship
-	 * @param updatedBy
-	 */
-	public StatusCodeNetwork(StatusCode parent, Relationship relationship,
-			StatusCode child, Agency updatedBy) {
-		super(relationship, updatedBy);
-		this.parent = parent;
-		this.child = child;
-	}
+    /**
+     * @param relationship
+     * @param updatedBy
+     */
+    public StatusCodeNetwork(StatusCode parent, Relationship relationship,
+                             StatusCode child, Agency updatedBy) {
+        super(relationship, updatedBy);
+        this.parent = parent;
+        this.child = child;
+    }
 
-	/**
-	 * @param id
-	 */
-	public StatusCodeNetwork(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public StatusCodeNetwork(UUID id) {
+        super(id);
+    }
 
-	@Override
-	public void delete(Triggers triggers) {
-		triggers.delete(this);
-	}
+    @Override
+    public void delete(Triggers triggers) {
+        triggers.delete(this);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#getChild()
-	 */
-	@Override
-	@JsonGetter
-	public StatusCode getChild() {
-		return child;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#getChild()
+     */
+    @Override
+    @JsonGetter
+    public StatusCode getChild() {
+        return child;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#getParent()
-	 */
-	@Override
-	@JsonGetter
-	public StatusCode getParent() {
-		return parent;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#getParent()
+     */
+    @Override
+    @JsonGetter
+    public StatusCode getParent() {
+        return parent;
+    }
 
-	/**
-	 * @return the premise1
-	 */
-	@Override
-	@JsonGetter
-	public StatusCodeNetwork getPremise1() {
-		return premise1;
-	}
+    /**
+     * @return the premise1
+     */
+    @Override
+    @JsonGetter
+    public StatusCodeNetwork getPremise1() {
+        return premise1;
+    }
 
-	/**
-	 * @return the premise2
-	 */
-	@Override
-	@JsonGetter
-	public StatusCodeNetwork getPremise2() {
-		return premise2;
-	}
+    /**
+     * @return the premise2
+     */
+    @Override
+    @JsonGetter
+    public StatusCodeNetwork getPremise2() {
+        return premise2;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, StatusCodeNetwork> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.statusCodeNetwork;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, StatusCodeNetwork> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.statusCodeNetwork;
+    }
 
-	@Override
-	public void persist(Triggers triggers) {
-		triggers.persist(this);
-	}
+    @Override
+    public void persist(Triggers triggers) {
+        triggers.persist(this);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkRuleform#setChild(com.chiralbehaviors
-	 * .CoRE.ExistentialRuleform)
-	 */
-	@Override
-	public void setChild(StatusCode child) {
-		this.child = child;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkRuleform#setChild(com.chiralbehaviors
+     * .CoRE.ExistentialRuleform)
+     */
+    @Override
+    public void setChild(StatusCode child) {
+        this.child = child;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#setParent(com.
-	 * chiralbehaviors.CoRE.ExistentialRuleform)
-	 */
-	@Override
-	public void setParent(StatusCode parent) {
-		this.parent = parent;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.network.NetworkRuleform#setParent(com.
+     * chiralbehaviors.CoRE.ExistentialRuleform)
+     */
+    @Override
+    public void setParent(StatusCode parent) {
+        this.parent = parent;
+    }
 }

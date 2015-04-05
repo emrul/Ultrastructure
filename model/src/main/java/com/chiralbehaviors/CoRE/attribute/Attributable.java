@@ -32,9 +32,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 public interface Attributable<AttributeType extends Ruleform> {
-	@JsonIgnore
-	<A extends AttributeType> Set<A> getAttributes();
+    @JsonIgnore
+    <A extends AttributeType> Set<A> getAttributes();
 
-	@JsonIgnore
-	<A extends AttributeType> void setAttributes(Set<A> attributes);
+    @JsonIgnore
+    <A extends AttributeType> void setAttributes(Set<A> attributes);
 }

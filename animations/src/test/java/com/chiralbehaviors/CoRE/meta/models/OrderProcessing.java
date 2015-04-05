@@ -30,48 +30,48 @@ import com.chiralbehaviors.CoRE.product.Product;
  */
 public interface OrderProcessing {
 
-	StatusCode getAbandoned();
+    StatusCode getAbandoned();
 
-	Product getABC486();
+    Product getABC486();
 
-	StatusCode getActive();
+    StatusCode getActive();
 
-	StatusCode getAvailable();
+    StatusCode getAvailable();
 
-	Location getBHT37();
+    Location getBHT37();
 
-	Agency getBillingComputer();
+    Agency getBillingComputer();
 
-	Agency getCarfleurBon();
+    Agency getCarfleurBon();
 
-	Product getCheckCredit();
+    Product getCheckCredit();
 
-	StatusCode getCompleted();
+    StatusCode getCompleted();
 
-	Product getDeliver();
+    Product getDeliver();
 
-	Location getFactory1();
+    Location getFactory1();
 
-	Agency getFactory1Agency();
+    Agency getFactory1Agency();
 
-	Product getFee();
+    Product getFee();
 
-	Agency getGeorgetownUniversity();
+    Agency getGeorgetownUniversity();
 
-	Agency getOrderFullfillment();
+    Agency getOrderFullfillment();
 
-	Agency getOrgA();
+    Agency getOrgA();
 
-	Product getPick();
+    Product getPick();
 
-	Product getPrintPurchaseOrder();
+    Product getPrintPurchaseOrder();
 
-	Location getRC31();
+    Location getRC31();
 
-	Location getRSB225();
+    Location getRSB225();
 
-	Product getShip();
+    Product getShip();
 
-	StatusCode getWaitingOnPurchaseOrder();
+    StatusCode getWaitingOnPurchaseOrder();
 
 }

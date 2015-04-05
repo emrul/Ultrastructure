@@ -42,97 +42,97 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "location_network_authorization", schema = "ruleform")
 public class LocationNetworkAuthorization extends
-		NetworkAuthorization<Location> {
-	private static final long serialVersionUID = 1L;
+        NetworkAuthorization<Location> {
+    private static final long serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Event
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "authorized_parent")
-	private Location authorizedParent;
+    // bi-directional many-to-one association to Event
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "authorized_parent")
+    private Location          authorizedParent;
 
-	// bi-directional many-to-one association to Event
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "classifier")
-	private Location classifier;
+    // bi-directional many-to-one association to Event
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "classifier")
+    private Location          classifier;
 
-	/**
-	 *
-	 */
-	public LocationNetworkAuthorization() {
-		super();
-	}
+    /**
+     *
+     */
+    public LocationNetworkAuthorization() {
+        super();
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public LocationNetworkAuthorization(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public LocationNetworkAuthorization(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param id
-	 */
-	public LocationNetworkAuthorization(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public LocationNetworkAuthorization(UUID id) {
+        super(id);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getAuthorizedParent
-	 * ()
-	 */
-	@Override
-	@JsonGetter
-	public Location getAuthorizedParent() {
-		return authorizedParent;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getAuthorizedParent
+     * ()
+     */
+    @Override
+    @JsonGetter
+    public Location getAuthorizedParent() {
+        return authorizedParent;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getClassifier()
-	 */
-	@Override
-	@JsonGetter
-	public Location getClassifier() {
-		return classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getClassifier()
+     */
+    @Override
+    @JsonGetter
+    public Location getClassifier() {
+        return classifier;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, LocationNetworkAuthorization> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.locationNetworkAuthorization;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, LocationNetworkAuthorization> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.locationNetworkAuthorization;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setAuthorizedParent
-	 * (com.chiralbehaviors.CoRE.network.Networked)
-	 */
-	@Override
-	public void setAuthorizedParent(Location parent) {
-		authorizedParent = parent;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setAuthorizedParent
+     * (com.chiralbehaviors.CoRE.network.Networked)
+     */
+    @Override
+    public void setAuthorizedParent(Location parent) {
+        authorizedParent = parent;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setClassifier(com
-	 * .chiralbehaviors.CoRE.network.Networked)
-	 */
-	@Override
-	public void setClassifier(Location classifier) {
-		this.classifier = classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setClassifier(com
+     * .chiralbehaviors.CoRE.network.Networked)
+     */
+    @Override
+    public void setClassifier(Location classifier) {
+        this.classifier = classifier;
+    }
 }

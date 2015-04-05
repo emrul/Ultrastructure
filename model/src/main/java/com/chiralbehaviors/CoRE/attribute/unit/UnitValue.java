@@ -43,87 +43,87 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "unit_values", schema = "ruleform")
 public class UnitValue extends Ruleform {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Column(name = "boolean_value")
-	private Integer booleanValue;
+    @Column(name = "boolean_value")
+    private Integer           booleanValue;
 
-	@Column(name = "integer_value")
-	private Integer integerValue;
+    @Column(name = "integer_value")
+    private Integer           integerValue;
 
-	@Column(name = "numeric_value")
-	private BigDecimal numericValue;
+    @Column(name = "numeric_value")
+    private BigDecimal        numericValue;
 
-	@Column(name = "sequence_number")
-	private Integer sequenceNumber;
+    @Column(name = "sequence_number")
+    private Integer           sequenceNumber;
 
-	@Column(name = "text_value")
-	private String textValue;
+    @Column(name = "text_value")
+    private String            textValue;
 
-	// bi-directional many-to-one association to Unit
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "unit")
-	private Unit unit;
+    // bi-directional many-to-one association to Unit
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "unit")
+    private Unit              unit;
 
-	public UnitValue() {
-	}
+    public UnitValue() {
+    }
 
-	public Boolean getBooleanValue() {
-		return toBoolean(booleanValue);
-	}
+    public Boolean getBooleanValue() {
+        return toBoolean(booleanValue);
+    }
 
-	public Integer getIntegerValue() {
-		return integerValue;
-	}
+    public Integer getIntegerValue() {
+        return integerValue;
+    }
 
-	public BigDecimal getNumericValue() {
-		return numericValue;
-	}
+    public BigDecimal getNumericValue() {
+        return numericValue;
+    }
 
-	public Integer getSequenceNumber() {
-		return sequenceNumber;
-	}
+    public Integer getSequenceNumber() {
+        return sequenceNumber;
+    }
 
-	public String getTextValue() {
-		return textValue;
-	}
+    public String getTextValue() {
+        return textValue;
+    }
 
-	public Unit getUnit() {
-		return unit;
-	}
+    public Unit getUnit() {
+        return unit;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, UnitValue> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.unitValue;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, UnitValue> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.unitValue;
+    }
 
-	public void setBooleanValue(Boolean booleanValue) {
-		this.booleanValue = toInteger(booleanValue);
-	}
+    public void setBooleanValue(Boolean booleanValue) {
+        this.booleanValue = toInteger(booleanValue);
+    }
 
-	public void setIntegerValue(Integer integerValue) {
-		this.integerValue = integerValue;
-	}
+    public void setIntegerValue(Integer integerValue) {
+        this.integerValue = integerValue;
+    }
 
-	public void setNumericValue(BigDecimal numericValue) {
-		this.numericValue = numericValue;
-	}
+    public void setNumericValue(BigDecimal numericValue) {
+        this.numericValue = numericValue;
+    }
 
-	public void setSequenceNumber(Integer sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
-	}
+    public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
 
-	public void setTextValue(String textValue) {
-		this.textValue = textValue;
-	}
+    public void setTextValue(String textValue) {
+        this.textValue = textValue;
+    }
 
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
 }

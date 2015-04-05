@@ -46,127 +46,127 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Access(AccessType.FIELD)
 abstract public class NetworkRuleform<E extends ExistentialRuleform<?, ?>>
-		extends Ruleform {
-	private static final long serialVersionUID = 1L;
+        extends Ruleform {
+    private static final long serialVersionUID = 1L;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "inference", insertable = false)
-	private NetworkInference inference;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "inference", insertable = false)
+    private NetworkInference  inference;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "relationship")
-	private Relationship relationship;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "relationship")
+    private Relationship      relationship;
 
-	public NetworkRuleform() {
-		super();
-	}
+    public NetworkRuleform() {
+        super();
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public NetworkRuleform(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public NetworkRuleform(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param relationship
-	 * @param updatedBy
-	 */
-	public NetworkRuleform(Relationship relationship, Agency updatedBy) {
-		super(updatedBy);
-		this.relationship = relationship;
-	}
+    /**
+     * @param relationship
+     * @param updatedBy
+     */
+    public NetworkRuleform(Relationship relationship, Agency updatedBy) {
+        super(updatedBy);
+        this.relationship = relationship;
+    }
 
-	/**
-	 * @param id
-	 */
-	public NetworkRuleform(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public NetworkRuleform(UUID id) {
+        super(id);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		@SuppressWarnings("unchecked")
-		NetworkRuleform<E> other = (NetworkRuleform<E>) obj;
-		return getParent().equals(other.getParent())
-				&& getRelationship().equals(other.getRelationship())
-				&& getChild().equals(other.getChild());
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        NetworkRuleform<E> other = (NetworkRuleform<E>) obj;
+        return getParent().equals(other.getParent())
+               && getRelationship().equals(other.getRelationship())
+               && getChild().equals(other.getChild());
+    }
 
-	abstract public E getChild();
+    abstract public E getChild();
 
-	/**
-	 * @return the inference
-	 */
-	@JsonGetter
-	public NetworkInference getInference() {
-		return inference;
-	}
+    /**
+     * @return the inference
+     */
+    @JsonGetter
+    public NetworkInference getInference() {
+        return inference;
+    }
 
-	@JsonGetter
-	abstract public E getParent();
+    @JsonGetter
+    abstract public E getParent();
 
-	@JsonGetter
-	abstract public NetworkRuleform<E> getPremise1();
+    @JsonGetter
+    abstract public NetworkRuleform<E> getPremise1();
 
-	@JsonGetter
-	abstract public NetworkRuleform<E> getPremise2();
+    @JsonGetter
+    abstract public NetworkRuleform<E> getPremise2();
 
-	/**
-	 * @return the relationship
-	 */
-	public Relationship getRelationship() {
-		return relationship;
-	}
+    /**
+     * @return the relationship
+     */
+    public Relationship getRelationship() {
+        return relationship;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ (getParent() == null ? 0 : getParent().hashCode());
-		result = prime * result
-				+ (relationship == null ? 0 : relationship.hashCode());
-		result = prime * result
-				+ (getChild() == null ? 0 : getChild().hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result
+                 + (getParent() == null ? 0 : getParent().hashCode());
+        result = prime * result
+                 + (relationship == null ? 0 : relationship.hashCode());
+        result = prime * result
+                 + (getChild() == null ? 0 : getChild().hashCode());
+        return result;
+    }
 
-	@JsonIgnore
-	public boolean isInferred() {
-		if (inference == null) {
-			return false;
-		}
-		return !ZERO.equals(inference.getId());
-	}
+    @JsonIgnore
+    public boolean isInferred() {
+        if (inference == null) {
+            return false;
+        }
+        return !ZERO.equals(inference.getId());
+    }
 
-	abstract public void setChild(E child);
+    abstract public void setChild(E child);
 
-	abstract public void setParent(E parent);
+    abstract public void setParent(E parent);
 
-	/**
-	 * @param relationship
-	 *            the relationship to set
-	 */
-	public void setRelationship(Relationship relationship) {
-		this.relationship = relationship;
-	}
+    /**
+     * @param relationship
+     *            the relationship to set
+     */
+    public void setRelationship(Relationship relationship) {
+        this.relationship = relationship;
+    }
 
-	@Override
-	public String toString() {
-		return String
-				.format("%s[%s] %s >> %s >> %s: %s", this.getClass()
-						.getSimpleName(), getId(), getParent().getName(),
-						getRelationship().getName(), getChild().getName(),
-						isInferred());
-	}
+    @Override
+    public String toString() {
+        return String.format("%s[%s] %s >> %s >> %s: %s",
+                             this.getClass().getSimpleName(), getId(),
+                             getParent().getName(),
+                             getRelationship().getName(), getChild().getName(),
+                             isInferred());
+    }
 }

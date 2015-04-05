@@ -33,57 +33,57 @@ import com.chiralbehaviors.CoRE.attribute.ValueType;
  */
 public class KernelTest extends AbstractModelTest {
 
-	@Test
-	public void testKernel() throws Exception {
-		assertNotNull(kernel.getAnyAttribute());
-		assertNotNull(kernel.getAnyProduct());
-		assertNotNull(kernel.getAnyLocation());
-		assertNotNull(kernel.getAnyRelationship());
-		assertNotNull(kernel.getAnyAgency());
-		assertNotNull(kernel.getAttribute());
-		assertNotNull(kernel.getContains());
-		assertNotNull(kernel.getCore());
-		assertNotNull(kernel.getCoreAnimationSoftware());
-		assertNotNull(kernel.getDeveloped());
-		assertNotNull(kernel.getDevelopedBy());
-		assertNotNull(kernel.getProduct());
-		assertNotNull(kernel.getEquals());
-		assertNotNull(kernel.getFormerMemberOf());
-		assertNotNull(kernel.getGreaterThan());
-		assertNotNull(kernel.getGreaterThanOrEqual());
-		assertNotNull(kernel.getHadMember());
-		assertNotNull(kernel.getHasException());
-		assertNotNull(kernel.getHasHead());
-		assertNotNull(kernel.getHasMember());
-		assertNotNull(kernel.getHasVersion());
-		assertNotNull(kernel.getHeadOf());
-		assertNotNull(kernel.getIncludes());
-		assertNotNull(kernel.getIsA());
-		assertNotNull(kernel.getIsContainedIn());
-		assertNotNull(kernel.getIsExceptionTo());
-		assertNotNull(kernel.getIsLocationOf());
-		assertNotNull(kernel.getLessThan());
-		assertNotNull(kernel.getLessThanOrEqual());
-		assertNotNull(kernel.getLocation());
-		assertNotNull(kernel.getMapsToLocation());
-		assertNotNull(kernel.getMemberOf());
-		assertNotNull(kernel.getPropagationSoftware());
-		assertNotNull(kernel.getPrototype());
-		assertNotNull(kernel.getPrototypeOf());
-		assertNotNull(kernel.getAgency());
-		assertNotNull(kernel.getSameAttribute());
-		assertNotNull(kernel.getSameRelationship());
-		assertNotNull(kernel.getSpecialSystemAgency());
-		assertNotNull(kernel.getVersionOf());
-		assertNotNull(kernel.getCoreModel());
-		assertNotNull(kernel.getCoreUser());
-		assertNotNull(kernel.getPasswordHashAttribute());
-		assertNotNull(kernel.getLoginAttribute());
-		assertNotNull(kernel.getUnset());
-		assertNotNull(kernel.getInverseSoftware());
+    @Test
+    public void testKernel() throws Exception {
+        assertNotNull(kernel.getAnyAttribute());
+        assertNotNull(kernel.getAnyProduct());
+        assertNotNull(kernel.getAnyLocation());
+        assertNotNull(kernel.getAnyRelationship());
+        assertNotNull(kernel.getAnyAgency());
+        assertNotNull(kernel.getAttribute());
+        assertNotNull(kernel.getContains());
+        assertNotNull(kernel.getCore());
+        assertNotNull(kernel.getCoreAnimationSoftware());
+        assertNotNull(kernel.getDeveloped());
+        assertNotNull(kernel.getDevelopedBy());
+        assertNotNull(kernel.getProduct());
+        assertNotNull(kernel.getEquals());
+        assertNotNull(kernel.getFormerMemberOf());
+        assertNotNull(kernel.getGreaterThan());
+        assertNotNull(kernel.getGreaterThanOrEqual());
+        assertNotNull(kernel.getHadMember());
+        assertNotNull(kernel.getHasException());
+        assertNotNull(kernel.getHasHead());
+        assertNotNull(kernel.getHasMember());
+        assertNotNull(kernel.getHasVersion());
+        assertNotNull(kernel.getHeadOf());
+        assertNotNull(kernel.getIncludes());
+        assertNotNull(kernel.getIsA());
+        assertNotNull(kernel.getIsContainedIn());
+        assertNotNull(kernel.getIsExceptionTo());
+        assertNotNull(kernel.getIsLocationOf());
+        assertNotNull(kernel.getLessThan());
+        assertNotNull(kernel.getLessThanOrEqual());
+        assertNotNull(kernel.getLocation());
+        assertNotNull(kernel.getMapsToLocation());
+        assertNotNull(kernel.getMemberOf());
+        assertNotNull(kernel.getPropagationSoftware());
+        assertNotNull(kernel.getPrototype());
+        assertNotNull(kernel.getPrototypeOf());
+        assertNotNull(kernel.getAgency());
+        assertNotNull(kernel.getSameAttribute());
+        assertNotNull(kernel.getSameRelationship());
+        assertNotNull(kernel.getSpecialSystemAgency());
+        assertNotNull(kernel.getVersionOf());
+        assertNotNull(kernel.getCoreModel());
+        assertNotNull(kernel.getCoreUser());
+        assertNotNull(kernel.getPasswordHashAttribute());
+        assertNotNull(kernel.getLoginAttribute());
+        assertNotNull(kernel.getUnset());
+        assertNotNull(kernel.getInverseSoftware());
 
-		assertEquals(ValueType.TEXT, kernel.getPasswordHashAttribute()
-				.getValueType());
-		assertEquals(ValueType.TEXT, kernel.getLoginAttribute().getValueType());
-	}
+        assertEquals(ValueType.TEXT,
+                     kernel.getPasswordHashAttribute().getValueType());
+        assertEquals(ValueType.TEXT, kernel.getLoginAttribute().getValueType());
+    }
 }

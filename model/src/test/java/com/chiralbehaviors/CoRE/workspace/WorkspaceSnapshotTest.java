@@ -40,42 +40,46 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class WorkspaceSnapshotTest extends DatabaseTest {
 
-	@Test
-	public void testSerializeWorkspaceSnapshot() throws Exception {
-		Agency pseudoScientist = new Agency("Behold the Pseudo Scientist!");
-		pseudoScientist.setUpdatedBy(pseudoScientist);
-		Product definingProduct = new Product("zee product", pseudoScientist);
-		WorkspaceAuthorization auth = new WorkspaceAuthorization(
-				pseudoScientist, definingProduct, pseudoScientist);
-		WorkspaceSnapshot snapshot = new WorkspaceSnapshot(Arrays.asList(auth));
-		snapshot.retarget(em);
-		em.getTransaction().commit();
-		WorkspaceSnapshot retrieved = new WorkspaceSnapshot(definingProduct, em);
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new CoREModule());
-		mapper.writeValue(os, retrieved);
-		ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-		WorkspaceSnapshot deserialized = mapper.readValue(is,
-				WorkspaceSnapshot.class);
-		assertEquals(1, deserialized.getAuths().size());
-		assertEquals(auth, deserialized.getAuths().get(0));
+    @Test
+    public void testSerializeWorkspaceSnapshot() throws Exception {
+        Agency pseudoScientist = new Agency("Behold the Pseudo Scientist!");
+        pseudoScientist.setUpdatedBy(pseudoScientist);
+        Product definingProduct = new Product("zee product", pseudoScientist);
+        WorkspaceAuthorization auth = new WorkspaceAuthorization(
+                                                                 pseudoScientist,
+                                                                 definingProduct,
+                                                                 pseudoScientist);
+        WorkspaceSnapshot snapshot = new WorkspaceSnapshot(Arrays.asList(auth));
+        snapshot.retarget(em);
+        em.getTransaction().commit();
+        WorkspaceSnapshot retrieved = new WorkspaceSnapshot(definingProduct, em);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new CoREModule());
+        mapper.writeValue(os, retrieved);
+        ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+        WorkspaceSnapshot deserialized = mapper.readValue(is,
+                                                          WorkspaceSnapshot.class);
+        assertEquals(1, deserialized.getAuths().size());
+        assertEquals(auth, deserialized.getAuths().get(0));
 
-	}
+    }
 
-	@Test
-	public void testWorkspaceSnapshot() {
-		Agency pseudoScientist = new Agency("Behold the Pseudo Scientist!");
-		pseudoScientist.setUpdatedBy(pseudoScientist);
-		Product definingProduct = new Product("zee product", pseudoScientist);
-		WorkspaceAuthorization auth = new WorkspaceAuthorization(
-				pseudoScientist, definingProduct, pseudoScientist);
-		WorkspaceSnapshot snapshot = new WorkspaceSnapshot(Arrays.asList(auth));
-		snapshot.retarget(em);
-		em.getTransaction().commit();
-		WorkspaceSnapshot retrieved = new WorkspaceSnapshot(definingProduct, em);
-		assertEquals(1, retrieved.getAuths().size());
-		assertEquals(auth, retrieved.getAuths().get(0));
-		assertEquals(pseudoScientist, retrieved.getAuths().get(0).getEntity());
-	}
+    @Test
+    public void testWorkspaceSnapshot() {
+        Agency pseudoScientist = new Agency("Behold the Pseudo Scientist!");
+        pseudoScientist.setUpdatedBy(pseudoScientist);
+        Product definingProduct = new Product("zee product", pseudoScientist);
+        WorkspaceAuthorization auth = new WorkspaceAuthorization(
+                                                                 pseudoScientist,
+                                                                 definingProduct,
+                                                                 pseudoScientist);
+        WorkspaceSnapshot snapshot = new WorkspaceSnapshot(Arrays.asList(auth));
+        snapshot.retarget(em);
+        em.getTransaction().commit();
+        WorkspaceSnapshot retrieved = new WorkspaceSnapshot(definingProduct, em);
+        assertEquals(1, retrieved.getAuths().size());
+        assertEquals(auth, retrieved.getAuths().get(0));
+        assertEquals(pseudoScientist, retrieved.getAuths().get(0).getEntity());
+    }
 }

@@ -52,97 +52,95 @@ import com.chiralbehaviors.CoRE.meta.Model;
  *
  */
 public class AbstractModelTest {
-	@AfterClass
-	public static void afterClass() {
-		if (em != null && em.getTransaction().isActive()) {
-			try {
-				em.getTransaction().rollback();
-				em.clear();
-				em.close();
-			} catch (Throwable e) {
-				LoggerFactory.getLogger(AbstractModelTest.class).warn(
-						String.format(
-								"Had a bit of trouble cleaning up after %s",
-								e.getMessage()), e);
-			}
-		}
-	}
+    @AfterClass
+    public static void afterClass() {
+        if (em != null && em.getTransaction().isActive()) {
+            try {
+                em.getTransaction().rollback();
+                em.clear();
+                em.close();
+            } catch (Throwable e) {
+                LoggerFactory.getLogger(AbstractModelTest.class).warn(String.format("Had a bit of trouble cleaning up after %s",
+                                                                                    e.getMessage()),
+                                                                      e);
+            }
+        }
+    }
 
-	private static EntityManager getEntityManager() throws IOException {
-		if (emf == null) {
-			InputStream is = ModelTest.class
-					.getResourceAsStream("/jpa.properties");
-			assertNotNull("jpa properties missing", is);
-			Properties properties = new Properties();
-			properties.load(is);
-			emf = Persistence.createEntityManagerFactory(WellKnownObject.CORE,
-					properties);
-		}
-		EntityManager em = emf.createEntityManager();
-		return em;
-	}
+    private static EntityManager getEntityManager() throws IOException {
+        if (emf == null) {
+            InputStream is = ModelTest.class.getResourceAsStream("/jpa.properties");
+            assertNotNull("jpa properties missing", is);
+            Properties properties = new Properties();
+            properties.load(is);
+            emf = Persistence.createEntityManagerFactory(WellKnownObject.CORE,
+                                                         properties);
+        }
+        EntityManager em = emf.createEntityManager();
+        return em;
+    }
 
-	@BeforeClass
-	public static void initializeDatabase() throws IOException, SQLException {
-		if (em != null && em.isOpen()) {
-			em.close();
-		}
-		em = getEntityManager();
-		KernelUtil.clearAndLoadKernel(em);
-		em.close();
-		model = new ModelImpl(emf);
-		kernel = model.getKernel();
-		em = model.getEntityManager();
-	}
+    @BeforeClass
+    public static void initializeDatabase() throws IOException, SQLException {
+        if (em != null && em.isOpen()) {
+            em.close();
+        }
+        em = getEntityManager();
+        KernelUtil.clearAndLoadKernel(em);
+        em.close();
+        model = new ModelImpl(emf);
+        kernel = model.getKernel();
+        em = model.getEntityManager();
+    }
 
-	private static final String SELECT_TABLE = "SELECT table_schema || '.' || table_name AS name FROM information_schema.tables WHERE table_schema='ruleform' AND table_type='BASE TABLE' ORDER BY table_name";
+    private static final String           SELECT_TABLE = "SELECT table_schema || '.' || table_name AS name FROM information_schema.tables WHERE table_schema='ruleform' AND table_type='BASE TABLE' ORDER BY table_name";
 
-	protected static Model model;
+    protected static Model                model;
 
-	protected static Kernel kernel;
-	protected static EntityManager em;
+    protected static Kernel               kernel;
+    protected static EntityManager        em;
 
-	protected static EntityManagerFactory emf;
+    protected static EntityManagerFactory emf;
 
-	public AbstractModelTest() {
-		super();
-	}
+    public AbstractModelTest() {
+        super();
+    }
 
-	@After
-	public void after() {
-		if (em.getTransaction().isActive()) {
-			try {
-				em.getTransaction().rollback();
-			} catch (PersistenceException e) {
-				LoggerFactory.getLogger(AbstractModelTest.class).warn(
-						String.format("Bit of a problem cleaning up"), e);
-			}
-		}
-		try {
-			em.clear();
-		} catch (Throwable e) {
-			LoggerFactory.getLogger(AbstractModelTest.class).warn(
-					String.format("Had a bit of trouble cleaning up after %s",
-							e.getMessage()), e);
-		}
-	}
+    @After
+    public void after() {
+        if (em.getTransaction().isActive()) {
+            try {
+                em.getTransaction().rollback();
+            } catch (PersistenceException e) {
+                LoggerFactory.getLogger(AbstractModelTest.class).warn(String.format("Bit of a problem cleaning up"),
+                                                                      e);
+            }
+        }
+        try {
+            em.clear();
+        } catch (Throwable e) {
+            LoggerFactory.getLogger(AbstractModelTest.class).warn(String.format("Had a bit of trouble cleaning up after %s",
+                                                                                e.getMessage()),
+                                                                  e);
+        }
+    }
 
-	protected void alterTriggers(boolean enable) throws SQLException {
-		Connection connection = em.unwrap(SessionImpl.class).connection();
-		for (String table : new String[] { "ruleform.agency",
-				"ruleform.product", "ruleform.location" }) {
-			String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
-					table, enable ? "ENABLE" : "DISABLE");
-			connection.createStatement().execute(query);
-		}
-		ResultSet r = connection.createStatement().executeQuery(SELECT_TABLE);
-		while (r.next()) {
-			String table = r.getString("name");
-			String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
-					table, enable ? "ENABLE" : "DISABLE");
-			connection.createStatement().execute(query);
-		}
-		r.close();
-	}
+    protected void alterTriggers(boolean enable) throws SQLException {
+        Connection connection = em.unwrap(SessionImpl.class).connection();
+        for (String table : new String[] { "ruleform.agency",
+                "ruleform.product", "ruleform.location" }) {
+            String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
+                                         table, enable ? "ENABLE" : "DISABLE");
+            connection.createStatement().execute(query);
+        }
+        ResultSet r = connection.createStatement().executeQuery(SELECT_TABLE);
+        while (r.next()) {
+            String table = r.getString("name");
+            String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
+                                         table, enable ? "ENABLE" : "DISABLE");
+            connection.createStatement().execute(query);
+        }
+        r.close();
+    }
 
 }

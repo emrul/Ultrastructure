@@ -43,93 +43,93 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "agency_network_authorization", schema = "ruleform")
 public class AgencyNetworkAuthorization extends NetworkAuthorization<Agency> {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Event
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "authorized_parent")
-	private Agency authorizedParent;
+    // bi-directional many-to-one association to Event
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "authorized_parent")
+    private Agency            authorizedParent;
 
-	// bi-directional many-to-one association to Event
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "classifier")
-	private Agency classifier;
+    // bi-directional many-to-one association to Event
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "classifier")
+    private Agency            classifier;
 
-	public AgencyNetworkAuthorization() {
-		super();
-	}
+    public AgencyNetworkAuthorization() {
+        super();
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public AgencyNetworkAuthorization(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public AgencyNetworkAuthorization(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param id
-	 */
-	public AgencyNetworkAuthorization(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public AgencyNetworkAuthorization(UUID id) {
+        super(id);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getAuthorizedParent
-	 * ()
-	 */
-	@Override
-	@JsonGetter
-	public Agency getAuthorizedParent() {
-		return authorizedParent;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getAuthorizedParent
+     * ()
+     */
+    @Override
+    @JsonGetter
+    public Agency getAuthorizedParent() {
+        return authorizedParent;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getClassifier()
-	 */
-	@Override
-	@JsonGetter
-	public Agency getClassifier() {
-		return classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#getClassifier()
+     */
+    @Override
+    @JsonGetter
+    public Agency getClassifier() {
+        return classifier;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, AgencyNetworkAuthorization> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.agencyNetworkAuthorization;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, AgencyNetworkAuthorization> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.agencyNetworkAuthorization;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setAuthorizedParent
-	 * (com.chiralbehaviors.CoRE.network.Networked)
-	 */
-	@Override
-	public void setAuthorizedParent(Agency parent) {
-		authorizedParent = parent;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setAuthorizedParent
+     * (com.chiralbehaviors.CoRE.network.Networked)
+     */
+    @Override
+    public void setAuthorizedParent(Agency parent) {
+        authorizedParent = parent;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setClassifier(com
-	 * .chiralbehaviors.CoRE.network.Networked)
-	 */
-	@Override
-	public void setClassifier(Agency classifier) {
-		this.classifier = classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.network.NetworkAuthorization#setClassifier(com
+     * .chiralbehaviors.CoRE.network.Networked)
+     */
+    @Override
+    public void setClassifier(Agency classifier) {
+        this.classifier = classifier;
+    }
 }

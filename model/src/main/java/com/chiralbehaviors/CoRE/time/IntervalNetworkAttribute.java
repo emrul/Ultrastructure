@@ -47,160 +47,160 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "interval_network_attribute", schema = "ruleform")
 public class IntervalNetworkAttribute extends AttributeValue<IntervalNetwork> {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Agency
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "agency")
-	private Agency agency;
+    // bi-directional many-to-one association to Agency
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "agency")
+    private Agency            agency;
 
-	// bi-directional many-to-one association to Attribute
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "attribute")
-	private Attribute attribute;
+    // bi-directional many-to-one association to Attribute
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "attribute")
+    private Attribute         attribute;
 
-	// bi-directional many-to-one association to IntervalNetwork
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "network_rule")
-	private IntervalNetwork IntervalNetwork;
+    // bi-directional many-to-one association to IntervalNetwork
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "network_rule")
+    private IntervalNetwork   IntervalNetwork;
 
-	public IntervalNetworkAttribute() {
-	}
+    public IntervalNetworkAttribute() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public IntervalNetworkAttribute(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public IntervalNetworkAttribute(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 */
-	public IntervalNetworkAttribute(Attribute attribute) {
-		super(attribute);
-	}
+    /**
+     * @param attribute
+     */
+    public IntervalNetworkAttribute(Attribute attribute) {
+        super(attribute);
+    }
 
-	/**
-	 * @param attribute
-	 * @param updatedBy
-	 */
-	public IntervalNetworkAttribute(Attribute attribute, Agency updatedBy) {
-		super(attribute, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param updatedBy
+     */
+    public IntervalNetworkAttribute(Attribute attribute, Agency updatedBy) {
+        super(attribute, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public IntervalNetworkAttribute(Attribute attribute, BigDecimal value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public IntervalNetworkAttribute(Attribute attribute, BigDecimal value,
+                                    Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public IntervalNetworkAttribute(Attribute attribute, boolean value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public IntervalNetworkAttribute(Attribute attribute, boolean value,
+                                    Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public IntervalNetworkAttribute(Attribute attribute, int value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public IntervalNetworkAttribute(Attribute attribute, int value,
+                                    Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public IntervalNetworkAttribute(Attribute attribute, String value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public IntervalNetworkAttribute(Attribute attribute, String value,
+                                    Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param unit
-	 */
-	public IntervalNetworkAttribute(Attribute attribute, Unit unit) {
-		super(attribute, unit);
-	}
+    /**
+     * @param attribute
+     * @param unit
+     */
+    public IntervalNetworkAttribute(Attribute attribute, Unit unit) {
+        super(attribute, unit);
+    }
 
-	/**
-	 * @param id
-	 */
-	public IntervalNetworkAttribute(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public IntervalNetworkAttribute(UUID id) {
+        super(id);
+    }
 
-	@JsonGetter
-	public Agency getAgency() {
-		return agency;
-	}
+    @JsonGetter
+    public Agency getAgency() {
+        return agency;
+    }
 
-	@Override
-	public Attribute getAttribute() {
-		return attribute;
-	}
+    @Override
+    public Attribute getAttribute() {
+        return attribute;
+    }
 
-	@JsonGetter
-	public IntervalNetwork getIntervalNetwork() {
-		return IntervalNetwork;
-	}
+    @JsonGetter
+    public IntervalNetwork getIntervalNetwork() {
+        return IntervalNetwork;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-	 */
-	@Override
-	public SingularAttribute<IntervalNetworkAttribute, IntervalNetwork> getRuleformAttribute() {
-		return IntervalNetworkAttribute_.IntervalNetwork;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+     */
+    @Override
+    public SingularAttribute<IntervalNetworkAttribute, IntervalNetwork> getRuleformAttribute() {
+        return IntervalNetworkAttribute_.IntervalNetwork;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-	 */
-	@Override
-	public Class<IntervalNetwork> getRuleformClass() {
-		return IntervalNetwork.class;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+     */
+    @Override
+    public Class<IntervalNetwork> getRuleformClass() {
+        return IntervalNetwork.class;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, IntervalNetworkAttribute> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.intervalNetworkAttribute;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, IntervalNetworkAttribute> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.intervalNetworkAttribute;
+    }
 
-	public void setAgency(Agency agency2) {
-		agency = agency2;
-	}
+    public void setAgency(Agency agency2) {
+        agency = agency2;
+    }
 
-	@Override
-	public void setAttribute(Attribute attribute) {
-		this.attribute = attribute;
-	}
+    @Override
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
 
-	public void setIntervalNetwork(IntervalNetwork IntervalNetwork) {
-		this.IntervalNetwork = IntervalNetwork;
-	}
+    public void setIntervalNetwork(IntervalNetwork IntervalNetwork) {
+        this.IntervalNetwork = IntervalNetwork;
+    }
 }

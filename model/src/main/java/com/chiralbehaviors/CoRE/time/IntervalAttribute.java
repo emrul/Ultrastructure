@@ -50,109 +50,109 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "interval_attribute", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = GET_ATTRIBUTE, query = "select ra from IntervalAttribute ra where ra.interval = :interval and ra.attribute = :attribute") })
 public class IntervalAttribute extends AttributeValue<Interval> {
-	public static final String GET_ATTRIBUTE = "intervalAttribute.getAttribute";
-	private static final long serialVersionUID = 1L;
+    public static final String GET_ATTRIBUTE    = "intervalAttribute.getAttribute";
+    private static final long  serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Attribute
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "attribute")
-	private Attribute attribute;
+    // bi-directional many-to-one association to Attribute
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "attribute")
+    private Attribute          attribute;
 
-	// bi-directional many-to-one association to Interval
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "interval")
-	private Interval interval;
+    // bi-directional many-to-one association to Interval
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "interval")
+    private Interval           interval;
 
-	public IntervalAttribute() {
-		super();
-	}
+    public IntervalAttribute() {
+        super();
+    }
 
-	public IntervalAttribute(Agency updatedBy) {
-		super(updatedBy);
-	}
+    public IntervalAttribute(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	public IntervalAttribute(Attribute attribute) {
-		super(attribute);
-	}
+    public IntervalAttribute(Attribute attribute) {
+        super(attribute);
+    }
 
-	public IntervalAttribute(Attribute attribute, Agency updatedBy) {
-		super(attribute, updatedBy);
-	}
+    public IntervalAttribute(Attribute attribute, Agency updatedBy) {
+        super(attribute, updatedBy);
+    }
 
-	public IntervalAttribute(Attribute attribute, BigDecimal value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public IntervalAttribute(Attribute attribute, BigDecimal value,
+                             Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public IntervalAttribute(Attribute attribute, boolean value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public IntervalAttribute(Attribute attribute, boolean value,
+                             Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public IntervalAttribute(Attribute attribute, int value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public IntervalAttribute(Attribute attribute, int value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public IntervalAttribute(Attribute attribute, String value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public IntervalAttribute(Attribute attribute, String value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public IntervalAttribute(Attribute attribute, Unit unit) {
-		super(attribute, unit);
-	}
+    public IntervalAttribute(Attribute attribute, Unit unit) {
+        super(attribute, unit);
+    }
 
-	public IntervalAttribute(UUID id) {
-		super(id);
-	}
+    public IntervalAttribute(UUID id) {
+        super(id);
+    }
 
-	@Override
-	public Attribute getAttribute() {
-		return attribute;
-	}
+    @Override
+    public Attribute getAttribute() {
+        return attribute;
+    }
 
-	@JsonGetter
-	public Interval getInterval() {
-		return interval;
-	}
+    @JsonGetter
+    public Interval getInterval() {
+        return interval;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-	 */
-	@Override
-	public SingularAttribute<? extends AttributeValue<Interval>, Interval> getRuleformAttribute() {
-		return IntervalAttribute_.interval;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+     */
+    @Override
+    public SingularAttribute<? extends AttributeValue<Interval>, Interval> getRuleformAttribute() {
+        return IntervalAttribute_.interval;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-	 */
-	@Override
-	public Class<Interval> getRuleformClass() {
-		return Interval.class;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+     */
+    @Override
+    public Class<Interval> getRuleformClass() {
+        return Interval.class;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, IntervalAttribute> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.intervalAttribute;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, IntervalAttribute> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.intervalAttribute;
+    }
 
-	@Override
-	public void setAttribute(Attribute attribute) {
-		this.attribute = attribute;
-	}
+    @Override
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
 
-	public void setInterval(Interval interval) {
-		this.interval = interval;
-	}
+    public void setInterval(Interval interval) {
+        this.interval = interval;
+    }
 }

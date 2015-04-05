@@ -49,244 +49,275 @@ import com.chiralbehaviors.CoRE.product.Product;
  */
 public class StatusCodeSequencingTest extends AbstractModelTest {
 
-	@Test
-	public void testHasNoSccs() throws Exception {
-		em.getTransaction().begin();
-		JobModel jobModel = model.getJobModel();
+    @Test
+    public void testHasNoSccs() throws Exception {
+        em.getTransaction().begin();
+        JobModel jobModel = model.getJobModel();
 
-		StatusCode startState = new StatusCode("top-level", kernel.getCore());
-		em.persist(startState);
+        StatusCode startState = new StatusCode("top-level", kernel.getCore());
+        em.persist(startState);
 
-		StatusCode state1 = new StatusCode("state-1", kernel.getCore());
-		em.persist(state1);
+        StatusCode state1 = new StatusCode("state-1", kernel.getCore());
+        em.persist(state1);
 
-		StatusCode state2 = new StatusCode("state-2", kernel.getCore());
-		em.persist(state2);
+        StatusCode state2 = new StatusCode("state-2", kernel.getCore());
+        em.persist(state2);
 
-		StatusCode terminalState = new StatusCode("terminal state",
-				kernel.getCore());
-		em.persist(terminalState);
+        StatusCode terminalState = new StatusCode("terminal state",
+                                                  kernel.getCore());
+        em.persist(terminalState);
 
-		Product service = new Product("My Service", kernel.getCore());
-		em.persist(service);
-		em.flush();
+        Product service = new Product("My Service", kernel.getCore());
+        em.persist(service);
+        em.flush();
 
-		StatusCodeSequencing sequence1 = new StatusCodeSequencing(service,
-				startState, state1, kernel.getCore());
-		em.persist(sequence1);
+        StatusCodeSequencing sequence1 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  startState,
+                                                                  state1,
+                                                                  kernel.getCore());
+        em.persist(sequence1);
 
-		StatusCodeSequencing sequence2 = new StatusCodeSequencing(service,
-				state1, state2, kernel.getCore());
-		em.persist(sequence2);
+        StatusCodeSequencing sequence2 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  state1,
+                                                                  state2,
+                                                                  kernel.getCore());
+        em.persist(sequence2);
 
-		StatusCodeSequencing sequence3 = new StatusCodeSequencing(service,
-				state2, terminalState, kernel.getCore());
-		em.persist(sequence3);
+        StatusCodeSequencing sequence3 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  state2,
+                                                                  terminalState,
+                                                                  kernel.getCore());
+        em.persist(sequence3);
 
-		StatusCode loopState = new StatusCode("loop-state", kernel.getCore());
-		em.persist(loopState);
+        StatusCode loopState = new StatusCode("loop-state", kernel.getCore());
+        em.persist(loopState);
 
-		StatusCodeSequencing loop = new StatusCodeSequencing(service, state2,
-				loopState, kernel.getCore());
-		em.persist(loop);
+        StatusCodeSequencing loop = new StatusCodeSequencing(service, state2,
+                                                             loopState,
+                                                             kernel.getCore());
+        em.persist(loop);
 
-		StatusCodeSequencing terminate = new StatusCodeSequencing(service,
-				loopState, terminalState, kernel.getCore());
-		em.persist(terminate);
+        StatusCodeSequencing terminate = new StatusCodeSequencing(
+                                                                  service,
+                                                                  loopState,
+                                                                  terminalState,
+                                                                  kernel.getCore());
+        em.persist(terminate);
 
-		StatusCodeSequencing back = new StatusCodeSequencing(service,
-				loopState, state1, kernel.getCore());
-		em.persist(back);
-		em.persist(terminate);
-		em.flush();
-		assertTrue(jobModel.hasScs(service));
-		jobModel.validateStateGraph(Arrays.asList(service));
-	}
+        StatusCodeSequencing back = new StatusCodeSequencing(service,
+                                                             loopState, state1,
+                                                             kernel.getCore());
+        em.persist(back);
+        em.persist(terminate);
+        em.flush();
+        assertTrue(jobModel.hasScs(service));
+        jobModel.validateStateGraph(Arrays.asList(service));
+    }
 
-	@Test
-	public void testHasNoTerminalSCCs() {
-		Map<StatusCode, List<StatusCode>> graph = new HashMap<StatusCode, List<StatusCode>>();
-		StatusCode[] codes = new StatusCode[] {
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()) };
-		graph.put(codes[0], asList(codes[1]));
-		graph.put(codes[1], asList(codes[2]));
-		graph.put(codes[2], asList(codes[0], codes[6]));
-		graph.put(codes[3], asList(codes[4]));
-		graph.put(codes[4], asList(codes[5], codes[6]));
-		graph.put(codes[5], asList(codes[3]));
-		graph.put(codes[6], asList(codes[7]));
-		graph.put(codes[7], asList(codes[8]));
-		graph.put(codes[8], asList(codes[6]));
+    @Test
+    public void testHasNoTerminalSCCs() {
+        Map<StatusCode, List<StatusCode>> graph = new HashMap<StatusCode, List<StatusCode>>();
+        StatusCode[] codes = new StatusCode[] {
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()) };
+        graph.put(codes[0], asList(codes[1]));
+        graph.put(codes[1], asList(codes[2]));
+        graph.put(codes[2], asList(codes[0], codes[6]));
+        graph.put(codes[3], asList(codes[4]));
+        graph.put(codes[4], asList(codes[5], codes[6]));
+        graph.put(codes[5], asList(codes[3]));
+        graph.put(codes[6], asList(codes[7]));
+        graph.put(codes[7], asList(codes[8]));
+        graph.put(codes[8], asList(codes[6]));
 
-		assertTrue(JobModelImpl.hasScc(graph));
-	}
+        assertTrue(JobModelImpl.hasScc(graph));
+    }
 
-	@Test
-	public void testHasSccs() throws SQLException {
-		em.getTransaction().begin();
+    @Test
+    public void testHasSccs() throws SQLException {
+        em.getTransaction().begin();
 
-		JobModel jobModel = model.getJobModel();
+        JobModel jobModel = model.getJobModel();
 
-		StatusCode startState = new StatusCode("top-level", kernel.getCore());
-		em.persist(startState);
+        StatusCode startState = new StatusCode("top-level", kernel.getCore());
+        em.persist(startState);
 
-		StatusCode state1 = new StatusCode("state-1", kernel.getCore());
-		em.persist(state1);
+        StatusCode state1 = new StatusCode("state-1", kernel.getCore());
+        em.persist(state1);
 
-		StatusCode state2 = new StatusCode("state-2", kernel.getCore());
-		em.persist(state2);
+        StatusCode state2 = new StatusCode("state-2", kernel.getCore());
+        em.persist(state2);
 
-		StatusCode terminalState = new StatusCode("terminal state",
-				kernel.getCore());
-		em.persist(terminalState);
+        StatusCode terminalState = new StatusCode("terminal state",
+                                                  kernel.getCore());
+        em.persist(terminalState);
 
-		Product service = new Product("My Service", kernel.getCore());
-		em.persist(service);
-		em.flush();
+        Product service = new Product("My Service", kernel.getCore());
+        em.persist(service);
+        em.flush();
 
-		StatusCodeSequencing sequence1 = new StatusCodeSequencing(service,
-				startState, state1, kernel.getCore());
-		em.persist(sequence1);
+        StatusCodeSequencing sequence1 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  startState,
+                                                                  state1,
+                                                                  kernel.getCore());
+        em.persist(sequence1);
 
-		StatusCodeSequencing sequence2 = new StatusCodeSequencing(service,
-				state1, state2, kernel.getCore());
-		em.persist(sequence2);
+        StatusCodeSequencing sequence2 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  state1,
+                                                                  state2,
+                                                                  kernel.getCore());
+        em.persist(sequence2);
 
-		StatusCodeSequencing sequence3 = new StatusCodeSequencing(service,
-				state2, terminalState, kernel.getCore());
-		em.persist(sequence3);
+        StatusCodeSequencing sequence3 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  state2,
+                                                                  terminalState,
+                                                                  kernel.getCore());
+        em.persist(sequence3);
 
-		em.flush();
+        em.flush();
 
-		StatusCodeSequencing loop = new StatusCodeSequencing(service,
-				terminalState, state1, kernel.getCore());
-		em.persist(loop);
+        StatusCodeSequencing loop = new StatusCodeSequencing(service,
+                                                             terminalState,
+                                                             state1,
+                                                             kernel.getCore());
+        em.persist(loop);
 
-		assertTrue(jobModel.hasNonTerminalSCCs(service));
-		service = em.merge(service);
+        assertTrue(jobModel.hasNonTerminalSCCs(service));
+        service = em.merge(service);
 
-		assertTrue(jobModel.hasScs(service));
-		try {
-			jobModel.validateStateGraph(Arrays.asList(service));
-			fail("Did not catch event with non terminal loop");
-		} catch (SQLException e) {
-			// expected
-			assertTrue(
-					e.getMessage(),
-					e.getMessage()
-							.endsWith(
-									"has at least one non terminal SCC defined in its status code graph"));
-		}
-	}
+        assertTrue(jobModel.hasScs(service));
+        try {
+            jobModel.validateStateGraph(Arrays.asList(service));
+            fail("Did not catch event with non terminal loop");
+        } catch (SQLException e) {
+            // expected
+            assertTrue(e.getMessage(),
+                       e.getMessage().endsWith("has at least one non terminal SCC defined in its status code graph"));
+        }
+    }
 
-	@Test
-	public void testHasTerminalSCCs() {
-		Map<StatusCode, List<StatusCode>> graph = new HashMap<StatusCode, List<StatusCode>>();
-		StatusCode[] codes = new StatusCode[] {
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()) };
-		graph.put(codes[0], asList(codes[1]));
-		graph.put(codes[1], asList(codes[2]));
-		graph.put(codes[2], asList(codes[0], codes[6]));
-		graph.put(codes[6], new ArrayList<StatusCode>());
+    @Test
+    public void testHasTerminalSCCs() {
+        Map<StatusCode, List<StatusCode>> graph = new HashMap<StatusCode, List<StatusCode>>();
+        StatusCode[] codes = new StatusCode[] {
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()) };
+        graph.put(codes[0], asList(codes[1]));
+        graph.put(codes[1], asList(codes[2]));
+        graph.put(codes[2], asList(codes[0], codes[6]));
+        graph.put(codes[6], new ArrayList<StatusCode>());
 
-		assertFalse(JobModelImpl.hasScc(graph));
-	}
+        assertFalse(JobModelImpl.hasScc(graph));
+    }
 
-	@Test
-	public void testLoop() {
-		Map<StatusCode, List<StatusCode>> graph = new HashMap<StatusCode, List<StatusCode>>();
-		StatusCode[] codes = new StatusCode[] {
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()),
-				new StatusCode(UUID.randomUUID()) };
-		graph.put(codes[0], asList(codes[1]));
-		graph.put(codes[1], asList(codes[2]));
-		graph.put(codes[2], asList(codes[3]));
-		graph.put(codes[3], asList(codes[4]));
-		graph.put(codes[4], asList(codes[2]));
+    @Test
+    public void testLoop() {
+        Map<StatusCode, List<StatusCode>> graph = new HashMap<StatusCode, List<StatusCode>>();
+        StatusCode[] codes = new StatusCode[] {
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()),
+                new StatusCode(UUID.randomUUID()) };
+        graph.put(codes[0], asList(codes[1]));
+        graph.put(codes[1], asList(codes[2]));
+        graph.put(codes[2], asList(codes[3]));
+        graph.put(codes[3], asList(codes[4]));
+        graph.put(codes[4], asList(codes[2]));
 
-		assertTrue(JobModelImpl.hasScc(graph));
-	}
+        assertTrue(JobModelImpl.hasScc(graph));
+    }
 
-	@Test
-	public void testMultipleInitialStates() throws SQLException {
-		em.getTransaction().begin();
+    @Test
+    public void testMultipleInitialStates() throws SQLException {
+        em.getTransaction().begin();
 
-		JobModel jobModel = model.getJobModel();
+        JobModel jobModel = model.getJobModel();
 
-		StatusCode startState = new StatusCode("top-level", kernel.getCore());
-		em.persist(startState);
+        StatusCode startState = new StatusCode("top-level", kernel.getCore());
+        em.persist(startState);
 
-		StatusCode startState2 = new StatusCode("top-level 2", kernel.getCore());
-		em.persist(startState2);
+        StatusCode startState2 = new StatusCode("top-level 2", kernel.getCore());
+        em.persist(startState2);
 
-		StatusCode state1 = new StatusCode("state-1", kernel.getCore());
-		em.persist(state1);
+        StatusCode state1 = new StatusCode("state-1", kernel.getCore());
+        em.persist(state1);
 
-		StatusCode state2 = new StatusCode("state-2", kernel.getCore());
-		em.persist(state2);
+        StatusCode state2 = new StatusCode("state-2", kernel.getCore());
+        em.persist(state2);
 
-		StatusCode terminalState = new StatusCode("terminal state",
-				kernel.getCore());
-		em.persist(terminalState);
+        StatusCode terminalState = new StatusCode("terminal state",
+                                                  kernel.getCore());
+        em.persist(terminalState);
 
-		Product service = new Product("My Service", kernel.getCore());
-		em.persist(service);
-		em.flush();
+        Product service = new Product("My Service", kernel.getCore());
+        em.persist(service);
+        em.flush();
 
-		StatusCodeSequencing sequence1 = new StatusCodeSequencing(service,
-				startState, state1, kernel.getCore());
-		em.persist(sequence1);
+        StatusCodeSequencing sequence1 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  startState,
+                                                                  state1,
+                                                                  kernel.getCore());
+        em.persist(sequence1);
 
-		StatusCodeSequencing sequence1a = new StatusCodeSequencing(service,
-				startState2, state1, kernel.getCore());
-		em.persist(sequence1a);
+        StatusCodeSequencing sequence1a = new StatusCodeSequencing(
+                                                                   service,
+                                                                   startState2,
+                                                                   state1,
+                                                                   kernel.getCore());
+        em.persist(sequence1a);
 
-		StatusCodeSequencing sequence2 = new StatusCodeSequencing(service,
-				state1, state2, kernel.getCore());
-		em.persist(sequence2);
+        StatusCodeSequencing sequence2 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  state1,
+                                                                  state2,
+                                                                  kernel.getCore());
+        em.persist(sequence2);
 
-		StatusCodeSequencing sequence3 = new StatusCodeSequencing(service,
-				state2, terminalState, kernel.getCore());
-		em.persist(sequence3);
+        StatusCodeSequencing sequence3 = new StatusCodeSequencing(
+                                                                  service,
+                                                                  state2,
+                                                                  terminalState,
+                                                                  kernel.getCore());
+        em.persist(sequence3);
 
-		List<StatusCode> initialStates = jobModel.getInitialStates(service);
-		assertEquals(2, initialStates.size());
-		assertTrue(initialStates.contains(startState));
-		assertTrue(initialStates.contains(startState2));
-		service = em.merge(service);
-		try {
-			jobModel.validateStateGraph(Arrays.asList(service));
-			fail("Did not catch event with non terminal loop");
-		} catch (SQLException e) {
-			// expected
-			assertTrue(
-					e.getMessage(),
-					e.getMessage()
-							.contains(
-									"has multiple initial state defined in its status code graph"));
-		}
-	}
+        List<StatusCode> initialStates = jobModel.getInitialStates(service);
+        assertEquals(2, initialStates.size());
+        assertTrue(initialStates.contains(startState));
+        assertTrue(initialStates.contains(startState2));
+        service = em.merge(service);
+        try {
+            jobModel.validateStateGraph(Arrays.asList(service));
+            fail("Did not catch event with non terminal loop");
+        } catch (SQLException e) {
+            // expected
+            assertTrue(e.getMessage(),
+                       e.getMessage().contains("has multiple initial state defined in its status code graph"));
+        }
+    }
 }

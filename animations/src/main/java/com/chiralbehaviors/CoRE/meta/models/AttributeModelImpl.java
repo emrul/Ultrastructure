@@ -42,9 +42,9 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  *
  */
 public class AttributeModelImpl
-        extends
-        AbstractNetworkedModel<Attribute, AttributeNetwork, AttributeMetaAttributeAuthorization, AttributeMetaAttribute>
-        implements AttributeModel {
+extends
+AbstractNetworkedModel<Attribute, AttributeNetwork, AttributeMetaAttributeAuthorization, AttributeMetaAttribute>
+implements AttributeModel {
 
     /**
      * @param em
@@ -55,7 +55,7 @@ public class AttributeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
      * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -74,7 +74,7 @@ public class AttributeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
      * chiralbehaviors.CoRE.network.Aspect,
      * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -95,7 +95,7 @@ public class AttributeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.network .Networked)
@@ -123,7 +123,7 @@ public class AttributeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
      * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -137,10 +137,10 @@ public class AttributeModelImpl
                                             kernel.getCoreModel());
         em.persist(attribute);
         return new Facet<Attribute, AttributeMetaAttribute>(
-                                                            aspect,
-                                                            attribute,
-                                                            initialize(attribute,
-                                                                       aspect)) {
+                aspect,
+                attribute,
+                initialize(attribute,
+                           aspect)) {
         };
     }
 
@@ -166,8 +166,8 @@ public class AttributeModelImpl
                                                       Collection<Relationship> relationships,
                                                       Collection<Attribute> children) {
         if (parents == null || parents.size() == 0 || relationships == null
-            || relationships.size() == 0 || children == null
-            || children.size() == 0) {
+                || relationships.size() == 0 || children == null
+                || children.size() == 0) {
             return null;
         }
         TypedQuery<AttributeNetwork> query = em.createNamedQuery(AttributeNetwork.GET_NETWORKS,
@@ -184,8 +184,8 @@ public class AttributeModelImpl
      */
     private AttributeMetaAttributeAuthorization getValidatingAuthorization(AttributeMetaAttribute attributeValue) {
         String sql = "SELECT  p FROM AttributeMetaAttributeAuthorization p "
-                     + "WHERE p.validatingAttribute IS NOT NULL "
-                     + "AND p.authorizedAttribute = :attribute ";
+                + "WHERE p.validatingAttribute IS NOT NULL "
+                + "AND p.authorizedAttribute = :attribute ";
         TypedQuery<AttributeMetaAttributeAuthorization> query = em.createQuery(sql,
                                                                                AttributeMetaAttributeAuthorization.class);
         query.setParameter("attribute", attributeValue.getAttribute());
@@ -230,7 +230,7 @@ public class AttributeModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
      * chiralbehaviors.CoRE.ExistentialRuleform,
      * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)

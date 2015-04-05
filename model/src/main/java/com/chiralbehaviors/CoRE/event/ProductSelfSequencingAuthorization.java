@@ -48,138 +48,139 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-		@NamedQuery(name = GET_SELF_ACTIONS, query = "SELECT seq FROM ProductSelfSequencingAuthorization AS seq"
-				+ " WHERE seq.service = :service"
-				+ "   AND seq.statusCode = :status"
-				+ " ORDER BY seq.sequenceNumber"),
-		@NamedQuery(name = GET_SEQUENCES, query = "SELECT seq FROM ProductSelfSequencingAuthorization AS seq"
-				+ " WHERE seq.service = :service"
-				+ " ORDER BY seq.sequenceNumber") })
+               @NamedQuery(name = GET_SELF_ACTIONS, query = "SELECT seq FROM ProductSelfSequencingAuthorization AS seq"
+                                                            + " WHERE seq.service = :service"
+                                                            + "   AND seq.statusCode = :status"
+                                                            + " ORDER BY seq.sequenceNumber"),
+               @NamedQuery(name = GET_SEQUENCES, query = "SELECT seq FROM ProductSelfSequencingAuthorization AS seq"
+                                                         + " WHERE seq.service = :service"
+                                                         + " ORDER BY seq.sequenceNumber") })
 @Entity
 @Table(name = "product_self_sequencing_authorization", schema = "ruleform")
 public class ProductSelfSequencingAuthorization extends Ruleform {
-	public static final String GET_SELF_ACTIONS = "productSelfSequencingAuthorization.getSelfActions";
-	public static final String GET_SEQUENCES = "productSelfSequencingAuthorization.getSequences";
+    public static final String GET_SELF_ACTIONS = "productSelfSequencingAuthorization.getSelfActions";
+    public static final String GET_SEQUENCES    = "productSelfSequencingAuthorization.getSequences";
 
-	private static final long serialVersionUID = 1L;
+    private static final long  serialVersionUID = 1L;
 
-	@Column(name = "sequence_number")
-	private Integer sequenceNumber = 1;
+    @Column(name = "sequence_number")
+    private Integer            sequenceNumber   = 1;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "service")
-	private Product service;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "service")
+    private Product            service;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "status_code")
-	private StatusCode statusCode;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "status_code")
+    private StatusCode         statusCode;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "status_to_set")
-	private StatusCode statusToSet;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "status_to_set")
+    private StatusCode         statusToSet;
 
-	public ProductSelfSequencingAuthorization() {
-		super();
-	}
+    public ProductSelfSequencingAuthorization() {
+        super();
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public ProductSelfSequencingAuthorization(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public ProductSelfSequencingAuthorization(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	public ProductSelfSequencingAuthorization(Product service,
-			StatusCode statusCode, StatusCode statusToSet, Agency updatedBy) {
-		super(updatedBy);
-		setService(service);
-		setStatusCode(statusCode);
-		setStatusToSet(statusToSet);
-	}
+    public ProductSelfSequencingAuthorization(Product service,
+                                              StatusCode statusCode,
+                                              StatusCode statusToSet,
+                                              Agency updatedBy) {
+        super(updatedBy);
+        setService(service);
+        setStatusCode(statusCode);
+        setStatusToSet(statusToSet);
+    }
 
-	/**
-	 * @param notes
-	 */
-	public ProductSelfSequencingAuthorization(String notes) {
-		super(notes);
-	}
+    /**
+     * @param notes
+     */
+    public ProductSelfSequencingAuthorization(String notes) {
+        super(notes);
+    }
 
-	/**
-	 * @param notes
-	 * @param updatedBy
-	 */
-	public ProductSelfSequencingAuthorization(String notes, Agency updatedBy) {
-		super(notes, updatedBy);
-	}
+    /**
+     * @param notes
+     * @param updatedBy
+     */
+    public ProductSelfSequencingAuthorization(String notes, Agency updatedBy) {
+        super(notes, updatedBy);
+    }
 
-	/**
-	 * @param id
-	 */
-	public ProductSelfSequencingAuthorization(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public ProductSelfSequencingAuthorization(UUID id) {
+        super(id);
+    }
 
-	/**
-	 * @param id
-	 * @param updatedBy
-	 */
-	public ProductSelfSequencingAuthorization(UUID id, Agency updatedBy) {
-		super(id, updatedBy);
-	}
+    /**
+     * @param id
+     * @param updatedBy
+     */
+    public ProductSelfSequencingAuthorization(UUID id, Agency updatedBy) {
+        super(id, updatedBy);
+    }
 
-	public Integer getSequenceNumber() {
-		return sequenceNumber;
-	}
+    public Integer getSequenceNumber() {
+        return sequenceNumber;
+    }
 
-	public Product getService() {
-		return service;
-	}
+    public Product getService() {
+        return service;
+    }
 
-	public StatusCode getStatusCode() {
-		return statusCode;
-	}
+    public StatusCode getStatusCode() {
+        return statusCode;
+    }
 
-	public StatusCode getStatusToSet() {
-		return statusToSet;
-	}
+    public StatusCode getStatusToSet() {
+        return statusToSet;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, ProductSelfSequencingAuthorization> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.productSelfSequencingAuthorization;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, ProductSelfSequencingAuthorization> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.productSelfSequencingAuthorization;
+    }
 
-	@Override
-	public void persist(Triggers triggers) {
-		triggers.persist(this);
-	}
+    @Override
+    public void persist(Triggers triggers) {
+        triggers.persist(this);
+    }
 
-	public void setSequenceNumber(Integer sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
-	}
+    public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
 
-	public void setService(Product service) {
-		this.service = service;
-	}
+    public void setService(Product service) {
+        this.service = service;
+    }
 
-	public void setStatusCode(StatusCode statusCode) {
-		this.statusCode = statusCode;
-	}
+    public void setStatusCode(StatusCode statusCode) {
+        this.statusCode = statusCode;
+    }
 
-	public void setStatusToSet(StatusCode statusToSet) {
-		this.statusToSet = statusToSet;
-	}
+    public void setStatusToSet(StatusCode statusToSet) {
+        this.statusToSet = statusToSet;
+    }
 
-	@Override
-	public String toString() {
-		return String
-				.format("ProductSelfSequencingAuthorization [service=%s, statusCode=%s, statusToSet=%s, sequenceNumber=%s]",
-						service.getName(), statusCode.getName(),
-						statusToSet.getName(), sequenceNumber);
-	}
+    @Override
+    public String toString() {
+        return String.format("ProductSelfSequencingAuthorization [service=%s, statusCode=%s, statusToSet=%s, sequenceNumber=%s]",
+                             service.getName(), statusCode.getName(),
+                             statusToSet.getName(), sequenceNumber);
+    }
 }

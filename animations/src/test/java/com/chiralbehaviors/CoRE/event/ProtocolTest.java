@@ -31,43 +31,44 @@ import com.chiralbehaviors.CoRE.product.Product;
  */
 public class ProtocolTest extends AbstractModelTest {
 
-	@Test
-	public void testMatchOnAssignTo() {
-		em.getTransaction().begin();
-		Product fireFuzzyGreenWarhead = new Product(
-				"FireFuzzyGreenWarheadService", null, kernel.getCore());
-		em.persist(fireFuzzyGreenWarhead);
-		em.flush();
+    @Test
+    public void testMatchOnAssignTo() {
+        em.getTransaction().begin();
+        Product fireFuzzyGreenWarhead = new Product(
+                                                    "FireFuzzyGreenWarheadService",
+                                                    null, kernel.getCore());
+        em.persist(fireFuzzyGreenWarhead);
+        em.flush();
 
-		Agency halIncandenza = new Agency("HalIncandenza", null,
-				kernel.getCore());
-		em.persist(halIncandenza);
+        Agency halIncandenza = new Agency("HalIncandenza", null,
+                                          kernel.getCore());
+        em.persist(halIncandenza);
 
-		Agency michaelPemulous = new Agency("MichaelPemulous", null,
-				kernel.getCore());
-		em.persist(michaelPemulous);
+        Agency michaelPemulous = new Agency("MichaelPemulous", null,
+                                            kernel.getCore());
+        em.persist(michaelPemulous);
 
-		Protocol infiniteTest = model.getJobModel().newInitializedProtocol(
-				fireFuzzyGreenWarhead, kernel.getCore());
-		infiniteTest.setAssignTo(halIncandenza);
-		infiniteTest.setChildAssignTo(michaelPemulous);
-		infiniteTest.setChildService(fireFuzzyGreenWarhead);
-		em.persist(infiniteTest);
+        Protocol infiniteTest = model.getJobModel().newInitializedProtocol(fireFuzzyGreenWarhead,
+                                                                           kernel.getCore());
+        infiniteTest.setAssignTo(halIncandenza);
+        infiniteTest.setChildAssignTo(michaelPemulous);
+        infiniteTest.setChildService(fireFuzzyGreenWarhead);
+        em.persist(infiniteTest);
 
-		Protocol infiniteTest2 = model.getJobModel().newInitializedProtocol(
-				fireFuzzyGreenWarhead, kernel.getCore());
-		infiniteTest2.setAssignTo(halIncandenza);
-		infiniteTest2.setChildAssignTo(michaelPemulous);
-		infiniteTest2.setChildService(fireFuzzyGreenWarhead);
-		em.persist(infiniteTest2);
+        Protocol infiniteTest2 = model.getJobModel().newInitializedProtocol(fireFuzzyGreenWarhead,
+                                                                            kernel.getCore());
+        infiniteTest2.setAssignTo(halIncandenza);
+        infiniteTest2.setChildAssignTo(michaelPemulous);
+        infiniteTest2.setChildService(fireFuzzyGreenWarhead);
+        em.persist(infiniteTest2);
 
-		Job startWW3 = model.getJobModel().newInitializedJob(
-				fireFuzzyGreenWarhead, kernel.getCore());
-		startWW3.setAssignTo(halIncandenza);
-		em.persist(startWW3);
-		em.flush();
+        Job startWW3 = model.getJobModel().newInitializedJob(fireFuzzyGreenWarhead,
+                                                             kernel.getCore());
+        startWW3.setAssignTo(halIncandenza);
+        em.persist(startWW3);
+        em.flush();
 
-		assertEquals(2, model.getJobModel().getAllChildren(startWW3).size());
+        assertEquals(2, model.getJobModel().getAllChildren(startWW3).size());
 
-	}
+    }
 }

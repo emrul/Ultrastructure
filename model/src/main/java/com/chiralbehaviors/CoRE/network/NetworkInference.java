@@ -44,116 +44,116 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "network_inference", schema = "ruleform")
 public class NetworkInference extends Ruleform {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Relationship
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "inference")
-	private Relationship inference;
+    // bi-directional many-to-one association to Relationship
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "inference")
+    private Relationship      inference;
 
-	// bi-directional many-to-one association to Relationship
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "premise1")
-	private Relationship premise1;
+    // bi-directional many-to-one association to Relationship
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "premise1")
+    private Relationship      premise1;
 
-	// bi-directional many-to-one association to Relationship
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "premise2")
-	private Relationship premise2;
+    // bi-directional many-to-one association to Relationship
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "premise2")
+    private Relationship      premise2;
 
-	public NetworkInference() {
-	}
+    public NetworkInference() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public NetworkInference(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public NetworkInference(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	public NetworkInference(Relationship premise1, Relationship premise2,
-			Relationship inference) {
-		super();
-		this.premise1 = premise1;
-		this.premise2 = premise2;
-		this.inference = inference;
-	}
+    public NetworkInference(Relationship premise1, Relationship premise2,
+                            Relationship inference) {
+        super();
+        this.premise1 = premise1;
+        this.premise2 = premise2;
+        this.inference = inference;
+    }
 
-	public NetworkInference(Relationship premise1, Relationship premise2,
-			Relationship inference, Agency updatedBy) {
-		super(updatedBy);
-		this.premise1 = premise1;
-		this.premise2 = premise2;
-		this.inference = inference;
-	}
+    public NetworkInference(Relationship premise1, Relationship premise2,
+                            Relationship inference, Agency updatedBy) {
+        super(updatedBy);
+        this.premise1 = premise1;
+        this.premise2 = premise2;
+        this.inference = inference;
+    }
 
-	/**
-	 * @param notes
-	 */
-	public NetworkInference(String notes) {
-		super(notes);
-	}
+    /**
+     * @param notes
+     */
+    public NetworkInference(String notes) {
+        super(notes);
+    }
 
-	/**
-	 * @param notes
-	 * @param updatedBy
-	 */
-	public NetworkInference(String notes, Agency updatedBy) {
-		super(notes, updatedBy);
-	}
+    /**
+     * @param notes
+     * @param updatedBy
+     */
+    public NetworkInference(String notes, Agency updatedBy) {
+        super(notes, updatedBy);
+    }
 
-	/**
-	 * @param id
-	 */
-	public NetworkInference(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public NetworkInference(UUID id) {
+        super(id);
+    }
 
-	/**
-	 * @param id
-	 * @param updatedBy
-	 */
-	public NetworkInference(UUID id, Agency updatedBy) {
-		super(id, updatedBy);
-	}
+    /**
+     * @param id
+     * @param updatedBy
+     */
+    public NetworkInference(UUID id, Agency updatedBy) {
+        super(id, updatedBy);
+    }
 
-	@Override
-	public void delete(Triggers triggers) {
-		triggers.delete(this);
-	}
+    @Override
+    public void delete(Triggers triggers) {
+        triggers.delete(this);
+    }
 
-	public Relationship getInference() {
-		return inference;
-	}
+    public Relationship getInference() {
+        return inference;
+    }
 
-	public Relationship getPremise1() {
-		return premise1;
-	}
+    public Relationship getPremise1() {
+        return premise1;
+    }
 
-	public Relationship getPremise2() {
-		return premise2;
-	}
+    public Relationship getPremise2() {
+        return premise2;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, NetworkInference> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.networkInference;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, NetworkInference> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.networkInference;
+    }
 
-	public void setInference(Relationship inference) {
-		this.inference = inference;
-	}
+    public void setInference(Relationship inference) {
+        this.inference = inference;
+    }
 
-	public void setPremise1(Relationship premise1) {
-		this.premise1 = premise1;
-	}
+    public void setPremise1(Relationship premise1) {
+        this.premise1 = premise1;
+    }
 
-	public void setPremise2(Relationship premise2) {
-		this.premise2 = premise2;
-	}
+    public void setPremise2(Relationship premise2) {
+        this.premise2 = premise2;
+    }
 }

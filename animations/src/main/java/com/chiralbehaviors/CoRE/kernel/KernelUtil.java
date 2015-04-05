@@ -55,104 +55,104 @@ import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
  */
 public class KernelUtil {
 
-	static void alterTriggers(Connection connection, boolean enable)
-			throws SQLException {
-		for (String table : new String[] { "ruleform.agency",
-				"ruleform.product", "ruleform.location" }) {
-			String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
-					table, enable ? "ENABLE" : "DISABLE");
-			connection.createStatement().execute(query);
-		}
-		ResultSet r = connection.createStatement().executeQuery(
-				KernelUtil.SELECT_TABLE);
-		while (r.next()) {
-			String table = r.getString("name");
-			String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
-					table, enable ? "ENABLE" : "DISABLE");
-			connection.createStatement().execute(query);
-		}
-		r.close();
-	}
+    static void alterTriggers(Connection connection, boolean enable)
+                                                                    throws SQLException {
+        for (String table : new String[] { "ruleform.agency",
+                "ruleform.product", "ruleform.location" }) {
+            String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
+                                         table, enable ? "ENABLE" : "DISABLE");
+            connection.createStatement().execute(query);
+        }
+        ResultSet r = connection.createStatement().executeQuery(KernelUtil.SELECT_TABLE);
+        while (r.next()) {
+            String table = r.getString("name");
+            String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
+                                         table, enable ? "ENABLE" : "DISABLE");
+            connection.createStatement().execute(query);
+        }
+        r.close();
+    }
 
-	public static void clear(EntityManager em) throws SQLException {
-		em.getTransaction().begin();
-		boolean committed = false;
-		Connection connection = em.unwrap(SessionImpl.class).connection();
-		try {
-			connection.setAutoCommit(false);
-			alterTriggers(connection, false);
-			ResultSet r = connection.createStatement().executeQuery(
-					KernelUtil.SELECT_TABLE);
-			while (r.next()) {
-				String table = r.getString("name");
-				String query = String.format("DELETE FROM %s", table);
-				connection.createStatement().execute(query);
-			}
-			r.close();
-			alterTriggers(connection, true);
-			em.getTransaction().commit();
-			committed = true;
-		} finally {
-			if (!committed) {
-				connection.rollback();
-				em.getTransaction().rollback();
-			}
-		}
-	}
+    public static void clear(EntityManager em) throws SQLException {
+        em.getTransaction().begin();
+        boolean committed = false;
+        Connection connection = em.unwrap(SessionImpl.class).connection();
+        try {
+            connection.setAutoCommit(false);
+            alterTriggers(connection, false);
+            ResultSet r = connection.createStatement().executeQuery(KernelUtil.SELECT_TABLE);
+            while (r.next()) {
+                String table = r.getString("name");
+                String query = String.format("DELETE FROM %s", table);
+                connection.createStatement().execute(query);
+            }
+            r.close();
+            alterTriggers(connection, true);
+            em.getTransaction().commit();
+            committed = true;
+        } finally {
+            if (!committed) {
+                connection.rollback();
+                em.getTransaction().rollback();
+            }
+        }
+    }
 
-	public static void clearAndLoadKernel(EntityManager em)
-			throws SQLException, IOException {
-		clear(em);
-		loadKernel(em);
-	}
+    public static void clearAndLoadKernel(EntityManager em)
+                                                           throws SQLException,
+                                                           IOException {
+        clear(em);
+        loadKernel(em);
+    }
 
-	public static Workspace getKernelWorkspace(EntityManager em) {
-		try (InputStream is = KernelUtil.class
-				.getResourceAsStream(KernelUtil.KERNEL_WORKSPACE_RESOURCE)) {
-			RehydratedWorkspace kernelSnapshot = readKernel(is);
-			Kernel kernel = kernelSnapshot.getAccessor(Kernel.class);
-			return new DatabaseBackedWorkspace(kernel.getKernelWorkspace(), em);
-		} catch (IOException e) {
-			throw new IllegalStateException("Unable to rehydrate kernel", e);
-		}
-	}
+    public static Workspace getKernelWorkspace(EntityManager em) {
+        try (InputStream is = KernelUtil.class.getResourceAsStream(KernelUtil.KERNEL_WORKSPACE_RESOURCE)) {
+            RehydratedWorkspace kernelSnapshot = readKernel(is);
+            Kernel kernel = kernelSnapshot.getAccessor(Kernel.class);
+            return new DatabaseBackedWorkspace(kernel.getKernelWorkspace(), em);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to rehydrate kernel", e);
+        }
+    }
 
-	public static void loadKernel(EntityManager em) throws IOException {
-		loadKernel(
-				em,
-				KernelUtil.class
-						.getResourceAsStream(KernelUtil.KERNEL_WORKSPACE_RESOURCE));
-	}
+    public static void loadKernel(EntityManager em) throws IOException {
+        loadKernel(em,
+                   KernelUtil.class.getResourceAsStream(KernelUtil.KERNEL_WORKSPACE_RESOURCE));
+    }
 
-	public static void loadKernel(EntityManager em, InputStream is)
-			throws IOException {
-		em.getTransaction().begin();
-		RehydratedWorkspace workspace = rehydrateKernel(is);
-		workspace.retarget(em);
-		em.getTransaction().commit();
-	}
+    public static void loadKernel(EntityManager em, InputStream is)
+                                                                   throws IOException {
+        em.getTransaction().begin();
+        RehydratedWorkspace workspace = rehydrateKernel(is);
+        workspace.retarget(em);
+        em.getTransaction().commit();
+    }
 
-	private static RehydratedWorkspace readKernel(InputStream is)
-			throws IOException, JsonParseException, JsonMappingException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new CoREModule());
-		mapper.registerModule(new Hibernate4Module());
-		RehydratedWorkspace workspace = mapper.readValue(is,
-				RehydratedWorkspace.class);
-		workspace.cache();
-		return workspace;
-	}
+    private static RehydratedWorkspace readKernel(InputStream is)
+                                                                 throws IOException,
+                                                                 JsonParseException,
+                                                                 JsonMappingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new CoREModule());
+        mapper.registerModule(new Hibernate4Module());
+        RehydratedWorkspace workspace = mapper.readValue(is,
+                                                         RehydratedWorkspace.class);
+        workspace.cache();
+        return workspace;
+    }
 
-	private static RehydratedWorkspace rehydrateKernel(InputStream is)
-			throws IOException, JsonParseException, JsonMappingException {
-		RehydratedWorkspace workspace = readKernel(is);
-		workspace.cache();
-		return workspace;
-	}
+    private static RehydratedWorkspace rehydrateKernel(InputStream is)
+                                                                      throws IOException,
+                                                                      JsonParseException,
+                                                                      JsonMappingException {
+        RehydratedWorkspace workspace = readKernel(is);
+        workspace.cache();
+        return workspace;
+    }
 
-	public static final String SELECT_TABLE = "SELECT table_schema || '.' || table_name AS name FROM information_schema.tables WHERE table_schema='ruleform' AND table_type='BASE TABLE' ORDER BY table_name";
+    public static final String SELECT_TABLE              = "SELECT table_schema || '.' || table_name AS name FROM information_schema.tables WHERE table_schema='ruleform' AND table_type='BASE TABLE' ORDER BY table_name";
 
-	public static final UUID ZERO = new UUID(0, 0);
+    public static final UUID   ZERO                      = new UUID(0, 0);
 
-	static final String KERNEL_WORKSPACE_RESOURCE = "/kernel-workspace.json";
+    static final String        KERNEL_WORKSPACE_RESOURCE = "/kernel-workspace.json";
 }

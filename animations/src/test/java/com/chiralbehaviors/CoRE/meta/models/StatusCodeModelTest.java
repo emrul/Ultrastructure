@@ -40,39 +40,37 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  */
 public class StatusCodeModelTest extends AbstractModelTest {
 
-	@Test
-	public void testSimpleNetworkPropagation() {
-		Agency core = model.getKernel().getCore();
-		Relationship equals = model.getKernel().getEquals();
+    @Test
+    public void testSimpleNetworkPropagation() {
+        Agency core = model.getKernel().getCore();
+        Relationship equals = model.getKernel().getEquals();
 
-		em.getTransaction().begin();
+        em.getTransaction().begin();
 
-		Relationship equals2 = new Relationship("equals 2",
-				"an alias for equals", core);
-		equals2.setInverse(equals2);
-		em.persist(equals2);
-		NetworkInference aEqualsA = new NetworkInference(equals, equals2,
-				equals, core);
-		em.persist(aEqualsA);
-		StatusCode a = new StatusCode("A", core);
-		em.persist(a);
-		StatusCode b = new StatusCode("B", core);
-		em.persist(b);
-		StatusCode c = new StatusCode("C", core);
-		em.persist(c);
-		StatusCodeNetwork edgeA = new StatusCodeNetwork(a, equals, b, core);
-		em.persist(edgeA);
-		StatusCodeNetwork edgeB = new StatusCodeNetwork(b, equals2, c, core);
-		em.persist(edgeB);
+        Relationship equals2 = new Relationship("equals 2",
+                                                "an alias for equals", core);
+        equals2.setInverse(equals2);
+        em.persist(equals2);
+        NetworkInference aEqualsA = new NetworkInference(equals, equals2,
+                                                         equals, core);
+        em.persist(aEqualsA);
+        StatusCode a = new StatusCode("A", core);
+        em.persist(a);
+        StatusCode b = new StatusCode("B", core);
+        em.persist(b);
+        StatusCode c = new StatusCode("C", core);
+        em.persist(c);
+        StatusCodeNetwork edgeA = new StatusCodeNetwork(a, equals, b, core);
+        em.persist(edgeA);
+        StatusCodeNetwork edgeB = new StatusCodeNetwork(b, equals2, c, core);
+        em.persist(edgeB);
 
-		em.flush();
+        em.flush();
 
-		TypedQuery<StatusCodeNetwork> query = em
-				.createQuery(
-						"SELECT edge FROM StatusCodeNetwork edge WHERE edge.inference.id <> :id",
-						StatusCodeNetwork.class);
-		query.setParameter("id", new UUID(0, 0));
-		List<StatusCodeNetwork> edges = query.getResultList();
-		assertEquals(2, edges.size());
-	}
+        TypedQuery<StatusCodeNetwork> query = em.createQuery("SELECT edge FROM StatusCodeNetwork edge WHERE edge.inference.id <> :id",
+                                                             StatusCodeNetwork.class);
+        query.setParameter("id", new UUID(0, 0));
+        List<StatusCodeNetwork> edges = query.getResultList();
+        assertEquals(2, edges.size());
+    }
 }

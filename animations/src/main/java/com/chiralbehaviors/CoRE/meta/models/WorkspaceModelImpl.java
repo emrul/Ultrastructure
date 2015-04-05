@@ -35,36 +35,33 @@ import com.chiralbehaviors.CoRE.workspace.WorkspaceAuthorization;
  */
 public class WorkspaceModelImpl implements WorkspaceModel {
 
-	private final EntityManager em;
+    private final EntityManager em;
 
-	public WorkspaceModelImpl(Model model) {
-		em = model.getEntityManager();
-	}
+    public WorkspaceModelImpl(Model model) {
+        em = model.getEntityManager();
+    }
 
-	public WorkspaceAuthorization get(Product definingProduct, String key) {
-		TypedQuery<WorkspaceAuthorization> query = em.createNamedQuery(
-				WorkspaceAuthorization.GET_AUTHORIZATION,
-				WorkspaceAuthorization.class);
-		query.setParameter("product", definingProduct);
-		query.setParameter("key", key);
-		return query.getSingleResult();
-	}
+    public WorkspaceAuthorization get(Product definingProduct, String key) {
+        TypedQuery<WorkspaceAuthorization> query = em.createNamedQuery(WorkspaceAuthorization.GET_AUTHORIZATION,
+                                                                       WorkspaceAuthorization.class);
+        query.setParameter("product", definingProduct);
+        query.setParameter("key", key);
+        return query.getSingleResult();
+    }
 
-	public List<WorkspaceAuthorization> getByType(Product definingProduct,
-			String type) {
-		TypedQuery<WorkspaceAuthorization> query = em.createNamedQuery(
-				WorkspaceAuthorization.GET_AUTHORIZATIONS_BY_TYPE,
-				WorkspaceAuthorization.class);
-		query.setParameter("product", definingProduct);
-		query.setParameter("type", type);
-		return query.getResultList();
-	}
+    public List<WorkspaceAuthorization> getByType(Product definingProduct,
+                                                  String type) {
+        TypedQuery<WorkspaceAuthorization> query = em.createNamedQuery(WorkspaceAuthorization.GET_AUTHORIZATIONS_BY_TYPE,
+                                                                       WorkspaceAuthorization.class);
+        query.setParameter("product", definingProduct);
+        query.setParameter("type", type);
+        return query.getResultList();
+    }
 
-	public List<WorkspaceAuthorization> getWorkspace(Product definingProduct) {
-		TypedQuery<WorkspaceAuthorization> query = em.createNamedQuery(
-				WorkspaceAuthorization.GET_WORKSPACE,
-				WorkspaceAuthorization.class);
-		query.setParameter("product", definingProduct);
-		return query.getResultList();
-	}
+    public List<WorkspaceAuthorization> getWorkspace(Product definingProduct) {
+        TypedQuery<WorkspaceAuthorization> query = em.createNamedQuery(WorkspaceAuthorization.GET_WORKSPACE,
+                                                                       WorkspaceAuthorization.class);
+        query.setParameter("product", definingProduct);
+        return query.getResultList();
+    }
 }

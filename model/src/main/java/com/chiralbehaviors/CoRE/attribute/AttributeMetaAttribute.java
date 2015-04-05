@@ -47,122 +47,123 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "attribute_meta_attribute", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = GET_ATTRIBUTE, query = "SELECT av FROM AttributeMetaAttribute av "
-		+ "WHERE av.metaAttribute = :meta " + "AND av.attribute = :attr") })
+                                                          + "WHERE av.metaAttribute = :meta "
+                                                          + "AND av.attribute = :attr") })
 public class AttributeMetaAttribute extends AttributeValue<Attribute> {
-	public static final String GET_ATTRIBUTE = "attributeMetaAttribute.getAttribute";
-	private static final long serialVersionUID = 1L;
+    public static final String GET_ATTRIBUTE    = "attributeMetaAttribute.getAttribute";
+    private static final long  serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Attribute
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "attribute")
-	private Attribute attribute;
+    // bi-directional many-to-one association to Attribute
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "attribute")
+    private Attribute          attribute;
 
-	// bi-directional many-to-one association to Attribute
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "meta_attribute")
-	private Attribute metaAttribute;
+    // bi-directional many-to-one association to Attribute
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "meta_attribute")
+    private Attribute          metaAttribute;
 
-	public AttributeMetaAttribute() {
-	}
+    public AttributeMetaAttribute() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public AttributeMetaAttribute(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public AttributeMetaAttribute(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	public AttributeMetaAttribute(Attribute attribute) {
-		super(attribute);
-	}
+    public AttributeMetaAttribute(Attribute attribute) {
+        super(attribute);
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public AttributeMetaAttribute(Attribute attribute, Agency updatedBy) {
-		super(updatedBy);
-		setAttribute(attribute);
-	}
+    /**
+     * @param updatedBy
+     */
+    public AttributeMetaAttribute(Attribute attribute, Agency updatedBy) {
+        super(updatedBy);
+        setAttribute(attribute);
+    }
 
-	public AttributeMetaAttribute(Attribute attribute, BigDecimal value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public AttributeMetaAttribute(Attribute attribute, BigDecimal value,
+                                  Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public AttributeMetaAttribute(Attribute attribute, boolean value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public AttributeMetaAttribute(Attribute attribute, boolean value,
+                                  Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public AttributeMetaAttribute(Attribute attribute, int value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public AttributeMetaAttribute(Attribute attribute, int value,
+                                  Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public AttributeMetaAttribute(Attribute attribute, String value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public AttributeMetaAttribute(Attribute attribute, String value,
+                                  Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public AttributeMetaAttribute(Attribute attribute, Unit unit) {
-		super(attribute, unit);
-	}
+    public AttributeMetaAttribute(Attribute attribute, Unit unit) {
+        super(attribute, unit);
+    }
 
-	/**
-	 * @param id
-	 */
-	public AttributeMetaAttribute(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public AttributeMetaAttribute(UUID id) {
+        super(id);
+    }
 
-	@Override
-	public Attribute getAttribute() {
-		return attribute;
-	}
+    @Override
+    public Attribute getAttribute() {
+        return attribute;
+    }
 
-	@JsonGetter
-	public Attribute getMetaAttribute() {
-		return metaAttribute;
-	}
+    @JsonGetter
+    public Attribute getMetaAttribute() {
+        return metaAttribute;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-	 */
-	@Override
-	public SingularAttribute<? extends AttributeValue<Attribute>, Attribute> getRuleformAttribute() {
-		return AttributeMetaAttribute_.metaAttribute;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+     */
+    @Override
+    public SingularAttribute<? extends AttributeValue<Attribute>, Attribute> getRuleformAttribute() {
+        return AttributeMetaAttribute_.metaAttribute;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-	 */
-	@Override
-	public Class<Attribute> getRuleformClass() {
-		return Attribute.class;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+     */
+    @Override
+    public Class<Attribute> getRuleformClass() {
+        return Attribute.class;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, AttributeMetaAttribute> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.attributeMetaAttribute;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, AttributeMetaAttribute> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.attributeMetaAttribute;
+    }
 
-	@Override
-	public void setAttribute(Attribute attribute) {
-		this.attribute = attribute;
-	}
+    @Override
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
 
-	public void setMetaAttribute(Attribute attribute3) {
-		metaAttribute = attribute3;
-	}
+    public void setMetaAttribute(Attribute attribute3) {
+        metaAttribute = attribute3;
+    }
 }

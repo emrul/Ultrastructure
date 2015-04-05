@@ -49,85 +49,85 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "agency_product", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = AGENCIES_FOR_PRODUCTS, query = "SELECT n.agency "
-		+ "FROM AgencyProduct n "
-		+ "WHERE n.relationship = :relationship "
-		+ "AND n.product = :product"), })
+                                                                  + "FROM AgencyProduct n "
+                                                                  + "WHERE n.relationship = :relationship "
+                                                                  + "AND n.product = :product"), })
 public class AgencyProduct extends Ruleform {
-	public static final String AGENCIES_FOR_PRODUCTS = "agencyProduct.agenciesForProducts";
-	private static final long serialVersionUID = 1L;
+    public static final String AGENCIES_FOR_PRODUCTS = "agencyProduct.agenciesForProducts";
+    private static final long  serialVersionUID      = 1L;
 
-	// bi-directional many-to-one association to Agency
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "agency")
-	private Agency agency;
+    // bi-directional many-to-one association to Agency
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "agency")
+    private Agency             agency;
 
-	// bi-directional many-to-one association to Location
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "product")
-	private Product product;
+    // bi-directional many-to-one association to Location
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "product")
+    private Product            product;
 
-	// bi-directional many-to-one association to Relationship
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "relationship")
-	private Relationship relationship;
+    // bi-directional many-to-one association to Relationship
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "relationship")
+    private Relationship       relationship;
 
-	public AgencyProduct() {
-	}
+    public AgencyProduct() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public AgencyProduct(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public AgencyProduct(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	public AgencyProduct(Agency agency, Relationship relationship,
-			Product product, Agency updatedBy) {
-		super(updatedBy);
-		this.relationship = relationship;
-		this.product = product;
-		this.agency = agency;
-	}
+    public AgencyProduct(Agency agency, Relationship relationship,
+                         Product product, Agency updatedBy) {
+        super(updatedBy);
+        this.relationship = relationship;
+        this.product = product;
+        this.agency = agency;
+    }
 
-	/**
-	 * @param id
-	 */
-	public AgencyProduct(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public AgencyProduct(UUID id) {
+        super(id);
+    }
 
-	public Agency getAgency() {
-		return agency;
-	}
+    public Agency getAgency() {
+        return agency;
+    }
 
-	public Product getProduct() {
-		return product;
-	}
+    public Product getProduct() {
+        return product;
+    }
 
-	public Relationship getRelationship() {
-		return relationship;
-	}
+    public Relationship getRelationship() {
+        return relationship;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, AgencyProduct> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.agencyProduct;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, AgencyProduct> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.agencyProduct;
+    }
 
-	public void setAgency(Agency agency) {
-		this.agency = agency;
-	}
+    public void setAgency(Agency agency) {
+        this.agency = agency;
+    }
 
-	public void setProduct(Product product) {
-		this.product = product;
-	}
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
-	public void setRelationship(Relationship relationship) {
-		this.relationship = relationship;
-	}
+    public void setRelationship(Relationship relationship) {
+        this.relationship = relationship;
+    }
 }

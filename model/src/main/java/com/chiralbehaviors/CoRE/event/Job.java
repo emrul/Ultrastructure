@@ -63,251 +63,262 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-		@NamedQuery(name = FIND_ALL, query = "select j from Job j"),
-		@NamedQuery(name = TOP_LEVEL_JOBS, query = "SELECT j  FROM Job AS j  WHERE j.parent IS NULL"),
-		@NamedQuery(name = EXISTING_JOB_WITH_PARENT_AND_PROTOCOL, query = "SELECT COUNT(j) from Job as j "
-				+ "WHERE j.parent = :parent " + "AND j.protocol = :protocol"),
-		@NamedQuery(name = GET_ACTIVE_OR_TERMINATED_SUB_JOBS, query = "SELECT j "
-				+ "FROM Job AS j "
-				+ "WHERE j.parent = :parent "
-				+ "  AND j.status <> :unset"),
-		@NamedQuery(name = GET_ACTIVE_JOBS_FOR_AGENCY_IN_STATUS, query = "SELECT j "
-				+ "FROM Job AS j "
-				+ "WHERE j.assignTo = :agency "
-				+ "  AND j.status = :status"),
-		@NamedQuery(name = GET_ACTIVE_JOBS_FOR_AGENCY_IN_STATUSES, query = "SELECT j "
-				+ "FROM Job AS j "
-				+ "WHERE j.assignTo = :agency "
-				+ "  AND j.status IN :statuses"),
-		@NamedQuery(name = GET_CHILD_JOBS_FOR_SERVICE, query = "SELECT j "
-				+ "FROM Job AS j " + "WHERE j.parent = :parent "
-				+ "  AND j.service = :service"),
-		@NamedQuery(name = GET_CHILD_JOBS, query = "SELECT j "
-				+ "FROM Job AS j " + "WHERE j.parent = :parent"),
-		@NamedQuery(name = HAS_SCS, query = "SELECT scs from StatusCodeSequencing scs where scs.service = :service "),
-		@NamedQuery(name = GET_NEXT_STATUS_CODES, query = "SELECT code "
-				+ "FROM StatusCodeSequencing AS sequencing, StatusCode AS code "
-				+ "WHERE sequencing.childCode = code "
-				+ "AND sequencing.service = :service "
-				+ "  AND sequencing.parentCode = :parent "),
-		@NamedQuery(name = GET_STATUS_CODE_SEQUENCES, query = "SELECT sequencing "
-				+ " FROM StatusCodeSequencing AS sequencing"
-				+ " WHERE sequencing.childCode = :code "
-				+ " AND sequencing.service = :service "
-				+ "   AND sequencing.parentCode = :parent "),
-		@NamedQuery(name = GET_UNSET_SIBLINGS, query = "SELECT j FROM Job AS j "
-				+ "WHERE j.service = :service "
-				+ "  AND j.status = :unset "
-				+ "  AND j.parent = :parent"),
-		@NamedQuery(name = GET_ASSIGNED_TO, query = "SELECT j "
-				+ "FROM Job AS j " + "  WHERE j.assignTo = :agency"),
-		@NamedQuery(name = GET_SUB_JOBS_ASSIGNED_TO, query = "SELECT j "
-				+ "FROM Job AS j " + "WHERE j.parent = :parent "
-				+ "  AND j.assignTo = :agency"),
-		@NamedQuery(name = INITIAL_STATE, query = "SELECT distinct(sc) "
-				+ "FROM StatusCodeSequencing AS seq, StatusCode AS sc "
-				+ "WHERE seq.parentCode = sc " + "AND NOT EXISTS( "
-				+ "  SELECT seq2.childCode FROM StatusCodeSequencing seq2 "
-				+ "  WHERE seq2.service = seq.service "
-				+ "    AND seq2.childCode = seq.parentCode " + ") "
-				+ " AND seq.service = :service"),
-		@NamedQuery(name = GET_TERMINAL_STATES, query = "SELECT DISTINCT(sc) "
-				+ "FROM StatusCodeSequencing AS seq, StatusCode AS sc "
-				+ "WHERE seq.childCode = sc " + "  AND NOT EXISTS ( "
-				+ "    SELECT seq2.parentCode FROM StatusCodeSequencing seq2"
-				+ "    WHERE seq2.service = seq.service "
-				+ "      AND seq2.parentCode = seq.childCode " + "  ) "
-				+ "  AND seq.service = :service " + "ORDER BY sc.name ASC") })
+               @NamedQuery(name = FIND_ALL, query = "select j from Job j"),
+               @NamedQuery(name = TOP_LEVEL_JOBS, query = "SELECT j  FROM Job AS j  WHERE j.parent IS NULL"),
+               @NamedQuery(name = EXISTING_JOB_WITH_PARENT_AND_PROTOCOL, query = "SELECT COUNT(j) from Job as j "
+                                                                                 + "WHERE j.parent = :parent "
+                                                                                 + "AND j.protocol = :protocol"),
+               @NamedQuery(name = GET_ACTIVE_OR_TERMINATED_SUB_JOBS, query = "SELECT j "
+                                                                             + "FROM Job AS j "
+                                                                             + "WHERE j.parent = :parent "
+                                                                             + "  AND j.status <> :unset"),
+               @NamedQuery(name = GET_ACTIVE_JOBS_FOR_AGENCY_IN_STATUS, query = "SELECT j "
+                                                                                + "FROM Job AS j "
+                                                                                + "WHERE j.assignTo = :agency "
+                                                                                + "  AND j.status = :status"),
+               @NamedQuery(name = GET_ACTIVE_JOBS_FOR_AGENCY_IN_STATUSES, query = "SELECT j "
+                                                                                  + "FROM Job AS j "
+                                                                                  + "WHERE j.assignTo = :agency "
+                                                                                  + "  AND j.status IN :statuses"),
+               @NamedQuery(name = GET_CHILD_JOBS_FOR_SERVICE, query = "SELECT j "
+                                                                      + "FROM Job AS j "
+                                                                      + "WHERE j.parent = :parent "
+                                                                      + "  AND j.service = :service"),
+               @NamedQuery(name = GET_CHILD_JOBS, query = "SELECT j "
+                                                          + "FROM Job AS j "
+                                                          + "WHERE j.parent = :parent"),
+               @NamedQuery(name = HAS_SCS, query = "SELECT scs from StatusCodeSequencing scs where scs.service = :service "),
+               @NamedQuery(name = GET_NEXT_STATUS_CODES, query = "SELECT code "
+                                                                 + "FROM StatusCodeSequencing AS sequencing, StatusCode AS code "
+                                                                 + "WHERE sequencing.childCode = code "
+                                                                 + "AND sequencing.service = :service "
+                                                                 + "  AND sequencing.parentCode = :parent "),
+               @NamedQuery(name = GET_STATUS_CODE_SEQUENCES, query = "SELECT sequencing "
+                                                                     + " FROM StatusCodeSequencing AS sequencing"
+                                                                     + " WHERE sequencing.childCode = :code "
+                                                                     + " AND sequencing.service = :service "
+                                                                     + "   AND sequencing.parentCode = :parent "),
+               @NamedQuery(name = GET_UNSET_SIBLINGS, query = "SELECT j FROM Job AS j "
+                                                              + "WHERE j.service = :service "
+                                                              + "  AND j.status = :unset "
+                                                              + "  AND j.parent = :parent"),
+               @NamedQuery(name = GET_ASSIGNED_TO, query = "SELECT j "
+                                                           + "FROM Job AS j "
+                                                           + "  WHERE j.assignTo = :agency"),
+               @NamedQuery(name = GET_SUB_JOBS_ASSIGNED_TO, query = "SELECT j "
+                                                                    + "FROM Job AS j "
+                                                                    + "WHERE j.parent = :parent "
+                                                                    + "  AND j.assignTo = :agency"),
+               @NamedQuery(name = INITIAL_STATE, query = "SELECT distinct(sc) "
+                                                         + "FROM StatusCodeSequencing AS seq, StatusCode AS sc "
+                                                         + "WHERE seq.parentCode = sc "
+                                                         + "AND NOT EXISTS( "
+                                                         + "  SELECT seq2.childCode FROM StatusCodeSequencing seq2 "
+                                                         + "  WHERE seq2.service = seq.service "
+                                                         + "    AND seq2.childCode = seq.parentCode "
+                                                         + ") "
+                                                         + " AND seq.service = :service"),
+               @NamedQuery(name = GET_TERMINAL_STATES, query = "SELECT DISTINCT(sc) "
+                                                               + "FROM StatusCodeSequencing AS seq, StatusCode AS sc "
+                                                               + "WHERE seq.childCode = sc "
+                                                               + "  AND NOT EXISTS ( "
+                                                               + "    SELECT seq2.parentCode FROM StatusCodeSequencing seq2"
+                                                               + "    WHERE seq2.service = seq.service "
+                                                               + "      AND seq2.parentCode = seq.childCode "
+                                                               + "  ) "
+                                                               + "  AND seq.service = :service "
+                                                               + "ORDER BY sc.name ASC") })
 @Entity
 @Table(name = "job", schema = "ruleform")
 public class Job extends AbstractProtocol {
-	public static final String CHANGE_STATUS = "job.changeStatus";
-	public static final String CHRONOLOGY = "job.chronology";
-	public static final String CLASSIFIED = "event.classified";
-	public static final String EXISTING_JOB_WITH_PARENT_AND_PROTOCOL = "job.existingJobWithParentAndProtocol";
-	public static final String FIND_ALL = "job.findAll";
-	public static final String GET_ACTIVE_JOBS_FOR_AGENCY_IN_STATUS = "job.getActiveJobsForAgencyInStatus";
-	public static final String GET_ACTIVE_JOBS_FOR_AGENCY_IN_STATUSES = "job.getActiveJobsForAgencyInStatuses";
-	public static final String GET_ACTIVE_OR_TERMINATED_SUB_JOBS = "job.getActiveOrTerminatedSubJobs";
-	public static final String GET_ASSIGNED_TO = "job.getAssignedTo";
-	public static final String GET_ATTRIBUTE_VALUE = "job.getAttributeValue";
-	public static final String GET_ATTRIBUTES_FOR_JOB = "job.getAttributesForJob";
-	public static final String GET_CHILD_JOBS = "job.getChildJobs";
-	public static final String GET_CHILD_JOBS_FOR_SERVICE = "job.getChildJobsForService";
-	public static final String GET_NEXT_STATUS_CODES = "job.getNextStatusCodes";
-	public static final String GET_STATUS_CODE_IDS = "job.getStatusCodeIds";
-	public static final String GET_STATUS_CODE_SEQUENCES = "job.getStatusCodeSequences";
-	public static final String GET_SUB_JOBS_ASSIGNED_TO = "job.getSubJobsAssignedTo";
-	public static final String GET_TERMINAL_STATES = "job.getTerminalStates";
-	public static final String GET_UNSET_SIBLINGS = "job.getUnsetSiblings";
-	public static final String HAS_SCS = "job.hasScs";
-	public static final String INITIAL_STATE = "job.initialState";
-	public static final String TOP_LEVEL_JOBS = "job.topLevelJobs";
+    public static final String CHANGE_STATUS                          = "job.changeStatus";
+    public static final String CHRONOLOGY                             = "job.chronology";
+    public static final String CLASSIFIED                             = "event.classified";
+    public static final String EXISTING_JOB_WITH_PARENT_AND_PROTOCOL  = "job.existingJobWithParentAndProtocol";
+    public static final String FIND_ALL                               = "job.findAll";
+    public static final String GET_ACTIVE_JOBS_FOR_AGENCY_IN_STATUS   = "job.getActiveJobsForAgencyInStatus";
+    public static final String GET_ACTIVE_JOBS_FOR_AGENCY_IN_STATUSES = "job.getActiveJobsForAgencyInStatuses";
+    public static final String GET_ACTIVE_OR_TERMINATED_SUB_JOBS      = "job.getActiveOrTerminatedSubJobs";
+    public static final String GET_ASSIGNED_TO                        = "job.getAssignedTo";
+    public static final String GET_ATTRIBUTE_VALUE                    = "job.getAttributeValue";
+    public static final String GET_ATTRIBUTES_FOR_JOB                 = "job.getAttributesForJob";
+    public static final String GET_CHILD_JOBS                         = "job.getChildJobs";
+    public static final String GET_CHILD_JOBS_FOR_SERVICE             = "job.getChildJobsForService";
+    public static final String GET_NEXT_STATUS_CODES                  = "job.getNextStatusCodes";
+    public static final String GET_STATUS_CODE_IDS                    = "job.getStatusCodeIds";
+    public static final String GET_STATUS_CODE_SEQUENCES              = "job.getStatusCodeSequences";
+    public static final String GET_SUB_JOBS_ASSIGNED_TO               = "job.getSubJobsAssignedTo";
+    public static final String GET_TERMINAL_STATES                    = "job.getTerminalStates";
+    public static final String GET_UNSET_SIBLINGS                     = "job.getUnsetSiblings";
+    public static final String HAS_SCS                                = "job.hasScs";
+    public static final String INITIAL_STATE                          = "job.initialState";
+    public static final String TOP_LEVEL_JOBS                         = "job.topLevelJobs";
 
-	private static final long serialVersionUID = 1L;
+    private static final long  serialVersionUID                       = 1L;
 
-	/**
-	 * The children of this job
-	 */
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-	@JsonIgnore
-	private Set<Job> childJobs;
+    /**
+     * The children of this job
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
+    @JsonIgnore
+    private Set<Job>           childJobs;
 
-	/**
-	 * The chronology of this job
-	 */
-	@OneToMany(mappedBy = "job")
-	@JsonIgnore
-	private Set<JobChronology> chronology;
+    /**
+     * The chronology of this job
+     */
+    @OneToMany(mappedBy = "job")
+    @JsonIgnore
+    private Set<JobChronology> chronology;
 
-	@Column(name = "depth")
-	private int depth = 0;
+    @Column(name = "depth")
+    private int                depth                                  = 0;
 
-	/**
-	 * The parent of this job
-	 */
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "parent")
-	private Job parent;
+    /**
+     * The parent of this job
+     */
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "parent")
+    private Job                parent;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "protocol")
-	private Protocol protocol;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "protocol")
+    private Protocol           protocol;
 
-	@Column(name = "sequence_number")
-	private int sequenceNumber = 1;
+    @Column(name = "sequence_number")
+    private int                sequenceNumber                         = 1;
 
-	/**
-	 * This job's status
-	 */
-	@NotNull
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "status")
-	private StatusCode status;
+    /**
+     * This job's status
+     */
+    @NotNull
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "status")
+    private StatusCode         status;
 
-	public Job() {
-	}
+    public Job() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public Job(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public Job(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	public Set<Job> getChildJobs() {
-		return childJobs;
-	}
+    public Set<Job> getChildJobs() {
+        return childJobs;
+    }
 
-	public Set<JobChronology> getChronology() {
-		return chronology;
-	}
+    public Set<JobChronology> getChronology() {
+        return chronology;
+    }
 
-	public int getDepth() {
-		return depth;
-	}
+    public int getDepth() {
+        return depth;
+    }
 
-	public Job getParent() {
-		return parent;
-	}
+    public Job getParent() {
+        return parent;
+    }
 
-	public Protocol getProtocol() {
-		return protocol;
-	}
+    public Protocol getProtocol() {
+        return protocol;
+    }
 
-	/**
-	 * @return the sequenceNumber
-	 */
-	public Integer getSequenceNumber() {
-		return sequenceNumber;
-	}
+    /**
+     * @return the sequenceNumber
+     */
+    public Integer getSequenceNumber() {
+        return sequenceNumber;
+    }
 
-	public StatusCode getStatus() {
-		return status;
-	}
+    public StatusCode getStatus() {
+        return status;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, Job> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.job;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, Job> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.job;
+    }
 
-	@Override
-	public void persist(Triggers triggers) {
-		triggers.persist(this);
-	}
+    @Override
+    public void persist(Triggers triggers) {
+        triggers.persist(this);
+    }
 
-	public void setChildJobs(Set<Job> jobs) {
-		childJobs = jobs;
-	}
+    public void setChildJobs(Set<Job> jobs) {
+        childJobs = jobs;
+    }
 
-	public void setChronology(Set<JobChronology> jobChronologies) {
-		chronology = jobChronologies;
-	}
+    public void setChronology(Set<JobChronology> jobChronologies) {
+        chronology = jobChronologies;
+    }
 
-	public void setDepth(int depth) {
-		this.depth = depth;
-	}
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
 
-	public void setParent(Job job) {
-		if (equals(job)) {
-			throw new IllegalArgumentException("Cannot set the parent to self");
-		}
-		parent = job;
-		depth = job == null ? 0 : job.getDepth() + 1;
-	}
+    public void setParent(Job job) {
+        if (equals(job)) {
+            throw new IllegalArgumentException("Cannot set the parent to self");
+        }
+        parent = job;
+        depth = job == null ? 0 : job.getDepth() + 1;
+    }
 
-	public void setProtocol(Protocol protocol) {
-		this.protocol = protocol;
-	}
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
+    }
 
-	/**
-	 * @param sequenceNumber
-	 *            the sequenceNumber to set
-	 */
-	public void setSequenceNumber(int sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
-	}
+    /**
+     * @param sequenceNumber
+     *            the sequenceNumber to set
+     */
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
 
-	/**
-	 * @param sequenceNumber
-	 *            the sequenceNumber to set
-	 */
-	public void setSequenceNumber(Integer sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
-	}
+    /**
+     * @param sequenceNumber
+     *            the sequenceNumber to set
+     */
+    public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
 
-	/**
-	 * Should ONLY be called from JobModel. You call this yourself, you ain't be
-	 * logging. We have to make it Public because it ain't in the same package.
-	 * <p>
-	 * <b>word</b>
-	 * </p>
-	 *
-	 * @param newStatus
-	 */
-	public void setStatus(StatusCode newStatus) {
-		status = newStatus;
-	}
+    /**
+     * Should ONLY be called from JobModel. You call this yourself, you ain't be
+     * logging. We have to make it Public because it ain't in the same package.
+     * <p>
+     * <b>word</b>
+     * </p>
+     *
+     * @param newStatus
+     */
+    public void setStatus(StatusCode newStatus) {
+        status = newStatus;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return String.format("Job [status=%s, %s, sequenceNumber=%s]",
-				getStatus().getName(), getToString(), sequenceNumber);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return String.format("Job [status=%s, %s, sequenceNumber=%s]",
+                             getStatus().getName(), getToString(),
+                             sequenceNumber);
+    }
 
-	@Override
-	public void update(Triggers triggers) {
-		triggers.update(this);
-	}
+    @Override
+    public void update(Triggers triggers) {
+        triggers.update(this);
+    }
 }

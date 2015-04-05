@@ -44,9 +44,9 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  *
  */
 public class UnitModelImpl
-        extends
-        AbstractNetworkedModel<Unit, UnitNetwork, UnitAttributeAuthorization, UnitAttribute>
-        implements UnitModel {
+extends
+AbstractNetworkedModel<Unit, UnitNetwork, UnitAttributeAuthorization, UnitAttribute>
+implements UnitModel {
 
     /**
      * @param em
@@ -57,7 +57,7 @@ public class UnitModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
      * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -76,7 +76,7 @@ public class UnitModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
      * chiralbehaviors.CoRE.network.Aspect,
      * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -97,7 +97,7 @@ public class UnitModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
      * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -114,7 +114,7 @@ public class UnitModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.meta .Aspect<RuleForm>[])
@@ -136,7 +136,7 @@ public class UnitModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.network .Networked)
@@ -164,7 +164,7 @@ public class UnitModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#getInterconnections(java
      * .util.List, java.util.List, java.util.List)
@@ -174,8 +174,8 @@ public class UnitModelImpl
                                                  Collection<Relationship> relationships,
                                                  Collection<Unit> children) {
         if (parents == null || parents.size() == 0 || relationships == null
-            || relationships.size() == 0 || children == null
-            || children.size() == 0) {
+                || relationships.size() == 0 || children == null
+                || children.size() == 0) {
             return null;
         }
         TypedQuery<UnitNetwork> query = em.createNamedQuery(UnitNetwork.GET_NETWORKS,
@@ -192,8 +192,8 @@ public class UnitModelImpl
      */
     private UnitAttributeAuthorization getValidatingAuthorization(UnitAttribute attributeValue) {
         String sql = "SELECT  p FROM UnitAttributeAuthorization p "
-                     + "WHERE p.validatingAttribute IS NOT NULL "
-                     + "AND p.authorizedAttribute = :attribute ";
+                + "WHERE p.validatingAttribute IS NOT NULL "
+                + "AND p.authorizedAttribute = :attribute ";
         TypedQuery<UnitAttributeAuthorization> query = em.createQuery(sql,
                                                                       UnitAttributeAuthorization.class);
         query.setParameter("attribute", attributeValue.getAttribute());
@@ -237,7 +237,7 @@ public class UnitModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
      * chiralbehaviors.CoRE.ExistentialRuleform,
      * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)

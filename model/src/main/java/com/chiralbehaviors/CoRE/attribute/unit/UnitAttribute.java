@@ -49,107 +49,107 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "unit_attribute", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = GET_ATTRIBUTE, query = "select ra from UnitAttribute ra where ra.unitRf = :unit and ra.attribute = :attribute") })
 public class UnitAttribute extends AttributeValue<Unit> {
-	public static final String GET_ATTRIBUTE = "unitAttribute.getAttribute";
-	private static final long serialVersionUID = 1L;
+    public static final String GET_ATTRIBUTE    = "unitAttribute.getAttribute";
+    private static final long  serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Attribute
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "attribute")
-	private Attribute attribute;
+    // bi-directional many-to-one association to Attribute
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "attribute")
+    private Attribute          attribute;
 
-	// bi-directional many-to-one association to Unit
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "unit_rf")
-	private Unit unitRf;
+    // bi-directional many-to-one association to Unit
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "unit_rf")
+    private Unit               unitRf;
 
-	public UnitAttribute() {
-		super();
-	}
+    public UnitAttribute() {
+        super();
+    }
 
-	public UnitAttribute(Agency updatedBy) {
-		super(updatedBy);
-	}
+    public UnitAttribute(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	public UnitAttribute(Attribute attribute) {
-		super(attribute);
-	}
+    public UnitAttribute(Attribute attribute) {
+        super(attribute);
+    }
 
-	public UnitAttribute(Attribute attribute, Agency updatedBy) {
-		super(attribute, updatedBy);
-	}
+    public UnitAttribute(Attribute attribute, Agency updatedBy) {
+        super(attribute, updatedBy);
+    }
 
-	public UnitAttribute(Attribute attribute, BigDecimal value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public UnitAttribute(Attribute attribute, BigDecimal value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public UnitAttribute(Attribute attribute, boolean value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public UnitAttribute(Attribute attribute, boolean value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public UnitAttribute(Attribute attribute, int value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public UnitAttribute(Attribute attribute, int value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public UnitAttribute(Attribute attribute, String value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    public UnitAttribute(Attribute attribute, String value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	public UnitAttribute(Attribute attribute, Unit unit) {
-		super(attribute, unit);
-	}
+    public UnitAttribute(Attribute attribute, Unit unit) {
+        super(attribute, unit);
+    }
 
-	public UnitAttribute(UUID id) {
-		super(id);
-	}
+    public UnitAttribute(UUID id) {
+        super(id);
+    }
 
-	@Override
-	public Attribute getAttribute() {
-		return attribute;
-	}
+    @Override
+    public Attribute getAttribute() {
+        return attribute;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-	 */
-	@Override
-	public SingularAttribute<? extends AttributeValue<Unit>, Unit> getRuleformAttribute() {
-		return UnitAttribute_.unitRf;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+     */
+    @Override
+    public SingularAttribute<? extends AttributeValue<Unit>, Unit> getRuleformAttribute() {
+        return UnitAttribute_.unitRf;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-	 */
-	@Override
-	public Class<Unit> getRuleformClass() {
-		return Unit.class;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+     */
+    @Override
+    public Class<Unit> getRuleformClass() {
+        return Unit.class;
+    }
 
-	@JsonGetter
-	public Unit getUnitRf() {
-		return unitRf;
-	}
+    @JsonGetter
+    public Unit getUnitRf() {
+        return unitRf;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, UnitAttribute> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.unitAttribute;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, UnitAttribute> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.unitAttribute;
+    }
 
-	@Override
-	public void setAttribute(Attribute attribute) {
-		this.attribute = attribute;
-	}
+    @Override
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
 
-	public void setUnitRf(Unit unit) {
-		unitRf = unit;
-	}
+    public void setUnitRf(Unit unit) {
+        unitRf = unit;
+    }
 }

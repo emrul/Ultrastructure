@@ -52,140 +52,139 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-		@NamedQuery(name = GET_USED_RELATIONSHIPS, query = "select distinct n.relationship from LocationNetwork n"),
-		@NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM LocationNetwork n "
-				+ "WHERE n.parent = :parent "
-				+ "AND n.relationship = :relationship"),
-		@NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM LocationNetwork n "
-				+ "WHERE n.parent = :parent "
-				+ "AND n.relationship = :relationship "
-				+ "AND n.child = :child") })
+               @NamedQuery(name = GET_USED_RELATIONSHIPS, query = "select distinct n.relationship from LocationNetwork n"),
+               @NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM LocationNetwork n "
+                                                        + "WHERE n.parent = :parent "
+                                                        + "AND n.relationship = :relationship"),
+               @NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM LocationNetwork n "
+                                                        + "WHERE n.parent = :parent "
+                                                        + "AND n.relationship = :relationship "
+                                                        + "AND n.child = :child") })
 @Entity
 @Table(name = "location_network", schema = "ruleform")
 public class LocationNetwork extends NetworkRuleform<Location> {
-	public static List<Relationship> getUsedRelationships(EntityManager em) {
-		return em.createNamedQuery(GET_USED_RELATIONSHIPS, Relationship.class)
-				.getResultList();
-	}
+    public static List<Relationship> getUsedRelationships(EntityManager em) {
+        return em.createNamedQuery(GET_USED_RELATIONSHIPS, Relationship.class).getResultList();
+    }
 
-	public static final String GET_CHILDREN = "locationNetwork"
-			+ GET_CHILDREN_SUFFIX;
-	public static final String GET_NETWORKS = "locationNetwork"
-			+ GET_NETWORKS_SUFFIX;
-	public static final String GET_USED_RELATIONSHIPS = "locationNetwork.getUsedRelationships";
+    public static final String GET_CHILDREN           = "locationNetwork"
+                                                        + GET_CHILDREN_SUFFIX;
+    public static final String GET_NETWORKS           = "locationNetwork"
+                                                        + GET_NETWORKS_SUFFIX;
+    public static final String GET_USED_RELATIONSHIPS = "locationNetwork.getUsedRelationships";
 
-	private static final long serialVersionUID = 1L;
+    private static final long  serialVersionUID       = 1L;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "child")
-	private Location child;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "child")
+    private Location           child;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "parent")
-	private Location parent;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "parent")
+    private Location           parent;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(insertable = false, name = "premise1")
-	private LocationNetwork premise1;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(insertable = false, name = "premise1")
+    private LocationNetwork    premise1;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(insertable = false, name = "premise2")
-	private LocationNetwork premise2;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(insertable = false, name = "premise2")
+    private LocationNetwork    premise2;
 
-	public LocationNetwork() {
-	}
+    public LocationNetwork() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public LocationNetwork(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public LocationNetwork(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param relationship
-	 * @param updatedBy
-	 */
-	public LocationNetwork(Location parent, Relationship relationship,
-			Location child, Agency updatedBy) {
-		super(relationship, updatedBy);
-		this.parent = parent;
-		this.child = child;
-	}
+    /**
+     * @param relationship
+     * @param updatedBy
+     */
+    public LocationNetwork(Location parent, Relationship relationship,
+                           Location child, Agency updatedBy) {
+        super(relationship, updatedBy);
+        this.parent = parent;
+        this.child = child;
+    }
 
-	/**
-	 * @param relationship
-	 * @param updatedBy
-	 */
-	public LocationNetwork(Relationship relationship, Agency updatedBy) {
-		super(relationship, updatedBy);
-	}
+    /**
+     * @param relationship
+     * @param updatedBy
+     */
+    public LocationNetwork(Relationship relationship, Agency updatedBy) {
+        super(relationship, updatedBy);
+    }
 
-	/**
-	 * @param id
-	 */
-	public LocationNetwork(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public LocationNetwork(UUID id) {
+        super(id);
+    }
 
-	@Override
-	public void delete(Triggers triggers) {
-		triggers.delete(this);
-	}
+    @Override
+    public void delete(Triggers triggers) {
+        triggers.delete(this);
+    }
 
-	@Override
-	@JsonGetter
-	public Location getChild() {
-		return child;
-	}
+    @Override
+    @JsonGetter
+    public Location getChild() {
+        return child;
+    }
 
-	@Override
-	@JsonGetter
-	public Location getParent() {
-		return parent;
-	}
+    @Override
+    @JsonGetter
+    public Location getParent() {
+        return parent;
+    }
 
-	/**
-	 * @return the premise1
-	 */
-	@Override
-	@JsonGetter
-	public LocationNetwork getPremise1() {
-		return premise1;
-	}
+    /**
+     * @return the premise1
+     */
+    @Override
+    @JsonGetter
+    public LocationNetwork getPremise1() {
+        return premise1;
+    }
 
-	/**
-	 * @return the premise2
-	 */
-	@Override
-	@JsonGetter
-	public LocationNetwork getPremise2() {
-		return premise2;
-	}
+    /**
+     * @return the premise2
+     */
+    @Override
+    @JsonGetter
+    public LocationNetwork getPremise2() {
+        return premise2;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, LocationNetwork> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.locationNetwork;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, LocationNetwork> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.locationNetwork;
+    }
 
-	@Override
-	public void persist(Triggers triggers) {
-		triggers.persist(this);
-	}
+    @Override
+    public void persist(Triggers triggers) {
+        triggers.persist(this);
+    }
 
-	@Override
-	public void setChild(Location child) {
-		this.child = child;
-	}
+    @Override
+    public void setChild(Location child) {
+        this.child = child;
+    }
 
-	@Override
-	public void setParent(Location parent) {
-		this.parent = parent;
-	}
+    @Override
+    public void setParent(Location parent) {
+        this.parent = parent;
+    }
 }

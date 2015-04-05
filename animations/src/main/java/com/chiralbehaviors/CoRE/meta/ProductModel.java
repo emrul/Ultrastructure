@@ -30,7 +30,7 @@ import com.chiralbehaviors.CoRE.product.ProductNetwork;
  *
  */
 public interface ProductModel
-		extends
-		NetworkedModel<Product, ProductNetwork, ProductAttributeAuthorization, ProductAttribute> {
+        extends
+        NetworkedModel<Product, ProductNetwork, ProductAttributeAuthorization, ProductAttribute> {
 
 }

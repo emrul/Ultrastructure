@@ -59,174 +59,172 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @NamedQueries({
-		@NamedQuery(name = GET_USED_RELATIONSHIPS, query = "select distinct n.relationship from ProductNetwork n"),
-		@NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM ProductNetwork n "
-				+ "WHERE n.parent = :parent "
-				+ "AND n.relationship = :relationship"),
-		@NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM ProductNetwork n "
-				+ "WHERE n.parent = :parent "
-				+ "AND n.relationship = :relationship "
-				+ "AND n.child = :child") })
+               @NamedQuery(name = GET_USED_RELATIONSHIPS, query = "select distinct n.relationship from ProductNetwork n"),
+               @NamedQuery(name = GET_CHILDREN, query = "SELECT n.child FROM ProductNetwork n "
+                                                        + "WHERE n.parent = :parent "
+                                                        + "AND n.relationship = :relationship"),
+               @NamedQuery(name = GET_NETWORKS, query = "SELECT n FROM ProductNetwork n "
+                                                        + "WHERE n.parent = :parent "
+                                                        + "AND n.relationship = :relationship "
+                                                        + "AND n.child = :child") })
 @Entity
 @Table(name = "product_network", schema = "ruleform")
 public class ProductNetwork extends NetworkRuleform<Product> implements
-		Attributable<ProductNetworkAttribute> {
-	public static List<Relationship> getUsedRelationships(EntityManager em) {
-		return em.createNamedQuery(GET_USED_RELATIONSHIPS, Relationship.class)
-				.getResultList();
-	}
+        Attributable<ProductNetworkAttribute> {
+    public static List<Relationship> getUsedRelationships(EntityManager em) {
+        return em.createNamedQuery(GET_USED_RELATIONSHIPS, Relationship.class).getResultList();
+    }
 
-	public static final String GET_CHILDREN = "productNetwork"
-			+ GET_CHILDREN_SUFFIX;
-	public static final String GET_NETWORKS = "productNetwork"
-			+ GET_NETWORKS_SUFFIX;
-	public static final String GET_USED_RELATIONSHIPS = "productNetwork"
-			+ USED_RELATIONSHIPS_SUFFIX;
+    public static final String           GET_CHILDREN           = "productNetwork"
+                                                                  + GET_CHILDREN_SUFFIX;
+    public static final String           GET_NETWORKS           = "productNetwork"
+                                                                  + GET_NETWORKS_SUFFIX;
+    public static final String           GET_USED_RELATIONSHIPS = "productNetwork"
+                                                                  + USED_RELATIONSHIPS_SUFFIX;
 
-	private static final long serialVersionUID = 1L;
+    private static final long            serialVersionUID       = 1L;
 
-	// bi-directional many-to-one association to ProductNetworkAttribute
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productNetwork")
-	@JsonIgnore
-	private Set<ProductNetworkAttribute> attributes;
+    // bi-directional many-to-one association to ProductNetworkAttribute
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productNetwork")
+    @JsonIgnore
+    private Set<ProductNetworkAttribute> attributes;
 
-	// bi-directional many-to-one association to Product
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "child")
-	private Product child;
+    // bi-directional many-to-one association to Product
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "child")
+    private Product                      child;
 
-	// bi-directional many-to-one association to Product
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "parent")
-	private Product parent;
+    // bi-directional many-to-one association to Product
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "parent")
+    private Product                      parent;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(insertable = false, name = "premise1")
-	private ProductNetwork premise1;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(insertable = false, name = "premise1")
+    private ProductNetwork               premise1;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(insertable = false, name = "premise2")
-	private ProductNetwork premise2;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(insertable = false, name = "premise2")
+    private ProductNetwork               premise2;
 
-	public ProductNetwork() {
-	}
+    public ProductNetwork() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public ProductNetwork(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public ProductNetwork(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param relationship
-	 * @param updatedBy
-	 */
-	public ProductNetwork(Product parent, Relationship relationship,
-			Product child, Agency updatedBy) {
-		super(relationship, updatedBy);
-		setRelationship(relationship);
-		this.parent = parent;
-		this.child = child;
-	}
+    /**
+     * @param relationship
+     * @param updatedBy
+     */
+    public ProductNetwork(Product parent, Relationship relationship,
+                          Product child, Agency updatedBy) {
+        super(relationship, updatedBy);
+        setRelationship(relationship);
+        this.parent = parent;
+        this.child = child;
+    }
 
-	/**
-	 * @param relationship
-	 * @param updatedBy
-	 */
-	public ProductNetwork(Relationship relationship, Agency updatedBy) {
-		super(relationship, updatedBy);
-	}
+    /**
+     * @param relationship
+     * @param updatedBy
+     */
+    public ProductNetwork(Relationship relationship, Agency updatedBy) {
+        super(relationship, updatedBy);
+    }
 
-	/**
-	 * @param id
-	 */
-	public ProductNetwork(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public ProductNetwork(UUID id) {
+        super(id);
+    }
 
-	/**
-	 * @param relationship
-	 * @param updatedBy
-	 */
-	public ProductNetwork(UUID id, Product parent, Relationship relationship,
-			Product child) {
-		super(id);
-		this.parent = parent;
-		this.child = child;
-		setRelationship(relationship);
-	}
+    /**
+     * @param relationship
+     * @param updatedBy
+     */
+    public ProductNetwork(UUID id, Product parent, Relationship relationship,
+                          Product child) {
+        super(id);
+        this.parent = parent;
+        this.child = child;
+        setRelationship(relationship);
+    }
 
-	@Override
-	public void delete(Triggers triggers) {
-		triggers.delete(this);
-	}
+    @Override
+    public void delete(Triggers triggers) {
+        triggers.delete(this);
+    }
 
-	@Override
-	public Set<ProductNetworkAttribute> getAttributes() {
-		return attributes;
-	}
+    @Override
+    public Set<ProductNetworkAttribute> getAttributes() {
+        return attributes;
+    }
 
-	@Override
-	@JsonGetter
-	public Product getChild() {
-		return child;
-	}
+    @Override
+    @JsonGetter
+    public Product getChild() {
+        return child;
+    }
 
-	@Override
-	@JsonGetter
-	public Product getParent() {
-		return parent;
-	}
+    @Override
+    @JsonGetter
+    public Product getParent() {
+        return parent;
+    }
 
-	/**
-	 * @return the premise1
-	 */
-	@Override
-	@JsonGetter
-	public ProductNetwork getPremise1() {
-		return premise1;
-	}
+    /**
+     * @return the premise1
+     */
+    @Override
+    @JsonGetter
+    public ProductNetwork getPremise1() {
+        return premise1;
+    }
 
-	/**
-	 * @return the premise2
-	 */
-	@Override
-	@JsonGetter
-	public ProductNetwork getPremise2() {
-		return premise2;
-	}
+    /**
+     * @return the premise2
+     */
+    @Override
+    @JsonGetter
+    public ProductNetwork getPremise2() {
+        return premise2;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, ProductNetwork> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.productNetwork;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, ProductNetwork> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.productNetwork;
+    }
 
-	@Override
-	public void persist(Triggers triggers) {
-		triggers.persist(this);
-	}
+    @Override
+    public void persist(Triggers triggers) {
+        triggers.persist(this);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <A extends ProductNetworkAttribute> void setAttributes(
-			Set<A> attributes) {
-		this.attributes = (Set<ProductNetworkAttribute>) attributes;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public <A extends ProductNetworkAttribute> void setAttributes(Set<A> attributes) {
+        this.attributes = (Set<ProductNetworkAttribute>) attributes;
+    }
 
-	@Override
-	public void setChild(Product child) {
-		this.child = child;
-	}
+    @Override
+    public void setChild(Product child) {
+        this.child = child;
+    }
 
-	@Override
-	public void setParent(Product parent) {
-		this.parent = parent;
-	}
+    @Override
+    public void setParent(Product parent) {
+        this.parent = parent;
+    }
 }

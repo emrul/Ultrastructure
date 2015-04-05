@@ -43,9 +43,9 @@ import com.chiralbehaviors.CoRE.network.RelationshipNetwork;
  *
  */
 public class RelationshipModelImpl
-        extends
-        AbstractNetworkedModel<Relationship, RelationshipNetwork, RelationshipAttributeAuthorization, RelationshipAttribute>
-        implements RelationshipModel {
+extends
+AbstractNetworkedModel<Relationship, RelationshipNetwork, RelationshipAttributeAuthorization, RelationshipAttribute>
+implements RelationshipModel {
 
     /**
      * @param em
@@ -56,7 +56,7 @@ public class RelationshipModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
      * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -75,7 +75,7 @@ public class RelationshipModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
      * chiralbehaviors.CoRE.network.Aspect,
      * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -96,7 +96,7 @@ public class RelationshipModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.network .Networked)
@@ -124,7 +124,7 @@ public class RelationshipModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
      * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -137,16 +137,16 @@ public class RelationshipModelImpl
                                                      kernel.getCoreModel());
         em.persist(relationship);
         return new Facet<Relationship, RelationshipAttribute>(
-                                                              aspect,
-                                                              relationship,
-                                                              initialize(relationship,
-                                                                         aspect)) {
+                aspect,
+                relationship,
+                initialize(relationship,
+                           aspect)) {
         };
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.meta .Aspect<RuleForm>[])
@@ -188,7 +188,7 @@ public class RelationshipModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#getInterconnections(java
      * .util.List, java.util.List, java.util.List)
@@ -198,8 +198,8 @@ public class RelationshipModelImpl
                                                          Collection<Relationship> relationships,
                                                          Collection<Relationship> children) {
         if (parents == null || parents.size() == 0 || relationships == null
-            || relationships.size() == 0 || children == null
-            || children.size() == 0) {
+                || relationships.size() == 0 || children == null
+                || children.size() == 0) {
             return null;
         }
         TypedQuery<RelationshipNetwork> query = em.createNamedQuery(RelationshipNetwork.GET_NETWORKS,
@@ -216,8 +216,8 @@ public class RelationshipModelImpl
      */
     private RelationshipAttributeAuthorization getValidatingAuthorization(RelationshipAttribute attributeValue) {
         String sql = "SELECT  p FROM RelationshipAttributeAuthorization p "
-                     + "WHERE p.validatingAttribute IS NOT NULL "
-                     + "AND p.authorizedAttribute = :attribute ";
+                + "WHERE p.validatingAttribute IS NOT NULL "
+                + "AND p.authorizedAttribute = :attribute ";
         TypedQuery<RelationshipAttributeAuthorization> query = em.createQuery(sql,
                                                                               RelationshipAttributeAuthorization.class);
         query.setParameter("attribute", attributeValue.getAttribute());
@@ -262,7 +262,7 @@ public class RelationshipModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
      * chiralbehaviors.CoRE.ExistentialRuleform,
      * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)

@@ -46,88 +46,89 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "interval_attribute_authorization", schema = "ruleform")
 public class IntervalAttributeAuthorization extends
-		ClassifiedAttributeAuthorization<Interval> {
-	private static final long serialVersionUID = 1L;
+        ClassifiedAttributeAuthorization<Interval> {
+    private static final long serialVersionUID = 1L;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "classifier")
-	private Interval classifier;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "classifier")
+    private Interval          classifier;
 
-	public IntervalAttributeAuthorization() {
-	}
+    public IntervalAttributeAuthorization() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public IntervalAttributeAuthorization(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public IntervalAttributeAuthorization(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param id
-	 * @param classification
-	 * @param updatedBy
-	 */
-	public IntervalAttributeAuthorization(Relationship classification,
-			Agency updatedBy) {
-		super(classification, updatedBy);
-	}
+    /**
+     * @param id
+     * @param classification
+     * @param updatedBy
+     */
+    public IntervalAttributeAuthorization(Relationship classification,
+                                          Agency updatedBy) {
+        super(classification, updatedBy);
+    }
 
-	/**
-	 * @param id
-	 * @param classification
-	 * @param authorized
-	 * @param updatedBy
-	 */
-	public IntervalAttributeAuthorization(Relationship classification,
-			Attribute authorized, Agency updatedBy) {
-		super(classification, authorized, updatedBy);
-	}
+    /**
+     * @param id
+     * @param classification
+     * @param authorized
+     * @param updatedBy
+     */
+    public IntervalAttributeAuthorization(Relationship classification,
+                                          Attribute authorized, Agency updatedBy) {
+        super(classification, authorized, updatedBy);
+    }
 
-	public IntervalAttributeAuthorization(Relationship classification,
-			Interval classifier, Attribute authorized, Agency updatedBy) {
-		this(classification, authorized, updatedBy);
-		this.classifier = classifier;
-	}
+    public IntervalAttributeAuthorization(Relationship classification,
+                                          Interval classifier,
+                                          Attribute authorized, Agency updatedBy) {
+        this(classification, authorized, updatedBy);
+        this.classifier = classifier;
+    }
 
-	/**
-	 * @param id
-	 */
-	public IntervalAttributeAuthorization(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public IntervalAttributeAuthorization(UUID id) {
+        super(id);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-	 * getClassifier()
-	 */
-	@Override
-	@JsonGetter
-	public Interval getClassifier() {
-		return classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+     * getClassifier()
+     */
+    @Override
+    @JsonGetter
+    public Interval getClassifier() {
+        return classifier;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, IntervalAttributeAuthorization> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.intervalAttributeAuthorization;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, IntervalAttributeAuthorization> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.intervalAttributeAuthorization;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-	 * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
-	 */
-	@Override
-	public void setClassifier(Interval classifier) {
-		this.classifier = classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+     * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
+     */
+    @Override
+    public void setClassifier(Interval classifier) {
+        this.classifier = classifier;
+    }
 }

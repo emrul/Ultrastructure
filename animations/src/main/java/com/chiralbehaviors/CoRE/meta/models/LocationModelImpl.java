@@ -44,9 +44,9 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  *
  */
 public class LocationModelImpl
-        extends
-        AbstractNetworkedModel<Location, LocationNetwork, LocationAttributeAuthorization, LocationAttribute>
-        implements LocationModel {
+extends
+AbstractNetworkedModel<Location, LocationNetwork, LocationAttributeAuthorization, LocationAttribute>
+implements LocationModel {
 
     /**
      * @param em
@@ -57,7 +57,7 @@ public class LocationModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
      * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -76,7 +76,7 @@ public class LocationModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
      * chiralbehaviors.CoRE.network.Aspect,
      * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -97,7 +97,7 @@ public class LocationModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.network .Networked)
@@ -125,7 +125,7 @@ public class LocationModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
      * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -138,14 +138,14 @@ public class LocationModelImpl
                                          kernel.getCoreModel());
         em.persist(location);
         return new Facet<Location, LocationAttribute>(aspect, location,
-                                                      initialize(location,
-                                                                 aspect)) {
+                initialize(location,
+                           aspect)) {
         };
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.meta .Aspect<RuleForm>[])
@@ -185,8 +185,8 @@ public class LocationModelImpl
      */
     private LocationAttributeAuthorization getValidatingAuthorization(LocationAttribute attributeValue) {
         String sql = "SELECT  p FROM LocationAttributeAuthorization p "
-                     + "WHERE p.validatingAttribute IS NOT NULL "
-                     + "AND p.authorizedAttribute = :attribute ";
+                + "WHERE p.validatingAttribute IS NOT NULL "
+                + "AND p.authorizedAttribute = :attribute ";
         TypedQuery<LocationAttributeAuthorization> query = em.createQuery(sql,
                                                                           LocationAttributeAuthorization.class);
         query.setParameter("attribute", attributeValue.getAttribute());
@@ -231,7 +231,7 @@ public class LocationModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
      * chiralbehaviors.CoRE.ExistentialRuleform,
      * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)

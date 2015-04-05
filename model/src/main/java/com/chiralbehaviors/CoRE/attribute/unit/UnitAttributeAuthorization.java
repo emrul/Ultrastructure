@@ -46,88 +46,89 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "unit_attribute_authorization", schema = "ruleform")
 public class UnitAttributeAuthorization extends
-		ClassifiedAttributeAuthorization<Unit> {
-	private static final long serialVersionUID = 1L;
+        ClassifiedAttributeAuthorization<Unit> {
+    private static final long serialVersionUID = 1L;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "classifier")
-	private Unit classifier;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "classifier")
+    private Unit              classifier;
 
-	public UnitAttributeAuthorization() {
-	}
+    public UnitAttributeAuthorization() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public UnitAttributeAuthorization(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public UnitAttributeAuthorization(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param id
-	 * @param classification
-	 * @param updatedBy
-	 */
-	public UnitAttributeAuthorization(Relationship classification,
-			Agency updatedBy) {
-		super(classification, updatedBy);
-	}
+    /**
+     * @param id
+     * @param classification
+     * @param updatedBy
+     */
+    public UnitAttributeAuthorization(Relationship classification,
+                                      Agency updatedBy) {
+        super(classification, updatedBy);
+    }
 
-	/**
-	 * @param id
-	 * @param classification
-	 * @param authorized
-	 * @param updatedBy
-	 */
-	public UnitAttributeAuthorization(Relationship classification,
-			Attribute authorized, Agency updatedBy) {
-		super(classification, authorized, updatedBy);
-	}
+    /**
+     * @param id
+     * @param classification
+     * @param authorized
+     * @param updatedBy
+     */
+    public UnitAttributeAuthorization(Relationship classification,
+                                      Attribute authorized, Agency updatedBy) {
+        super(classification, authorized, updatedBy);
+    }
 
-	public UnitAttributeAuthorization(Relationship classification,
-			Unit classifier, Attribute authorized, Agency updatedBy) {
-		this(classification, authorized, updatedBy);
-		this.classifier = classifier;
-	}
+    public UnitAttributeAuthorization(Relationship classification,
+                                      Unit classifier, Attribute authorized,
+                                      Agency updatedBy) {
+        this(classification, authorized, updatedBy);
+        this.classifier = classifier;
+    }
 
-	/**
-	 * @param id
-	 */
-	public UnitAttributeAuthorization(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public UnitAttributeAuthorization(UUID id) {
+        super(id);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-	 * getClassifier()
-	 */
-	@Override
-	@JsonGetter
-	public Unit getClassifier() {
-		return classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+     * getClassifier()
+     */
+    @Override
+    @JsonGetter
+    public Unit getClassifier() {
+        return classifier;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, UnitAttributeAuthorization> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.unitAttributeAuthorization;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, UnitAttributeAuthorization> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.unitAttributeAuthorization;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-	 * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
-	 */
-	@Override
-	public void setClassifier(Unit classifier) {
-		this.classifier = classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+     * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
+     */
+    @Override
+    public void setClassifier(Unit classifier) {
+        this.classifier = classifier;
+    }
 }

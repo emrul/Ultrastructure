@@ -46,160 +46,160 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "agency_network_attribute", schema = "ruleform")
 public class AgencyNetworkAttribute extends AttributeValue<AgencyNetwork> {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Agency
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "agency")
-	private Agency agency;
+    // bi-directional many-to-one association to Agency
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "agency")
+    private Agency            agency;
 
-	// bi-directional many-to-one association to ProductNetwork
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "network_rule")
-	private AgencyNetwork agencyNetwork;
+    // bi-directional many-to-one association to ProductNetwork
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "network_rule")
+    private AgencyNetwork     agencyNetwork;
 
-	// bi-directional many-to-one association to Attribute
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "attribute")
-	private Attribute attribute;
+    // bi-directional many-to-one association to Attribute
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "attribute")
+    private Attribute         attribute;
 
-	public AgencyNetworkAttribute() {
-	}
+    public AgencyNetworkAttribute() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public AgencyNetworkAttribute(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public AgencyNetworkAttribute(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 */
-	public AgencyNetworkAttribute(Attribute attribute) {
-		super(attribute);
-	}
+    /**
+     * @param attribute
+     */
+    public AgencyNetworkAttribute(Attribute attribute) {
+        super(attribute);
+    }
 
-	/**
-	 * @param attribute
-	 * @param updatedBy
-	 */
-	public AgencyNetworkAttribute(Attribute attribute, Agency updatedBy) {
-		super(attribute, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param updatedBy
+     */
+    public AgencyNetworkAttribute(Attribute attribute, Agency updatedBy) {
+        super(attribute, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public AgencyNetworkAttribute(Attribute attribute, BigDecimal value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public AgencyNetworkAttribute(Attribute attribute, BigDecimal value,
+                                  Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public AgencyNetworkAttribute(Attribute attribute, boolean value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public AgencyNetworkAttribute(Attribute attribute, boolean value,
+                                  Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public AgencyNetworkAttribute(Attribute attribute, int value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public AgencyNetworkAttribute(Attribute attribute, int value,
+                                  Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public AgencyNetworkAttribute(Attribute attribute, String value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public AgencyNetworkAttribute(Attribute attribute, String value,
+                                  Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param unit
-	 */
-	public AgencyNetworkAttribute(Attribute attribute, Unit unit) {
-		super(attribute, unit);
-	}
+    /**
+     * @param attribute
+     * @param unit
+     */
+    public AgencyNetworkAttribute(Attribute attribute, Unit unit) {
+        super(attribute, unit);
+    }
 
-	/**
-	 * @param id
-	 */
-	public AgencyNetworkAttribute(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public AgencyNetworkAttribute(UUID id) {
+        super(id);
+    }
 
-	@JsonGetter
-	public Agency getAgency() {
-		return agency;
-	}
+    @JsonGetter
+    public Agency getAgency() {
+        return agency;
+    }
 
-	@JsonGetter
-	public AgencyNetwork getAgencyNetwork() {
-		return agencyNetwork;
-	}
+    @JsonGetter
+    public AgencyNetwork getAgencyNetwork() {
+        return agencyNetwork;
+    }
 
-	@Override
-	public Attribute getAttribute() {
-		return attribute;
-	}
+    @Override
+    public Attribute getAttribute() {
+        return attribute;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-	 */
-	@Override
-	public SingularAttribute<AgencyNetworkAttribute, AgencyNetwork> getRuleformAttribute() {
-		return AgencyNetworkAttribute_.agencyNetwork;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+     */
+    @Override
+    public SingularAttribute<AgencyNetworkAttribute, AgencyNetwork> getRuleformAttribute() {
+        return AgencyNetworkAttribute_.agencyNetwork;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-	 */
-	@Override
-	public Class<AgencyNetwork> getRuleformClass() {
-		return AgencyNetwork.class;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+     */
+    @Override
+    public Class<AgencyNetwork> getRuleformClass() {
+        return AgencyNetwork.class;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, AgencyNetworkAttribute> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.agencyNetworkAttribute;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, AgencyNetworkAttribute> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.agencyNetworkAttribute;
+    }
 
-	public void setAgency(Agency agency2) {
-		agency = agency2;
-	}
+    public void setAgency(Agency agency2) {
+        agency = agency2;
+    }
 
-	public void setAgencyNetwork(AgencyNetwork agencyNetwork) {
-		this.agencyNetwork = agencyNetwork;
-	}
+    public void setAgencyNetwork(AgencyNetwork agencyNetwork) {
+        this.agencyNetwork = agencyNetwork;
+    }
 
-	@Override
-	public void setAttribute(Attribute attribute) {
-		this.attribute = attribute;
-	}
+    @Override
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
 }

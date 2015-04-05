@@ -40,80 +40,79 @@ import org.junit.BeforeClass;
  *
  */
 abstract public class DatabaseTest {
-	@AfterClass
-	public static void afterClass() {
-		if (em != null && em.getTransaction().isActive()) {
-			em.getTransaction().rollback();
-			em.clear();
-			em.close();
-		}
-	}
+    @AfterClass
+    public static void afterClass() {
+        if (em != null && em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+            em.clear();
+            em.close();
+        }
+    }
 
-	protected static void alterAllTriggers(boolean enable) throws SQLException {
-		ResultSet r = connection.createStatement().executeQuery(SELECT_TABLE);
-		while (r.next()) {
-			String table = r.getString("name");
-			String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
-					table, enable ? "ENABLE" : "DISABLE");
-			connection.createStatement().execute(query);
-		}
-		r.close();
-	}
+    protected static void alterAllTriggers(boolean enable) throws SQLException {
+        ResultSet r = connection.createStatement().executeQuery(SELECT_TABLE);
+        while (r.next()) {
+            String table = r.getString("name");
+            String query = String.format("ALTER TABLE %s %s TRIGGER ALL",
+                                         table, enable ? "ENABLE" : "DISABLE");
+            connection.createStatement().execute(query);
+        }
+        r.close();
+    }
 
-	/**
-	 * Initiates a database transaction.
-	 */
-	protected static void beginTransaction() {
-		em.getTransaction().begin();
-	}
+    /**
+     * Initiates a database transaction.
+     */
+    protected static void beginTransaction() {
+        em.getTransaction().begin();
+    }
 
-	/**
-	 * Commits the current transaction, if it is still active.
-	 */
-	protected static final void commitTransaction() {
-		em.getTransaction().commit();
-	}
+    /**
+     * Commits the current transaction, if it is still active.
+     */
+    protected static final void commitTransaction() {
+        em.getTransaction().commit();
+    }
 
-	@BeforeClass
-	public static void setup() throws Exception {
-		Properties properties = new Properties();
-		properties.load(DatabaseTest.class
-				.getResourceAsStream("/jpa.properties"));
-		emf = Persistence.createEntityManagerFactory("CoRE", properties);
-		em = emf.createEntityManager();
-		em.getTransaction().begin();
-		connection = em.unwrap(SessionImpl.class).connection();
-		alterAllTriggers(false);
-		ResultSet r = connection.createStatement().executeQuery(SELECT_TABLE);
-		while (r.next()) {
-			String table = r.getString("name");
-			String query = String.format("DELETE FROM %s", table);
-			connection.createStatement().execute(query);
-		}
-		r.close();
-		alterAllTriggers(true);
-		em.getTransaction().commit();
-	}
+    @BeforeClass
+    public static void setup() throws Exception {
+        Properties properties = new Properties();
+        properties.load(DatabaseTest.class.getResourceAsStream("/jpa.properties"));
+        emf = Persistence.createEntityManagerFactory("CoRE", properties);
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        connection = em.unwrap(SessionImpl.class).connection();
+        alterAllTriggers(false);
+        ResultSet r = connection.createStatement().executeQuery(SELECT_TABLE);
+        while (r.next()) {
+            String table = r.getString("name");
+            String query = String.format("DELETE FROM %s", table);
+            connection.createStatement().execute(query);
+        }
+        r.close();
+        alterAllTriggers(true);
+        em.getTransaction().commit();
+    }
 
-	protected static Connection connection;
+    protected static Connection           connection;
 
-	protected static EntityManager em;
+    protected static EntityManager        em;
 
-	private static final String SELECT_TABLE = "SELECT table_schema || '.' || table_name AS name FROM information_schema.tables WHERE table_schema='ruleform' AND table_type='BASE TABLE' ORDER BY table_name";
+    private static final String           SELECT_TABLE = "SELECT table_schema || '.' || table_name AS name FROM information_schema.tables WHERE table_schema='ruleform' AND table_type='BASE TABLE' ORDER BY table_name";
 
-	protected static EntityManagerFactory emf;
+    protected static EntityManagerFactory emf;
 
-	@After
-	public void after() {
-		if (em.getTransaction().isActive()) {
-			em.getTransaction().rollback();
-		}
-		em.clear();
-	}
+    @After
+    public void after() {
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+        }
+        em.clear();
+    }
 
-	@Before
-	public void before() {
-		beginTransaction();
-		em.clear();
-	}
+    @Before
+    public void before() {
+        beginTransaction();
+        em.clear();
+    }
 }

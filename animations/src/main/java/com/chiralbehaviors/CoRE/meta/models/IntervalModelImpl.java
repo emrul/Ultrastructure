@@ -46,9 +46,9 @@ import com.chiralbehaviors.CoRE.time.IntervalNetwork;
  *
  */
 public class IntervalModelImpl
-        extends
-        AbstractNetworkedModel<Interval, IntervalNetwork, IntervalAttributeAuthorization, IntervalAttribute>
-        implements IntervalModel {
+extends
+AbstractNetworkedModel<Interval, IntervalNetwork, IntervalAttributeAuthorization, IntervalAttribute>
+implements IntervalModel {
 
     /**
      * @param em
@@ -59,7 +59,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
      * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -78,7 +78,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
      * chiralbehaviors.CoRE.network.Aspect,
      * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -99,7 +99,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.network .Networked)
@@ -127,7 +127,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
      * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -143,7 +143,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.meta .Aspect<RuleForm>[])
@@ -170,7 +170,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
      * java.lang.String, java.math.BigDecimal,
      * com.chiralbehaviors.CoRE.attribute.unit.Unit,
@@ -190,7 +190,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
      * java.lang.String, java.math.BigDecimal,
      * com.chiralbehaviors.CoRE.attribute.unit.Unit, java.math.BigDecimal,
@@ -212,14 +212,14 @@ public class IntervalModelImpl
                                          kernel.getCoreModel());
         em.persist(interval);
         return new Facet<Interval, IntervalAttribute>(aspect, interval,
-                                                      initialize(interval,
-                                                                 aspect)) {
+                initialize(interval,
+                           aspect)) {
         };
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#getInterconnections(java
      * .util.List, java.util.List, java.util.List)
@@ -237,8 +237,8 @@ public class IntervalModelImpl
      */
     private IntervalAttributeAuthorization getValidatingAuthorization(IntervalAttribute attributeValue) {
         String sql = "SELECT  p FROM IntervalAttributeAuthorization p "
-                     + "WHERE p.validatingAttribute IS NOT NULL "
-                     + "AND p.authorizedAttribute = :attribute ";
+                + "WHERE p.validatingAttribute IS NOT NULL "
+                + "AND p.authorizedAttribute = :attribute ";
         TypedQuery<IntervalAttributeAuthorization> query = em.createQuery(sql,
                                                                           IntervalAttributeAuthorization.class);
         query.setParameter("attribute", attributeValue.getAttribute());
@@ -283,7 +283,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.IntervalModel#create(java.lang.String,
      * java.lang.String, java.math.BigDecimal,
      * com.chiralbehaviors.CoRE.attribute.unit.Unit, java.math.BigDecimal,
@@ -302,7 +302,7 @@ public class IntervalModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
      * chiralbehaviors.CoRE.ExistentialRuleform,
      * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)

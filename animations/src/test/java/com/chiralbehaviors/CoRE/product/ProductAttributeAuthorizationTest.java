@@ -34,36 +34,40 @@ import com.chiralbehaviors.CoRE.network.Relationship;
  */
 public class ProductAttributeAuthorizationTest extends AbstractModelTest {
 
-	@Test
-	public void testAllowedNumericValues() throws Exception {
-		em.getTransaction().begin();
+    @Test
+    public void testAllowedNumericValues() throws Exception {
+        em.getTransaction().begin();
 
-		Agency agency = new Agency();
-		agency.setName("Primordial Agency");
-		agency.setDescription("Just ye olde time agency");
-		agency.setUpdatedBy(agency);
-		em.persist(agency);
+        Agency agency = new Agency();
+        agency.setName("Primordial Agency");
+        agency.setDescription("Just ye olde time agency");
+        agency.setUpdatedBy(agency);
+        em.persist(agency);
 
-		Relationship classification = new Relationship("My classification",
-				"A classification", agency, true);
-		em.persist(classification);
-		Relationship inverse = new Relationship("inverse classification",
-				"The inverse classification", agency, classification);
-		em.persist(inverse);
+        Relationship classification = new Relationship("My classification",
+                                                       "A classification",
+                                                       agency, true);
+        em.persist(classification);
+        Relationship inverse = new Relationship("inverse classification",
+                                                "The inverse classification",
+                                                agency, classification);
+        em.persist(inverse);
 
-		Product classificationProduct = new Product();
-		classificationProduct.setName("Classification Product");
-		classificationProduct.setUpdatedBy(agency);
-		em.persist(classificationProduct);
+        Product classificationProduct = new Product();
+        classificationProduct.setName("Classification Product");
+        classificationProduct.setUpdatedBy(agency);
+        em.persist(classificationProduct);
 
-		Attribute authorizedAttribute = new Attribute();
-		authorizedAttribute.setName("My classification");
-		authorizedAttribute.setUpdatedBy(agency);
-		authorizedAttribute.setValueType(ValueType.NUMERIC);
-		em.persist(authorizedAttribute);
+        Attribute authorizedAttribute = new Attribute();
+        authorizedAttribute.setName("My classification");
+        authorizedAttribute.setUpdatedBy(agency);
+        authorizedAttribute.setValueType(ValueType.NUMERIC);
+        em.persist(authorizedAttribute);
 
-		model.getProductModel().getAllowedValues(authorizedAttribute,
-				new Aspect<Product>(classification, classificationProduct));
-		em.getTransaction().rollback();
-	}
+        model.getProductModel().getAllowedValues(authorizedAttribute,
+                                                 new Aspect<Product>(
+                                                                     classification,
+                                                                     classificationProduct));
+        em.getTransaction().rollback();
+    }
 }

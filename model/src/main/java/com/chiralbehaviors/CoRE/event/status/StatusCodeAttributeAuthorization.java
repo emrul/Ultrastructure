@@ -46,88 +46,91 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "status_code_attribute_authorization", schema = "ruleform")
 public class StatusCodeAttributeAuthorization extends
-		ClassifiedAttributeAuthorization<StatusCode> {
-	private static final long serialVersionUID = 1L;
+        ClassifiedAttributeAuthorization<StatusCode> {
+    private static final long serialVersionUID = 1L;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "classifier")
-	private StatusCode classifier;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "classifier")
+    private StatusCode        classifier;
 
-	public StatusCodeAttributeAuthorization() {
-	}
+    public StatusCodeAttributeAuthorization() {
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public StatusCodeAttributeAuthorization(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public StatusCodeAttributeAuthorization(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param id
-	 * @param classification
-	 * @param updatedBy
-	 */
-	public StatusCodeAttributeAuthorization(Relationship classification,
-			Agency updatedBy) {
-		super(classification, updatedBy);
-	}
+    /**
+     * @param id
+     * @param classification
+     * @param updatedBy
+     */
+    public StatusCodeAttributeAuthorization(Relationship classification,
+                                            Agency updatedBy) {
+        super(classification, updatedBy);
+    }
 
-	/**
-	 * @param id
-	 * @param classification
-	 * @param authorized
-	 * @param updatedBy
-	 */
-	public StatusCodeAttributeAuthorization(Relationship classification,
-			Attribute authorized, Agency updatedBy) {
-		super(classification, authorized, updatedBy);
-	}
+    /**
+     * @param id
+     * @param classification
+     * @param authorized
+     * @param updatedBy
+     */
+    public StatusCodeAttributeAuthorization(Relationship classification,
+                                            Attribute authorized,
+                                            Agency updatedBy) {
+        super(classification, authorized, updatedBy);
+    }
 
-	public StatusCodeAttributeAuthorization(Relationship classification,
-			StatusCode classifier, Attribute authorized, Agency updatedBy) {
-		this(classification, authorized, updatedBy);
-		this.classifier = classifier;
-	}
+    public StatusCodeAttributeAuthorization(Relationship classification,
+                                            StatusCode classifier,
+                                            Attribute authorized,
+                                            Agency updatedBy) {
+        this(classification, authorized, updatedBy);
+        this.classifier = classifier;
+    }
 
-	/**
-	 * @param id
-	 */
-	public StatusCodeAttributeAuthorization(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public StatusCodeAttributeAuthorization(UUID id) {
+        super(id);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-	 * getClassifier()
-	 */
-	@Override
-	@JsonGetter
-	public StatusCode getClassifier() {
-		return classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+     * getClassifier()
+     */
+    @Override
+    @JsonGetter
+    public StatusCode getClassifier() {
+        return classifier;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, StatusCodeAttributeAuthorization> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.statusCodeAttributeAuthorization;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, StatusCodeAttributeAuthorization> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.statusCodeAttributeAuthorization;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
-	 * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
-	 */
-	@Override
-	public void setClassifier(StatusCode classifier) {
-		this.classifier = classifier;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.ClassifiedAttributeAuthorization#
+     * setClassifier(com.chiralbehaviors.CoRE.network.Networked)
+     */
+    @Override
+    public void setClassifier(StatusCode classifier) {
+        this.classifier = classifier;
+    }
 }

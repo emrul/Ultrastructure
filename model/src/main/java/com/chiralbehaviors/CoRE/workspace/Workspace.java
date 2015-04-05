@@ -32,17 +32,17 @@ import com.chiralbehaviors.CoRE.Ruleform;
  */
 public interface Workspace {
 
-	<T extends Ruleform> T get(String key);
+    <T extends Ruleform> T get(String key);
 
-	<T> T getAccessor(Class<T> accessorInterface);
+    <T> T getAccessor(Class<T> accessorInterface);
 
-	<T extends Ruleform> List<T> getCollection(Class<T> ruleformClass);
+    <T extends Ruleform> List<T> getCollection(Class<T> ruleformClass);
 
-	WorkspaceSnapshot getSnapshot();
+    WorkspaceSnapshot getSnapshot();
 
-	void refreshFrom(EntityManager em);
+    void refreshFrom(EntityManager em);
 
-	void replaceFrom(EntityManager em);
+    void replaceFrom(EntityManager em);
 
-	void retarget(EntityManager em);
+    void retarget(EntityManager em);
 }

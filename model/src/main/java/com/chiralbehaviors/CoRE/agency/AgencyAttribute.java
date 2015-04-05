@@ -51,145 +51,145 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "agency_attribute", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = GET_ATTRIBUTE, query = "select ra from AgencyAttribute ra where ra.agency = :agency and ra.attribute = :attribute") })
 public class AgencyAttribute extends AttributeValue<Agency> {
-	public static final String GET_ATTRIBUTE = "agencyAttribute.getAttribute";
-	private static final long serialVersionUID = 1L;
+    public static final String GET_ATTRIBUTE    = "agencyAttribute.getAttribute";
+    private static final long  serialVersionUID = 1L;
 
-	// bi-directional many-to-one association to Agency
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "agency")
-	private Agency agency;
+    // bi-directional many-to-one association to Agency
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "agency")
+    private Agency             agency;
 
-	// bi-directional many-to-one association to Attribute
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
-	@JoinColumn(name = "attribute")
-	private Attribute attribute;
+    // bi-directional many-to-one association to Attribute
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "attribute")
+    private Attribute          attribute;
 
-	public AgencyAttribute() {
-		super();
-	}
+    public AgencyAttribute() {
+        super();
+    }
 
-	/**
-	 * @param updatedBy
-	 */
-	public AgencyAttribute(Agency updatedBy) {
-		super(updatedBy);
-	}
+    /**
+     * @param updatedBy
+     */
+    public AgencyAttribute(Agency updatedBy) {
+        super(updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 */
-	public AgencyAttribute(Attribute attribute) {
-		super(attribute);
-	}
+    /**
+     * @param attribute
+     */
+    public AgencyAttribute(Attribute attribute) {
+        super(attribute);
+    }
 
-	/**
-	 * @param attribute
-	 * @param updatedBy
-	 */
-	public AgencyAttribute(Attribute attribute, Agency updatedBy) {
-		super(attribute, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param updatedBy
+     */
+    public AgencyAttribute(Attribute attribute, Agency updatedBy) {
+        super(attribute, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public AgencyAttribute(Attribute attribute, BigDecimal value,
-			Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public AgencyAttribute(Attribute attribute, BigDecimal value,
+                           Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public AgencyAttribute(Attribute attribute, boolean value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public AgencyAttribute(Attribute attribute, boolean value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public AgencyAttribute(Attribute attribute, int value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public AgencyAttribute(Attribute attribute, int value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param value
-	 * @param updatedBy
-	 */
-	public AgencyAttribute(Attribute attribute, String value, Agency updatedBy) {
-		super(attribute, value, updatedBy);
-	}
+    /**
+     * @param attribute
+     * @param value
+     * @param updatedBy
+     */
+    public AgencyAttribute(Attribute attribute, String value, Agency updatedBy) {
+        super(attribute, value, updatedBy);
+    }
 
-	/**
-	 * @param attribute
-	 * @param unit
-	 */
-	public AgencyAttribute(Attribute attribute, Unit unit) {
-		super(attribute, unit);
-	}
+    /**
+     * @param attribute
+     * @param unit
+     */
+    public AgencyAttribute(Attribute attribute, Unit unit) {
+        super(attribute, unit);
+    }
 
-	/**
-	 * @param id
-	 */
-	public AgencyAttribute(UUID id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public AgencyAttribute(UUID id) {
+        super(id);
+    }
 
-	@JsonGetter
-	public Agency getAgency() {
-		return agency;
-	}
+    @JsonGetter
+    public Agency getAgency() {
+        return agency;
+    }
 
-	@Override
-	public Attribute getAttribute() {
-		return attribute;
-	}
+    @Override
+    public Attribute getAttribute() {
+        return attribute;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
-	 */
-	@Override
-	public SingularAttribute<AgencyAttribute, Agency> getRuleformAttribute() {
-		return AgencyAttribute_.agency;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformAttribute()
+     */
+    @Override
+    public SingularAttribute<AgencyAttribute, Agency> getRuleformAttribute() {
+        return AgencyAttribute_.agency;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
-	 */
-	@Override
-	public Class<Agency> getRuleformClass() {
-		return Agency.class;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.attribute.AttributeValue#getRuleformClass()
+     */
+    @Override
+    public Class<Agency> getRuleformClass() {
+        return Agency.class;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
-	 */
-	@Override
-	@JsonIgnore
-	public SingularAttribute<WorkspaceAuthorization, AgencyAttribute> getWorkspaceAuthAttribute() {
-		return WorkspaceAuthorization_.agencyAttribute;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.chiralbehaviors.CoRE.Ruleform#getWorkspaceAuthAttribute()
+     */
+    @Override
+    @JsonIgnore
+    public SingularAttribute<WorkspaceAuthorization, AgencyAttribute> getWorkspaceAuthAttribute() {
+        return WorkspaceAuthorization_.agencyAttribute;
+    }
 
-	public void setAgency(Agency agency2) {
-		agency = agency2;
-	}
+    public void setAgency(Agency agency2) {
+        agency = agency2;
+    }
 
-	@Override
-	public void setAttribute(Attribute attribute) {
-		this.attribute = attribute;
-	}
+    @Override
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
 }

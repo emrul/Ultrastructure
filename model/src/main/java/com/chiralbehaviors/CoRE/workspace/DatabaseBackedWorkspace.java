@@ -38,157 +38,150 @@ import com.chiralbehaviors.CoRE.product.Product;
  */
 public class DatabaseBackedWorkspace implements EditableWorkspace {
 
-	public class EntityList<T extends Ruleform> extends AbstractList<T> {
-		private final List<WorkspaceAuthorization> backingList;
+    public class EntityList<T extends Ruleform> extends AbstractList<T> {
+        private final List<WorkspaceAuthorization> backingList;
 
-		public EntityList(List<WorkspaceAuthorization> backingList) {
-			this.backingList = backingList;
-		}
+        public EntityList(List<WorkspaceAuthorization> backingList) {
+            this.backingList = backingList;
+        }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.AbstractList#get(int)
-		 */
-		@SuppressWarnings("unchecked")
-		@Override
-		public T get(int index) {
-			return (T) backingList.get(index).getEntity();
-		}
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.util.AbstractList#get(int)
+         */
+        @SuppressWarnings("unchecked")
+        @Override
+        public T get(int index) {
+            return (T) backingList.get(index).getEntity();
+        }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.AbstractCollection#size()
-		 */
-		@Override
-		public int size() {
-			return backingList.size();
-		}
-	}
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.util.AbstractCollection#size()
+         */
+        @Override
+        public int size() {
+            return backingList.size();
+        }
+    }
 
-	protected final Product definingProduct;
-	protected final EntityManager em;
+    protected final Product       definingProduct;
+    protected final EntityManager em;
 
-	public DatabaseBackedWorkspace(Product definingProduct, EntityManager em) {
-		assert definingProduct != null;
-		this.definingProduct = definingProduct;
-		this.em = em;
-	}
+    public DatabaseBackedWorkspace(Product definingProduct, EntityManager em) {
+        assert definingProduct != null;
+        this.definingProduct = definingProduct;
+        this.em = em;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.workspace.NeuvoWorkspace#add(com.chiralbehaviors
-	 * .CoRE.Ruleform)
-	 */
-	@Override
-	public <T extends Ruleform> void add(T ruleform) {
-		WorkspaceAuthorization authorization = new WorkspaceAuthorization();
-		authorization.setEntity(ruleform);
-		authorization.setDefiningProduct(definingProduct);
-		authorization.setUpdatedBy(ruleform.getUpdatedBy());
-		em.persist(authorization);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.workspace.NeuvoWorkspace#add(com.chiralbehaviors
+     * .CoRE.Ruleform)
+     */
+    @Override
+    public <T extends Ruleform> void add(T ruleform) {
+        WorkspaceAuthorization authorization = new WorkspaceAuthorization();
+        authorization.setEntity(ruleform);
+        authorization.setDefiningProduct(definingProduct);
+        authorization.setUpdatedBy(ruleform.getUpdatedBy());
+        em.persist(authorization);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.workspace.NeuvoWorkspace#get(java.lang.String)
-	 */
-	@Override
-	public <T extends Ruleform> T get(String key) {
-		if (key == null) {
-			throw new IllegalArgumentException("Key cannot be null");
-		}
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<WorkspaceAuthorization> query = cb
-				.createQuery(WorkspaceAuthorization.class);
-		Root<WorkspaceAuthorization> from = query
-				.from(WorkspaceAuthorization.class);
-		query.select(from).where(
-				cb.and(cb.equal(from.get(WorkspaceAuthorization_.key), key), cb
-						.equal(from
-								.get(WorkspaceAuthorization_.definingProduct),
-								definingProduct)));
-		try {
-			WorkspaceAuthorization authorization = em.createQuery(query)
-					.getSingleResult();
-			return authorization.getEntity();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.workspace.NeuvoWorkspace#get(java.lang.String)
+     */
+    @Override
+    public <T extends Ruleform> T get(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<WorkspaceAuthorization> query = cb.createQuery(WorkspaceAuthorization.class);
+        Root<WorkspaceAuthorization> from = query.from(WorkspaceAuthorization.class);
+        query.select(from).where(cb.and(cb.equal(from.get(WorkspaceAuthorization_.key),
+                                                 key),
+                                        cb.equal(from.get(WorkspaceAuthorization_.definingProduct),
+                                                 definingProduct)));
+        try {
+            WorkspaceAuthorization authorization = em.createQuery(query).getSingleResult();
+            return authorization.getEntity();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.workspace.Workspace#getAccesor(java.lang.Class)
-	 */
-	@Override
-	public <T> T getAccessor(Class<T> accessorInterface) {
-		return WorkspaceAccessHandler.getAccesor(accessorInterface, this);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.workspace.Workspace#getAccesor(java.lang.Class)
+     */
+    @Override
+    public <T> T getAccessor(Class<T> accessorInterface) {
+        return WorkspaceAccessHandler.getAccesor(accessorInterface, this);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.workspace.NeuvoWorkspace#getCollection(java.
-	 * lang.Class)
-	 */
-	@Override
-	public <T extends Ruleform> List<T> getCollection(Class<T> ruleformClass) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<WorkspaceAuthorization> query = cb
-				.createQuery(WorkspaceAuthorization.class);
-		Root<WorkspaceAuthorization> from = query
-				.from(WorkspaceAuthorization.class);
-		query.select(from).where(
-				cb.and(cb.equal(from.get(WorkspaceAuthorization_.type),
-						ruleformClass.getSimpleName()), cb.equal(
-						from.get(WorkspaceAuthorization_.definingProduct),
-						definingProduct)));
-		return new EntityList<T>(em.createQuery(query).getResultList());
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.workspace.NeuvoWorkspace#getCollection(java.
+     * lang.Class)
+     */
+    @Override
+    public <T extends Ruleform> List<T> getCollection(Class<T> ruleformClass) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<WorkspaceAuthorization> query = cb.createQuery(WorkspaceAuthorization.class);
+        Root<WorkspaceAuthorization> from = query.from(WorkspaceAuthorization.class);
+        query.select(from).where(cb.and(cb.equal(from.get(WorkspaceAuthorization_.type),
+                                                 ruleformClass.getSimpleName()),
+                                        cb.equal(from.get(WorkspaceAuthorization_.definingProduct),
+                                                 definingProduct)));
+        return new EntityList<T>(em.createQuery(query).getResultList());
+    }
 
-	@Override
-	public WorkspaceSnapshot getSnapshot() {
-		return new WorkspaceSnapshot(definingProduct, em);
-	}
+    @Override
+    public WorkspaceSnapshot getSnapshot() {
+        return new WorkspaceSnapshot(definingProduct, em);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.chiralbehaviors.CoRE.workspace.NeuvoWorkspace#put(java.lang.String,
-	 * com.chiralbehaviors.CoRE.Ruleform)
-	 */
-	@Override
-	public <T extends Ruleform> void put(String key, T ruleform) {
-		WorkspaceAuthorization authorization = new WorkspaceAuthorization();
-		authorization.setDefiningProduct(definingProduct);
-		authorization.setEntity(ruleform);
-		authorization.setKey(key);
-		authorization.setUpdatedBy(ruleform.getUpdatedBy());
-		em.persist(authorization);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.chiralbehaviors.CoRE.workspace.NeuvoWorkspace#put(java.lang.String,
+     * com.chiralbehaviors.CoRE.Ruleform)
+     */
+    @Override
+    public <T extends Ruleform> void put(String key, T ruleform) {
+        WorkspaceAuthorization authorization = new WorkspaceAuthorization();
+        authorization.setDefiningProduct(definingProduct);
+        authorization.setEntity(ruleform);
+        authorization.setKey(key);
+        authorization.setUpdatedBy(ruleform.getUpdatedBy());
+        em.persist(authorization);
+    }
 
-	@Override
-	public void refreshFrom(EntityManager em) {
-		// nothing to do, as we're backed by the DB
-	}
+    @Override
+    public void refreshFrom(EntityManager em) {
+        // nothing to do, as we're backed by the DB
+    }
 
-	@Override
-	public void replaceFrom(EntityManager em) {
-		// nothing to do, as we're backed by the DB
-	}
+    @Override
+    public void replaceFrom(EntityManager em) {
+        // nothing to do, as we're backed by the DB
+    }
 
-	@Override
-	public void retarget(EntityManager em) {
-		// nothing to do, as we're backed by the DB
-	}
+    @Override
+    public void retarget(EntityManager em) {
+        // nothing to do, as we're backed by the DB
+    }
 }

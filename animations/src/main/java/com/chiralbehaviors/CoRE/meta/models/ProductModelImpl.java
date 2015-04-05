@@ -44,9 +44,9 @@ import com.chiralbehaviors.CoRE.product.ProductNetwork;
  *
  */
 public class ProductModelImpl
-        extends
-        AbstractNetworkedModel<Product, ProductNetwork, ProductAttributeAuthorization, ProductAttribute>
-        implements ProductModel {
+extends
+AbstractNetworkedModel<Product, ProductNetwork, ProductAttributeAuthorization, ProductAttribute>
+implements ProductModel {
 
     /**
      * @param em
@@ -57,7 +57,7 @@ public class ProductModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#authorize(com.chiralbehaviors
      * .CoRE .meta.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute[])
@@ -76,7 +76,7 @@ public class ProductModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
      * chiralbehaviors.CoRE.network.Aspect,
      * com.chiralbehaviors.CoRE.attribute.Attribute,
@@ -97,7 +97,7 @@ public class ProductModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.network .Networked)
@@ -125,7 +125,7 @@ public class ProductModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(java.lang.String,
      * java.lang.String, com.chiralbehaviors.CoRE.network.Aspect)
@@ -137,13 +137,13 @@ public class ProductModelImpl
         Product product = new Product(name, description, kernel.getCoreModel());
         em.persist(product);
         return new Facet<Product, ProductAttribute>(aspect, product,
-                                                    initialize(product, aspect)) {
+                initialize(product, aspect)) {
         };
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.chiralbehaviors.CoRE.meta.NetworkedModel#create(com.chiralbehaviors
      * .CoRE.meta .Aspect<RuleForm>[])
@@ -169,8 +169,8 @@ public class ProductModelImpl
                                                     Collection<Relationship> relationships,
                                                     Collection<Product> children) {
         if (parents == null || parents.size() == 0 || relationships == null
-            || relationships.size() == 0 || children == null
-            || children.size() == 0) {
+                || relationships.size() == 0 || children == null
+                || children.size() == 0) {
             return null;
         }
         TypedQuery<ProductNetwork> query = em.createNamedQuery(ProductNetwork.GET_NETWORKS,
@@ -187,8 +187,8 @@ public class ProductModelImpl
      */
     private ProductAttributeAuthorization getValidatingAuthorization(ProductAttribute attributeValue) {
         String sql = "SELECT  p FROM ProductAttributeAuthorization p "
-                     + "WHERE p.validatingAttribute IS NOT NULL "
-                     + "AND p.authorizedAttribute = :attribute ";
+                + "WHERE p.validatingAttribute IS NOT NULL "
+                + "AND p.authorizedAttribute = :attribute ";
         TypedQuery<ProductAttributeAuthorization> query = em.createQuery(sql,
                                                                          ProductAttributeAuthorization.class);
         query.setParameter("attribute", attributeValue.getAttribute());
@@ -233,7 +233,7 @@ public class ProductModelImpl
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
      * chiralbehaviors.CoRE.ExistentialRuleform,
      * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
