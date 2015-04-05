@@ -19,7 +19,7 @@
  */
 package com.chiralbehaviors.CoRE.product;
 
-import static com.chiralbehaviors.CoRE.product.ProductAttribute.FIND_ATTRIBUTE_VALUE_FROM_AGENCY;
+import static com.chiralbehaviors.CoRE.product.ProductAttribute.GET_ATTRIBUTE;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -48,13 +48,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author hhildebrand
  *
  */
-@NamedQueries({ @NamedQuery(name = FIND_ATTRIBUTE_VALUE_FROM_AGENCY, query = "SELECT ea FROM ProductAttribute ea"
+@NamedQueries({ @NamedQuery(name = GET_ATTRIBUTE, query = "SELECT ea FROM ProductAttribute ea"
                                                                              + "   WHERE ea.product = :product "
                                                                              + "   AND ea.attribute = :attribute") })
 @Entity
 @Table(name = "product_attribute", schema = "ruleform")
 public class ProductAttribute extends AttributeValue<Product> {
-    public final static String FIND_ATTRIBUTE_VALUE_FROM_AGENCY = "productAttribute.findAttributeValueFromAgency";
+    public final static String GET_ATTRIBUTE = "productAttribute.getAttribute";
     private static final long  serialVersionUID                 = 1L;
 
     // bi-directional many-to-one association to Attribute

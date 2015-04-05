@@ -23,7 +23,6 @@ package com.chiralbehaviors.CoRE.meta.models;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -210,14 +209,13 @@ public class ProductModelImpl
 			Attribute validatingAttribute = auth.getValidatingAttribute();
 			if (validatingAttribute.getValueType().equals(
 					attributeValue.getAttribute().getValueType())) {
-				String sql = "SELECT av FROM AttributeMetaAttribute av "
-						+ "WHERE av.metaAttribute = :meta "
-						+ "AND av.attribute = :attr"
-						;
-				TypedQuery<AttributeMetaAttribute> valueQuery = em.createQuery(sql, AttributeMetaAttribute.class);
+				TypedQuery<AttributeMetaAttribute> valueQuery = em
+						.createNamedQuery(AttributeMetaAttribute.GET_ATTRIBUTE,
+								AttributeMetaAttribute.class);
 				valueQuery.setParameter("meta", attributeValue.getAttribute());
 				valueQuery.setParameter("attr", validatingAttribute);
-				List<AttributeMetaAttribute> values = valueQuery.getResultList();
+				List<AttributeMetaAttribute> values = valueQuery
+						.getResultList();
 				boolean valid = false;
 				for (AttributeMetaAttribute value : values) {
 					if (attributeValue.getTextValue().equals(

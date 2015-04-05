@@ -24,9 +24,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import com.chiralbehaviors.CoRE.attribute.Attribute;
+import com.chiralbehaviors.CoRE.attribute.AttributeMetaAttribute;
 import com.chiralbehaviors.CoRE.attribute.unit.Unit;
 import com.chiralbehaviors.CoRE.attribute.unit.UnitAttribute;
 import com.chiralbehaviors.CoRE.attribute.unit.UnitAttributeAuthorization;
@@ -175,22 +177,96 @@ public class UnitModelImpl
         return attributes;
     }
 
-	/* (non-Javadoc)
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.chiralbehaviors.CoRE.network.Aspect, com.chiralbehaviors.CoRE.attribute.Attribute, com.chiralbehaviors.CoRE.attribute.Attribute)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.
+	 * chiralbehaviors.CoRE.ExistentialRuleform,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute, java.lang.Object)
+	 */
+	@Override
+	public void setAttributeValue(UnitAttribute attributeValue) {
+		UnitAttributeAuthorization auth = getValidatingAuthorization(attributeValue);
+		if (auth != null) {
+			Attribute validatingAttribute = auth.getValidatingAttribute();
+			if (validatingAttribute.getValueType().equals(
+					attributeValue.getAttribute().getValueType())) {
+				TypedQuery<AttributeMetaAttribute> valueQuery = em
+						.createNamedQuery(AttributeMetaAttribute.GET_ATTRIBUTE,
+								AttributeMetaAttribute.class);
+				valueQuery.setParameter("meta", attributeValue.getAttribute());
+				valueQuery.setParameter("attr", validatingAttribute);
+				List<AttributeMetaAttribute> values = valueQuery
+						.getResultList();
+				boolean valid = false;
+				for (AttributeMetaAttribute value : values) {
+					if (attributeValue.getTextValue().equals(
+							value.getTextValue())) {
+						valid = true;
+						break;
+					}
+				}
+				if (!valid) {
+					throw new IllegalArgumentException(
+							String.format(
+									"%s is not a valid picklist value for attribute %s",
+									attributeValue.getTextValue(),
+									attributeValue.getAttribute().getName()));
+
+				}
+			}
+		}
+
+		em.persist(attributeValue);
+
+	}
+
+	/**
+	 * @param attributeValue
+	 * @return
+	 */
+	private UnitAttributeAuthorization getValidatingAuthorization(
+			UnitAttribute attributeValue) {
+		String sql = "SELECT  p FROM UnitAttributeAuthorization p "
+				+ "WHERE p.validatingAttribute IS NOT NULL "
+				+ "AND p.authorizedAttribute = :attribute ";
+		TypedQuery<UnitAttributeAuthorization> query = em.createQuery(sql,
+				UnitAttributeAuthorization.class);
+		query.setParameter("attribute", attributeValue.getAttribute());
+		List<UnitAttributeAuthorization> auths = query.getResultList();
+		TypedQuery<UnitNetwork> networkQuery = em.createNamedQuery(
+				UnitNetwork.GET_NETWORKS, UnitNetwork.class);
+		networkQuery.setParameter("parent", attributeValue.getUnit());
+		for (UnitAttributeAuthorization auth : auths) {
+			networkQuery.setParameter("relationship", auth.getClassification());
+			networkQuery.setParameter("child", auth.getClassifier());
+			try {
+				if (networkQuery.getSingleResult() != null) {
+					return auth;
+				}
+			} catch (NoResultException e) {
+				// keep going
+			}
+		}
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#authorizeEnum(com.
+	 * chiralbehaviors.CoRE.network.Aspect,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute,
+	 * com.chiralbehaviors.CoRE.attribute.Attribute)
 	 */
 	@Override
 	public void authorizeEnum(Aspect<Unit> aspect, Attribute attribute,
 			Attribute enumAttribute) {
-		// TODO Auto-generated method stub
-		
-	}
+		UnitAttributeAuthorization auth = new UnitAttributeAuthorization(
+				aspect.getClassification(), aspect.getClassifier(), attribute,
+				kernel.getCoreAnimationSoftware());
+		auth.setValidatingAttribute(enumAttribute);
+		em.persist(auth);
 
-	/* (non-Javadoc)
-	 * @see com.chiralbehaviors.CoRE.meta.NetworkedModel#setAttributeValue(com.chiralbehaviors.CoRE.attribute.AttributeValue)
-	 */
-	@Override
-	public void setAttributeValue(UnitAttribute attributeValue) {
-		// TODO Auto-generated method stub
-		
 	}
 }

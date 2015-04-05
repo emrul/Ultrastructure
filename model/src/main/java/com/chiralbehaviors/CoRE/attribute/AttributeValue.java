@@ -49,6 +49,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public abstract class AttributeValue<RuleForm extends Ruleform> extends
         Ruleform {
     private static final long serialVersionUID = 1L;
+    public static final String GET_ATTRIBUTE_VALUES_SUFFIX = ".getAttributeValues";
 
     @Column(name = "binary_value")
     private byte[]            binaryValue;

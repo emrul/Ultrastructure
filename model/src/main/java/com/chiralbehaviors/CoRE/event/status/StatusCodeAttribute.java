@@ -50,7 +50,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "status_code_attribute", schema = "ruleform")
 @NamedQueries({ @NamedQuery(name = GET_ATTRIBUTE, query = "select ra from StatusCodeAttribute ra where ra.statusCode = :inteval and ra.attribute = :attribute") })
 public class StatusCodeAttribute extends AttributeValue<StatusCode> {
-    public static final String GET_ATTRIBUTE    = "statusCodeAttribute.intervalAttribute";
+    public static final String GET_ATTRIBUTE    = "statusCodeAttribute.getAttribute";
     private static final long  serialVersionUID = 1L;
 
     // bi-directional many-to-one association to Attribute
