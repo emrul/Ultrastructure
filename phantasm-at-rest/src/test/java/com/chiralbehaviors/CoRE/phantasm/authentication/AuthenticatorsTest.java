@@ -196,7 +196,7 @@ public class AuthenticatorsTest extends AbstractModelTest {
         CapabilityRequest capRequest = new CapabilityRequest();
         capRequest.username = username;
         capRequest.password = password;
-        capRequest.capabilities = Arrays.asList(asserted.getId());
+        capRequest.roles = Arrays.asList(asserted.getId());
         authToken = AuthxResource.requestCapability(capRequest, request, model);
 
         credential = new RequestCredentials(ip, authToken.toString());

@@ -209,7 +209,7 @@ public class RoundTripFunctionalTest {
         CapabilityRequest capReq = new CapabilityRequest();
         capReq.username = USER;
         capReq.password = PASSWORD;
-        capReq.capabilities = Arrays.asList(asserted.getId());
+        capReq.roles = Arrays.asList(asserted.getId());
 
         webTarget = client.target(String.format("http://localhost:%s/api/oauth2/token/capability",
                                                 application.getPort()));

@@ -64,7 +64,7 @@ import io.dropwizard.auth.Auth;
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthxResource extends TransactionalResource {
     public static class CapabilityRequest {
-        public List<UUID> capabilities = Collections.emptyList();
+        public List<UUID> roles = Collections.emptyList();
         public String     password;
         public String     username;
     }
@@ -175,7 +175,7 @@ public class AuthxResource extends TransactionalResource {
         cred.roles.add(model.getKernel()
                             .getLoginRole()
                             .getId());
-        cred.roles.addAll(request.capabilities);
+        cred.roles.addAll(request.roles);
         cred.ip = httpRequest.getRemoteAddr();
         return generateToken(cred, authenticate(request.username,
                                                 request.password, model),
